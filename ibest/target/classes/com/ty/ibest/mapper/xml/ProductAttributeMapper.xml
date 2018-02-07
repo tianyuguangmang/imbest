@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ty.ibest.mapper.ProductAttributeMapper">
+	<resultMap id="BaseResult" type="com.ty.ibest.entity.ProductAttribute">
+		<id column="p_id" property="productId"></id>
+		<result column="p_name" property="name"></result>
+		<result column="p_img_url" property="imgUrl"></result>
+		<result column="p_origin_price" property="originPrice"></result>
+		<result column="p_current_price" property="currentPrice"></result>
+		<result column="p_sale" property="sale"></result>
+		<result column="p_cate_id" property="cateId"></result>
+		<result column="p_is_private" property="isPrivate"></result>
+		<result column="p_on_shelves" property="onShelves"></result>
+		<result column="p_brief" property="brief"></result>
+		<result column="p_sku" property="sku"></result>
+	</resultMap>
+	<select id="getProduct" resultMap="BaseResult">
+		SELECT *
+		FROM
+		m_product 
+		<if test="cateId != 0">
+		  WHERE p_cate_id = #{cateId}
+		</if> 
+		<!-- limit #{current},#{size} -->
+	</select>
+	<select id="detailProduct" resultMap="BaseResult">
+		SELECT *
+		FROM
+		m_product WHERE p_id = #{id}
+	</select>
+	<insert id="addProduct" parameterType="ProductAttribute" useGeneratedKeys="true" keyProperty="productId">
+        INSERT INTO m_product(p_name,p_img_url,p_origin_price,p_current_price,p_sale,p_cate_id,
+        p_is_private,p_on_shelves,p_brief,p_sku)
+        VALUES(#{name},#{imgUrl},#{originPrice},#{currentPrice},#{sale},#{cateId},
+        #{isPrivate},#{onShelves},#{brief},#{sku})
+        
+    </insert>
+    <update id="updateProduct" parameterType="ProductAttribute">
+        UPDATE m_product
+        SET
+        p_name=
+        #{name},
+        p_img_url = #{imgUrl},
+        p_origin_price = #{originPrice},
+        p_current_price = #{currentPrice},
+        p_sale =#{sale}           
+        WHERE
+        p_id =
+        #{productId}
+    </update>
+     <update id="onShelves">
+        UPDATE m_product
+        SET
+        p_on_shelves =#{onShelves}           
+        WHERE
+        p_id =
+        #{productId}
+    </update>
+    <delete id="deleteProduct" parameterType="int">
+        DELETE FROM m_product WHERE p_id = #{productId}
+    </delete>
+</mapper>

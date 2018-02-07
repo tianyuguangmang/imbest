@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ty.ibest.mapper.AddressMapper">
+	<resultMap id="BaseResult" type="com.ty.ibest.entity.Address">
+		<id column="id" property="id"></id>
+		<result column="m_mid" property="merchantId"></result>
+		<result column="u_province" property="province"></result>
+		<result column="u_city" property="city"></result>
+		<result column="u_region" property="region"></result>
+		<result column="u_detail_address" property="detailAddress"></result>
+		<result column="u_name" property="name"></result>
+		<result column="u_phone" property="phone"></result>
+		<result column="u_is_default" property="isDefault"></result>
+	
+	</resultMap>
+	<select id="getAddress" resultMap="BaseResult">
+		SELECT *
+		FROM
+		u_address  WHERE m_mid = #{merchantId}
+	</select>
+	<insert id="addAddress" parameterType="Address" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO u_address(m_mid, u_province,u_city,u_region,u_detail_address,u_name,u_phone,u_is_default)
+        VALUES(#{merchantId},#{province},#{city},#{detailAddress},#{region},#{name},#{phone},#{isDefault})
+    </insert>
+
+    <update id="updateAddress" parameterType="ProductAttribute">
+        UPDATE u_address
+        SET
+        u_name=
+        #{name},
+        u_province = #{province},
+        u_city = #{city},
+        u_region = #{region},
+        u_detail_address = #{detailAddress},
+        u_phone = #{phone},
+        u_is_default =#{isDefault},
+
+        WHERE
+        id =
+        #{id}
+    </update>
+
+
+    <delete id="deleteAddress" parameterType="int">
+        DELETE FROM u_address WHERE id = #{id}
+    </delete>
+</mapper>

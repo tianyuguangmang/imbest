@@ -1,0 +1,54 @@
+html{
+    min-height: 1080px;
+    /*侧边栏185  主要内容1200*/
+    /*width: 1400px;*/
+    width: 100%;
+    background-color:#FFFFFF;
+    /*_height: expression(((document.compatMode && document.compatMode=='CSS1Compat')? document.documentElement.clientHeight : document.body.clientHeight) < 1080? '1080px' : 'auto');*/
+}
+body{
+    height: 100%;
+    width: 100%;
+}
+
+/*图片剪裁*/
+#crop-div{
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    z-index: 79;
+    display: none;
+}
+
+#crop-background{
+    position: absolute;
+    top:0px;
+    left:0px;
+    z-index: 89;
+    background: black;
+    opacity: 0.6;
+    filter:Alpha(opacity=60);
+}
+#crop-container{
+    position: absolute;
+    z-index: 99;
+    padding: 10px;
+    background-color: #FFFFFF;
+}
+
+#btn-group{
+    height: 25px;
+    width: 210px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+#btn-group button{
+    display: inline;
+    width: 80px;
+    height: 25px;
+    background-color: #35D0E6;
+    color: #FFFFFF;
+    border: none;
+    cursor: pointer;
+}

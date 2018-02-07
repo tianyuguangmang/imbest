@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ty.ibest.mapper.ProductCategoryMapper">
+	<resultMap id="BaseResult" type="com.ty.ibest.entity.ProductCategory">
+		<id column="cate_id" property="cateId"></id>
+		<result column="m_title" property="title"></result>
+	
+	</resultMap>
+	<select id="queryProductCate" resultMap="BaseResult">
+		SELECT *
+		FROM
+		m_category 
+	</select>
+	<insert id="addCate" parameterType="String" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO m_category(m_title)
+        VALUES(#{title})
+    </insert>
+</mapper>

@@ -1,0 +1,21 @@
+用户
+consumerId nickName avatar openId
+商户
+merchantId nickName avatar openId createTime amOpenTime amEndTime pmOpenTime pmEndTime phone realName address detailAddress sendPrice deliveryFee accountAmount
+供应商
+supplierId nickName avatar openId createTime amOpenTime amEndTime pmOpenTime pmEndTime phone realName address account
+菜单
+cateId title
+供应商商品列表
+productId mainImage name originPrice discountPrice stock soldNumber sku status(上架/下架) supplierId cateId
+用户收货地址
+addressId name phone address detail isDefault consumerId
+商户向供应商进货的订单
+orderId productId mainImage name originPrice discountPrice count createTime status(待支付/待发货)  
+merchantId name phone address detailAddress nickName avatar openId supplierId orderNumber(订单号)
+商户商品列表
+productId mainImage name originPrice discountPrice stock soldNumber sku status(上架/下架) supplierId cateId resetPrice(商户重设价格)
+
+用户向商户买东西的订单
+orderId productId mainImage name originPrice discountPrice count createTime status resetPrice(待支付/等待收货) 
+consumerId name phone address detailAddress nickName avatar openId merchantId amount（盈利金额）

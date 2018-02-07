@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body><div>真的才sfs，我额积分我发</div>
+<!-- <form method="post" action="register">
+	
+</form> -->
+
+<!-- <form method="post" action="img/upload" enctype="multipart/form-data">
+	<input type="hidden" name="user" value="123"/>
+	<input type="file" name="img"/>
+	<input type="submit" value="提交"/>
+	
+</form> -->
+<div style="width:90px; height:110px; overflow:hidden; border:1px solid red;">  
+<div id="imgDiv"> </div>  
+</div>  
+<br>  
+<input type="file" value="上传文件">  
+
+</body>
+<script src="js/jquery1.js"></script>
+ <script src="js/imgUpload.js"></script> 
+
+<!-- <script src="js/juqery.Jcrop.js"></script>
+<script src="js/jquery-form.js"></script> -->
+<script src="js/wAjax.js"></script>
+<script>
+/* wAjax("merchant/add","JSON_POST",{name:"xmw",
+	phone:18754800737},function(res){
+	console.log(res);
+})  */
+$(document).ready(function() {    
+     $("input").uploadPreview({ width: 90, height: 110, imgDiv: "#imgDiv",callback:function(){
+    	 console.log("123");
+     }});  
+});  
+/* var params = 
+		name:"xmw",
+		phone:18754800737,
+		merchantId:1
+}
+/* wAjax("merchant/add","JSON_POST",params,function(res){
+	console.log(res);
+}) */
+/*params.name = "b白色";
+
+wAjax("merchant/update","JSON_POST",params,function(res){
+	console.log(res);
+}) */
+/* wAjax("product/add","JSON_POST",{name:'xw',imgUrl:'123'},function(res){
+	console.log(res);
+	wAjax("product/list","POST",{},function(res){
+		console.log(res);
+	}) 
+})  */
+/* wAjax("admin/tologin","POST",{phone:"admin",password:"123"},function(res){
+		console.log(res);
+	}) */
+	/* wAjax("register","POST",{phone:'187',password:'123'},function(res){
+		console.log(res);
+	}) 
+		wAjax("login","POST",{phone:'187',password:'123'},function(res){
+		console.log(res);
+
+wAjax("merchant/update","JSON_POST",{
+	phone:'187',
+	name:"白花花2s,S"
+},function(res){
+	console.log(res);
+})    
+		}) 
+	wAjax("goods/addcate","POST",{title:"日常用品"},function(){
+		wAjax("goods/getcate","POST",{},function(){
+			
+		})
+	}) */
+/* var params = {
+	merchantId:11,
+	name:"白花花2"
+}
+wAjax("merchant/update","JSON_POST",params,function(res){
+	console.log(res);
+})  */
+</script>
+</html>
