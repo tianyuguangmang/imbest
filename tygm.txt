@@ -1,21 +1,138 @@
 用户
 consumerId nickName avatar openId
+ CREATE TABLE consumer (
+ consumer_id INT(11) NOT NULL AUTO_INCREMENT,
+ nick_name VARCHAR(30) DEFAULT NULL,
+ avatar VARCHAR(100),
+ open_id VARCHAR(30)
+ ,PRIMARY KEY (consumer_id))
+ ENGINE=InnoDB DEFAULT CHARSET=utf8;
 商户
+ CREATE TABLE merchant (
+ merchant_id INT(11) NOT NULL AUTO_INCREMENT,
+ nick_name VARCHAR(30),
+ avatar VARCHAR(100),
+ open_id VARCHAR(30),
+ create_time VARCHAR(13),
+ am_start_time VARCHAR(13),
+ am_end_time VARCHAR(13),
+ pm_start_time VARCHAR(13),
+ pm_end_time VARCHAR(13),
+ phone VARCHAR(11),
+ real_name VARCHAR(20),
+ address VARCHAR(100),
+ detail_address VARCHAR(100),
+ send_price FLOAT,
+ delivery_fee FLOAT,
+ account_amount FLOAT,
+ PRIMARY KEY (merchant_id))
+ ENGINE=InnoDB DEFAULT CHARSET=utf8;
 merchantId nickName avatar openId createTime amOpenTime amEndTime pmOpenTime pmEndTime phone realName address detailAddress sendPrice deliveryFee accountAmount
 供应商
-supplierId nickName avatar openId createTime amOpenTime amEndTime pmOpenTime pmEndTime phone realName address account
+ CREATE TABLE supplier (
+ supplier_id INT(11) NOT NULL AUTO_INCREMENT,
+ nick_name VARCHAR(30),
+ avatar VARCHAR(100),
+ open_id VARCHAR(30),
+ create_time VARCHAR(13),
+ am_start_time VARCHAR(13),
+ am_end_time VARCHAR(13),
+ pm_start_time VARCHAR(13),
+ pm_end_time VARCHAR(13),
+ phone VARCHAR(11),
+ real_name VARCHAR(20),
+ address VARCHAR(100),
+ account FLOAT,
+ account_amount FLOAT,
+ PRIMARY KEY (supplier_id))
+ ENGINE=InnoDB DEFAULT CHARSET=utf8;
+supplierId nickName avatar openId createTime amOpenTime amEndTime pmOpenTime pmEndTime phone realName address account accountAmount
 菜单
+ CREATE TABLE cate (
+ cate_id INT(11) NOT NULL AUTO_INCREMENT,
+ title VARCHAR(10),
+ PRIMARY KEY (cate_id))
+ ENGINE = InnoDB DEFAULT CHARSET=utf8;
 cateId title
 供应商商品列表
-productId mainImage name originPrice discountPrice stock soldNumber sku status(上架/下架) supplierId cateId
+ CREATE TABLE s_product (
+ product_id INT(11) NOT NULL AUTO_INCREMENT,
+ main_image VARCHAR(100),
+ name VARCHAR(20),
+ origin_price FLOAT,
+ reset_price FLOAT,
+ stock INT(11),
+ sold_number INT(10),
+ sku TEXT,
+ status VARCHAR(30),
+ supplier_id INT(11),
+ cate_id INT(11),
+ PRIMARY KEY (product_id))
+ ENGINE=InnoDB DEFAULT CHARSET=utf8;
+productId mainImage name originPrice stock soldNumber sku status(上架/下架) supplierId cateId resetPrice
 用户收货地址
+CREATE TABLE address (
+address_id INT(11) NOT NULL AUTO_INCREMENT,
+name VARCHAR(20),
+phone VARCHAR(11),
+address VARCHAR(50),
+detail VARCHAR(100),
+is_default VARCHAR(10),
+cousumber_id INT(11),
+PRIMARY KEY (address_id))
+ENGINE=InnoDB DEFAULT CHARSET =utf8;
 addressId name phone address detail isDefault consumerId
+
 商户向供应商进货的订单
-orderId productId mainImage name originPrice discountPrice count createTime status(待支付/待发货)  
-merchantId name phone address detailAddress nickName avatar openId supplierId orderNumber(订单号)
+ CREATE TABLE ms_order (
+ order_id INT(11) NOT NULL AUTO_INCREMENT,
+ product_id INT(11) ,
+ main_image VARCHAR(100),
+ name VARCHAR(20),
+ origin_price FLOAT,
+ count INT(11),
+ create_time VARCHAR(13),
+ status VARCHAR(30),
+ reset_price FLOAT,
+ merchant_id INT(11),
+ m_name VARCHAR(30),
+ m_address VARCHAR(50),
+ m_detail_address VARCHAR(100),
+ m_nick_name VARCHAR(30),
+ m_avatar VARCHAR(100),
+ supplier_id INT(11),
+ order_number VARCHAR(50),
+ PRIMARY KEY (order_id))
+ ENGINE = InnoDB DEFAULT CHARSET=utf8;
+orderId productId mainImage name originPrice count createTime status(待支付/待发货) resetPrice （平台的重设价格）
+（平台以原价向供应商进货）
+
+merchantId name phone address detailAddress nickName avatar supplierId orderNumber(订单号)
+
 商户商品列表
 productId mainImage name originPrice discountPrice stock soldNumber sku status(上架/下架) supplierId cateId resetPrice(商户重设价格)
 
 用户向商户买东西的订单
-orderId productId mainImage name originPrice discountPrice count createTime status resetPrice(待支付/等待收货) 
-consumerId name phone address detailAddress nickName avatar openId merchantId amount（盈利金额）
+ CREATE TABLE cm_order (
+ order_id INT(11) NOT NULL AUTO_INCREMENT,
+ product_id INT(11) ,
+ main_image VARCHAR(100),
+ name VARCHAR(20),
+ origin_price FLOAT,
+ count INT(11),
+ create_time VARCHAR(13),
+ status VARCHAR(30),
+ reset_price FLOAT,
+ consumer_id INT(11),
+ c_name VARCHAR(30),
+ c_phone INT(11),
+ c_address VARCHAR(50),
+ c_detail_address VARCHAR(100),
+ c_nick_name VARCHAR(50),
+ c_avatar VARCHAR(100),
+ merchant_id INT(11),
+ amount FLOAT,
+ PRIMARY KEY (order_id))
+ ENGINE = InnoDB DEFAULT CHARSET=utf8;
+orderId productId mainImage name originPrice count createTime status resetPrice(待支付/等待收货) 
+consumerId name phone address detailAddress nickName avatar merchantId amount（盈利金额）
