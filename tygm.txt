@@ -78,7 +78,7 @@ phone VARCHAR(11),
 address VARCHAR(50),
 detail VARCHAR(100),
 is_default VARCHAR(10),
-cousumber_id INT(11),
+consumer_id INT(11),
 PRIMARY KEY (address_id))
 ENGINE=InnoDB DEFAULT CHARSET =utf8;
 addressId name phone address detail isDefault consumerId
@@ -110,7 +110,21 @@ orderId productId mainImage name originPrice count createTime status(待支付/待发
 merchantId name phone address detailAddress nickName avatar supplierId orderNumber(订单号)
 
 商户商品列表
-productId mainImage name originPrice discountPrice stock soldNumber sku status(上架/下架) supplierId cateId resetPrice(商户重设价格)
+CREATE TABLE `m_product` (
+  `product_id` int(11) NOT NULL AUTO_INCREMENT,
+  `origin_id` int(11) DEFAULT NULL,
+  `main_image` varchar(50) DEFAULT NULL,
+  `name` varchar(30) DEFAULT NULL,
+  `origin_price` float DEFAULT NULL,
+  `stock` int(11) DEFAULT NULL,
+  `sold_number` int(11) DEFAULT NULL,
+  `status` varchar(30) DEFAULT NULL,
+  `cate_id` int(11) DEFAULT NULL,
+  `reset_price` float DEFAULT NULL,
+  `merchant_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`product_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+productId originId mainImage name originPrice  stock soldNumber sku status(上架/下架) cateId resetPrice(商户重设价格)  merchantId
 
 用户向商户买东西的订单
  CREATE TABLE cm_order (
