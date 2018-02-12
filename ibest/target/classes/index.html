@@ -37,7 +37,16 @@ $(document).ready(function() {
      $("input").uploadPreview({ width: 90, height: 110, imgDiv: "#imgDiv",callback:function(){
     	 console.log("123");
      }});  
-});  
+}); 
+var params = {
+	name:"xiaowang",
+	phone:18754800737,
+	detail:"somsxinzhun",
+	addressId:1
+}
+wAjax("address/update","JSON_POST",params,function(res){
+	console.log(res);
+}) 
 /* var params = 
 		name:"xmw",
 		phone:18754800737,

@@ -3,46 +3,41 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ty.ibest.mapper.AddressMapper">
 	<resultMap id="BaseResult" type="com.ty.ibest.entity.Address">
-		<id column="id" property="id"></id>
-		<result column="m_mid" property="merchantId"></result>
-		<result column="u_province" property="province"></result>
-		<result column="u_city" property="city"></result>
-		<result column="u_region" property="region"></result>
-		<result column="u_detail_address" property="detailAddress"></result>
-		<result column="u_name" property="name"></result>
-		<result column="u_phone" property="phone"></result>
-		<result column="u_is_default" property="isDefault"></result>
-	
+		<id column="address_id" property="addressId"></id>
+		<result column="name" property="name"></result>
+		<result column="phone" property="phone"></result>
+		<result column="address" property="address"></result>
+		<result column="detail" property="detail"></result>
+		<result column="is_default" property="isDefault"></result>
+		<result column="consumer_id" property="consumerId"></result>
 	</resultMap>
 	<select id="getAddress" resultMap="BaseResult">
 		SELECT *
 		FROM
-		u_address  WHERE m_mid = #{merchantId}
+		address  WHERE consumer_id = #{consumerId}
 	</select>
-	<insert id="addAddress" parameterType="Address" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO u_address(m_mid, u_province,u_city,u_region,u_detail_address,u_name,u_phone,u_is_default)
-        VALUES(#{merchantId},#{province},#{city},#{detailAddress},#{region},#{name},#{phone},#{isDefault})
+	<insert id="addAddress" parameterType="Address" useGeneratedKeys="true" keyProperty="addressId">
+        INSERT INTO address(name, phone,address,detail,is_default,consumer_id)
+        VALUES(#{name},#{phone},#{address},#{detail},#{isDefault},#{consumerId})
     </insert>
 
     <update id="updateAddress" parameterType="ProductAttribute">
-        UPDATE u_address
+        UPDATE address
         SET
-        u_name=
+        name=
         #{name},
-        u_province = #{province},
-        u_city = #{city},
-        u_region = #{region},
-        u_detail_address = #{detailAddress},
-        u_phone = #{phone},
-        u_is_default =#{isDefault},
-
+        phone = #{phone},
+        address = #{address},
+        detail = #{detail},
+        is_default = #{isDefault},
+        consumer_id = #{consumerId}
         WHERE
-        id =
-        #{id}
+        address_id =
+        #{addressId}
     </update>
 
 
     <delete id="deleteAddress" parameterType="int">
-        DELETE FROM u_address WHERE id = #{id}
+        DELETE FROM address WHERE address_id = #{addressId}
     </delete>
 </mapper>

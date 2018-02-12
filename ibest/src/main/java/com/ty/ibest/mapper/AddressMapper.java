@@ -11,7 +11,7 @@ import com.ty.ibest.entity.ProductAttribute;
 
 public interface AddressMapper {
 	int addAddress(Address address);
-	List<Address> getAddress(@Param("merchantId") String merchantId);
-	int deleteAddress(@Param("id") int id);
+	List<Address> getAddress(@Param("consumerId") int consumerId);
+	int deleteAddress(@Param("addressId") int addressId);
 	int updateAddress(Address address);
 }

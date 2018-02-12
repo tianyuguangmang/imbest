@@ -24,26 +24,25 @@ public class AddressServiceImpl implements AddressService{
 		try{
 			
 			addressMapper.addAddress(address);
-			return address.getId();
-		
-			
+			System.out.println(address.getAddressId());
+			return address.getAddressId();
 		}catch(Exception e){
+			System.out.println(e);
 			
 		}
 		return 0;
 	}
 
-	public List<Address> getAddress(String merchantId) {
+	public List<Address> getAddress(int consumerId) {
 		// TODO Auto-generated method stub
-		return addressMapper.getAddress(merchantId);
+		return addressMapper.getAddress(consumerId);
 		
 	}
 
-	public int deleteAddress(int id) {
-		
+	public int deleteAddress(int addressId) {
 		// TODO Auto-generated method stub
 		try{
-			int x = addressMapper.deleteAddress(id);
+			int x = addressMapper.deleteAddress(addressId);
 			return x;
 		}catch(Exception e){
 			

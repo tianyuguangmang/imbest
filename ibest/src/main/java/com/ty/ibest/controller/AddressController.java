@@ -25,20 +25,21 @@ public class AddressController extends BaseController{
 	public Results<Address> addAddress(@RequestBody Address address){
 		try{
 			addressService.addAddress(address);
-			int x = address.getId();
+			int x = address.getAddressId();
 			if(x>0){
 				return successResult(address);
 			}
 			
 		}catch(Exception e){
+			
 		}
-		return failResult(555,"Ê∑ªÂä†Â§±Ë¥•");
+		return failResult(555,"ÃÌº”µÿ÷∑ ß∞‹");
 	}
 	@RequestMapping(value="/address/list",method = RequestMethod.POST)
 	@ResponseBody
-	public Results<List<Address>> getAddress(@RequestParam String merchantId){
+	public Results<List<Address>> getAddress(@RequestParam int consumerId){
 		try{
-			List<Address> list = addressService.getAddress(merchantId);
+			List<Address> list = addressService.getAddress(consumerId);
 			return successResult(list);
 			
 		}catch(Exception e){
@@ -47,9 +48,9 @@ public class AddressController extends BaseController{
 	}
 	@RequestMapping(value="/address/delete",method = RequestMethod.POST)
 	@ResponseBody
-	public Results<ProductAttribute> deleteAddress(@RequestParam int id){ 
+	public Results<ProductAttribute> deleteAddress(@RequestParam int addressId){ 
 		try{
-			int x =addressService.deleteAddress(id);
+			int x =addressService.deleteAddress(addressId);
 			if(x>0){
 				return successResult(null);
 			}

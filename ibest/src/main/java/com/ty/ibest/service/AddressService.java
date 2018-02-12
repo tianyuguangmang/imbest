@@ -10,8 +10,8 @@ import com.ty.ibest.entity.Address;
 
 public interface AddressService {
 	int addAddress(Address address);
-	List<Address> getAddress(@Param("merchantId") String merchantId);
-	int deleteAddress(@Param("id") int id);
+	List<Address> getAddress(int consumerId);
+	int deleteAddress(int addressId);
 	int updateAddress(Address address);
 	
 }

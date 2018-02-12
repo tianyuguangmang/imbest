@@ -1,44 +1,18 @@
 package com.ty.ibest.entity;
 
 public class Address {
-	int id;
-	String province;
-	String city;
-	String region;
-	String detailAddress;
-	String name;
-	String phone;
-	String merchantId;
-	int isDefault;
-	public int getId() {
-		return id;
+	private int addressId;
+	private String name;
+	private String phone;
+	private String address;
+	private String detail;
+	private int isDefault;
+	private int consumerId;
+	public int getAddressId() {
+		return addressId;
 	}
-	public void setId(int id) {
-		this.id = id;
-	}
-	public String getProvince() {
-		return province;
-	}
-	public void setProvince(String province) {
-		this.province = province;
-	}
-	public String getCity() {
-		return city;
-	}
-	public void setCity(String city) {
-		this.city = city;
-	}
-	public String getRegion() {
-		return region;
-	}
-	public void setRegion(String region) {
-		this.region = region;
-	}
-	public String getDetailAddress() {
-		return detailAddress;
-	}
-	public void setDetailAddress(String detailAddress) {
-		this.detailAddress = detailAddress;
+	public void setAddressId(int addressId) {
+		this.addressId = addressId;
 	}
 	public String getName() {
 		return name;
@@ -52,17 +26,29 @@ public class Address {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-	public String getMerchantId() {
-		return merchantId;
+	public String getAddress() {
+		return address;
 	}
-	public void setMerchantId(String merchantId) {
-		this.merchantId = merchantId;
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public String getDetail() {
+		return detail;
+	}
+	public void setDetail(String detail) {
+		this.detail = detail;
 	}
 	public int getIsDefault() {
 		return isDefault;
 	}
 	public void setIsDefault(int isDefault) {
 		this.isDefault = isDefault;
+	}
+	public int getConsumerId() {
+		return consumerId;
+	}
+	public void setConsumerId(int consumerId) {
+		this.consumerId = consumerId;
 	}
 	
 }
