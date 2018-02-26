@@ -6,6 +6,7 @@
 		
 		<typeAlias alias="ProductAttribute" type="com.ty.ibest.entity.ProductAttribute" />
 		<typeAlias alias="Address" type="com.ty.ibest.entity.Address" />
+		<typeAlias alias="SupplierProduct" type="com.ty.ibest.entity.SupplierProduct" />
 		<typeAlias alias="OrderMessage" type="com.ty.ibest.entity.OrderMessage" />
 		<typeAlias alias="Merchant" type="com.ty.ibest.entity.Merchant" />
 	</typeAliases>

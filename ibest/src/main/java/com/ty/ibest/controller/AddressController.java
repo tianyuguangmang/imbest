@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.ty.ibest.entity.Address;
 import com.ty.ibest.entity.ProductAttribute;
 import com.ty.ibest.service.AddressService;
-import com.ty.ibest.service.ProductAttributeService;
 import com.ty.ibest.utils.Results;
 
 @Controller

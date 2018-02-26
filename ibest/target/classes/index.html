@@ -38,13 +38,21 @@ $(document).ready(function() {
     	 console.log("123");
      }});  
 }); 
-var params = {
+/* var params = {
 	name:"xiaowang",
 	phone:18754800737,
 	detail:"somsxinzhun",
 	addressId:1
 }
 wAjax("address/update","JSON_POST",params,function(res){
+	console.log(res);
+})  */
+var params = {
+		mainImage:"http://img.zcool.cn/community/01690955496f930000019ae92f3a4e.jpg@2o.jpg",
+		name:"er个大百花",
+		productId:1
+}
+ wAjax("supplier/product/update","JSON_POST",params,function(res){
 	console.log(res);
 }) 
 /* var params = 

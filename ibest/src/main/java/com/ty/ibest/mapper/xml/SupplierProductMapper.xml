@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ty.ibest.mapper.SupplierProductMapper">
+	<resultMap id="BaseResult" type="com.ty.ibest.entity.SupplierProduct">
+		<id column="product_id" property="productId"></id>
+		<result column="main_image" property="mainImage"></result>
+		<result column="name" property="name"></result>
+		<result column="origin_price" property="originPrice"></result>
+		<result column="reset_price" property="resetPrice"></result>
+		<result column="stock" property="stock"></result>
+		<result column="sold_number" property="soldNumber"></result>
+		<result column="sku" property="sku"></result>
+		<result column="status" property="status"></result>
+		<result column="supplier_id" property="supplierId"></result>
+		<result column="cate_id" property="cateId"></result>
+	</resultMap>
+	<select id="getProduct" resultMap="BaseResult">
+		SELECT *
+		FROM
+		s_product WHERE
+		supplier_id = #{supplierId}
+	</select>
+	<insert id="addProduct" parameterType="SupplierProduct"
+		useGeneratedKeys="true" keyProperty="productId">
+		INSERT INTO s_product
+		(main_image,name,
+		origin_price,reset_price,
+		stock,sold_number,sku,
+		status,supplier_id,cate_id)
+		VALUES (#{mainImage},#{name},
+		#{originPrice},#{resetPrice},
+		#{stock},#{soldNumber},#{sku},
+		#{status},#{supplierId},#{cateId})
+	</insert>
+
+	<update id="updateProduct" parameterType="SupplierProduct">
+		UPDATE s_product
+		SET
+		main_image=#{mainImage},
+		name = #{name},
+		origin_price = #{originPrice},
+		reset_price = #{resetPrice},
+		stock = #{stock},
+		sold_number =
+		#{soldNumber},
+		sku = #{sku},
+		status = #{status},
+		supplier_id =
+		#{supplierId},
+		cate_id = #{cateId}
+		WHERE
+		product_id =
+		#{productId}
+	</update>
+
+
+	<delete id="deleteProduct" parameterType="int">
+		DELETE FROM s_product
+		WHERE product_id = #{productId}
+	</delete>
+</mapper>
