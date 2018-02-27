@@ -18,46 +18,50 @@
 	<select id="getProduct" resultMap="BaseResult">
 		SELECT *
 		FROM
-		m_product 
+		m_product
 		<if test="cateId != 0">
-		  WHERE p_cate_id = #{cateId}
-		</if> 
+			WHERE p_cate_id = #{cateId}
+		</if>
 		<!-- limit #{current},#{size} -->
 	</select>
 	<select id="detailProduct" resultMap="BaseResult">
 		SELECT *
 		FROM
-		m_product WHERE p_id = #{id}
+		m_product WHERE
+		p_id = #{id}
 	</select>
-	<insert id="addProduct" parameterType="ProductAttribute" useGeneratedKeys="true" keyProperty="productId">
-        INSERT INTO m_product(p_name,p_img_url,p_origin_price,p_current_price,p_sale,p_cate_id,
-        p_is_private,p_on_shelves,p_brief,p_sku)
-        VALUES(#{name},#{imgUrl},#{originPrice},#{currentPrice},#{sale},#{cateId},
-        #{isPrivate},#{onShelves},#{brief},#{sku})
-        
-    </insert>
-    <update id="updateProduct" parameterType="ProductAttribute">
-        UPDATE m_product
-        SET
-        p_name=
-        #{name},
-        p_img_url = #{imgUrl},
-        p_origin_price = #{originPrice},
-        p_current_price = #{currentPrice},
-        p_sale =#{sale}           
-        WHERE
-        p_id =
-        #{productId}
-    </update>
-     <update id="onShelves">
-        UPDATE m_product
-        SET
-        p_on_shelves =#{onShelves}           
-        WHERE
-        p_id =
-        #{productId}
-    </update>
-    <delete id="deleteProduct" parameterType="int">
-        DELETE FROM m_product WHERE p_id = #{productId}
-    </delete>
+	<insert id="addProduct" parameterType="ProductAttribute"
+		useGeneratedKeys="true" keyProperty="productId">
+		INSERT INTO
+		m_product(p_name,p_img_url,p_origin_price,p_current_price,p_sale,p_cate_id,
+		p_is_private,p_on_shelves,p_brief,p_sku)
+		VALUES(#{name},#{imgUrl},#{originPrice},#{currentPrice},#{sale},#{cateId},
+		#{isPrivate},#{onShelves},#{brief},#{sku})
+
+	</insert>
+	<update id="updateProduct" parameterType="ProductAttribute">
+		UPDATE m_product
+		SET
+		p_name=
+		#{name},
+		p_img_url = #{imgUrl},
+		p_origin_price = #{originPrice},
+		p_current_price = #{currentPrice},
+		p_sale =#{sale}
+		WHERE
+		p_id =
+		#{productId}
+	</update>
+	<update id="onShelves">
+		UPDATE m_product
+		SET
+		p_on_shelves =#{onShelves}
+		WHERE
+		p_id =
+		#{productId}
+	</update>
+	<delete id="deleteProduct" parameterType="int">
+		DELETE FROM m_product
+		WHERE p_id = #{productId}
+	</delete>
 </mapper>

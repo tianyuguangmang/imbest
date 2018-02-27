@@ -17,43 +17,43 @@
 		<jacksonVersion>2.5.0</jacksonVersion>
 		<mysqlVersion>5.1.38</mysqlVersion>
 		<c3p0Version>0.9.1.2</c3p0Version>
-		<log4jVersion>1.2.17</log4jVersion>
+		<log4jVersion>1.2.16</log4jVersion>
 		<fileuploadVersion>1.3.1</fileuploadVersion>
 		<lombokVersion>1.16.10</lombokVersion>
 		<mybatis.version>3.2.6</mybatis.version>
 	</properties>
 	<dependencies>
-	 <dependency>
-      <groupId>com.qiniu</groupId>
-      <artifactId>qiniu-java-sdk</artifactId>
-      <version>7.2.6</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.squareup.okhttp3</groupId>
-      <artifactId>okhttp</artifactId>
-      <version>3.3.1</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.google.code.gson</groupId>
-      <artifactId>gson</artifactId>
-      <version>2.6.2</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.qiniu</groupId>
-      <artifactId>happy-dns-java</artifactId>
-      <version>0.1.4</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.12</version>
-      <scope>test</scope>
-    </dependency>
-		
+		<dependency>
+			<groupId>com.qiniu</groupId>
+			<artifactId>qiniu-java-sdk</artifactId>
+			<version>7.2.6</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>okhttp</artifactId>
+			<version>3.3.1</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.6.2</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.qiniu</groupId>
+			<artifactId>happy-dns-java</artifactId>
+			<version>0.1.4</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -61,10 +61,10 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-		    <groupId>net.sf.json-lib</groupId>
-		    <artifactId>json-lib</artifactId>
-		    <version>2.4</version>
-		    <classifier>jdk15</classifier>
+			<groupId>net.sf.json-lib</groupId>
+			<artifactId>json-lib</artifactId>
+			<version>2.4</version>
+			<classifier>jdk15</classifier>
 		</dependency>
 
 		<!-- 导入Mysql数据库链接jar包 -->
@@ -193,7 +193,17 @@
 			<artifactId>jackson-databind</artifactId>
 			<version>${jacksonVersion}</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.5.6</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>1.5.6</version>
+		</dependency>
 		<!-- log4j配置, 视情况添加 -->
 		<dependency>
 			<groupId>log4j</groupId>
@@ -216,56 +226,56 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-       <groupId>org.apache.velocity</groupId>
-	       <artifactId>velocity</artifactId>
-	       <version>1.7</version>
+			<groupId>org.apache.velocity</groupId>
+			<artifactId>velocity</artifactId>
+			<version>1.7</version>
 		</dependency>
 		<dependency>
-	       <groupId>com.baomidou</groupId>
-	       <artifactId>mybatis-plus</artifactId>
-	       <version>2.0.1</version> 
+			<groupId>com.baomidou</groupId>
+			<artifactId>mybatis-plus</artifactId>
+			<version>2.0.1</version>
 		</dependency>
 		<dependency>
-		    <groupId>com.github.pagehelper</groupId>
-		    <artifactId>pagehelper</artifactId>
-		    <version>4.1.4</version>
+			<groupId>com.github.pagehelper</groupId>
+			<artifactId>pagehelper</artifactId>
+			<version>4.1.4</version>
 		</dependency>
 		<!-- 七牛包 -->
-		 <dependency>
-	      <groupId>com.qiniu</groupId>
-	      <artifactId>qiniu-java-sdk</artifactId>
-	      <version>7.2.6</version>
-	      <scope>compile</scope>
-	    </dependency>
-	    <dependency>
-	      <groupId>com.squareup.okhttp3</groupId>
-	      <artifactId>okhttp</artifactId>
-	      <version>3.3.1</version>
-	      <scope>compile</scope>
-	    </dependency>
-	    <dependency>
-	      <groupId>com.google.code.gson</groupId>
-	      <artifactId>gson</artifactId>
-	      <version>2.6.2</version>
-	      <scope>compile</scope>
-	    </dependency>
-	    <dependency>
-	      <groupId>com.qiniu</groupId>
-	      <artifactId>happy-dns-java</artifactId>
-	      <version>0.1.4</version>
-	      <scope>compile</scope>
-	    </dependency>
-	    <dependency>
-	      <groupId>junit</groupId>
-	      <artifactId>junit</artifactId>
-	      <version>4.12</version>
-	      <scope>test</scope>
-	    </dependency>
+		<dependency>
+			<groupId>com.qiniu</groupId>
+			<artifactId>qiniu-java-sdk</artifactId>
+			<version>7.2.6</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>okhttp</artifactId>
+			<version>3.3.1</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.6.2</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.qiniu</groupId>
+			<artifactId>happy-dns-java</artifactId>
+			<version>0.1.4</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
 
 
 	</dependencies>
 	<build>
-		
+
 		<resources>
 			<resource>
 				<directory>src/main/java</directory>

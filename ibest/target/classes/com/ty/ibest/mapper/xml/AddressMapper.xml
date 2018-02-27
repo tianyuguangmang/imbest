@@ -14,30 +14,34 @@
 	<select id="getAddress" resultMap="BaseResult">
 		SELECT *
 		FROM
-		address  WHERE consumer_id = #{consumerId}
+		address WHERE
+		consumer_id = #{consumerId}
 	</select>
-	<insert id="addAddress" parameterType="Address" useGeneratedKeys="true" keyProperty="addressId">
-        INSERT INTO address(name, phone,address,detail,is_default,consumer_id)
-        VALUES(#{name},#{phone},#{address},#{detail},#{isDefault},#{consumerId})
-    </insert>
+	<insert id="addAddress" parameterType="Address"
+		useGeneratedKeys="true" keyProperty="addressId">
+		INSERT INTO address(name,
+		phone,address,detail,is_default,consumer_id)
+		VALUES(#{name},#{phone},#{address},#{detail},#{isDefault},#{consumerId})
+	</insert>
 
-    <update id="updateAddress" parameterType="ProductAttribute">
-        UPDATE address
-        SET
-        name=
-        #{name},
-        phone = #{phone},
-        address = #{address},
-        detail = #{detail},
-        is_default = #{isDefault},
-        consumer_id = #{consumerId}
-        WHERE
-        address_id =
-        #{addressId}
-    </update>
+	<update id="updateAddress" parameterType="ProductAttribute">
+		UPDATE address
+		SET
+		name=
+		#{name},
+		phone = #{phone},
+		address = #{address},
+		detail = #{detail},
+		is_default = #{isDefault},
+		consumer_id = #{consumerId}
+		WHERE
+		address_id =
+		#{addressId}
+	</update>
 
 
-    <delete id="deleteAddress" parameterType="int">
-        DELETE FROM address WHERE address_id = #{addressId}
-    </delete>
+	<delete id="deleteAddress" parameterType="int">
+		DELETE FROM address
+		WHERE address_id = #{addressId}
+	</delete>
 </mapper>

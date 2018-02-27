@@ -20,11 +20,10 @@ public class AddressServiceImpl implements AddressService{
 	AddressMapper addressMapper;
 
 	public int addAddress(Address address) {
-		// TODO Auto-generated method stub
+		
 		try{
 			
 			addressMapper.addAddress(address);
-			System.out.println(address.getAddressId());
 			return address.getAddressId();
 		}catch(Exception e){
 			System.out.println(e);

@@ -9,7 +9,8 @@
 
 	<select id="isLogin" resultMap="BaseResult">
 		SELECT *
-		FROM            
-		admin  WHERE phone = #{phone} AND password = #{password}
+		FROM
+		admin WHERE phone =
+		#{phone} AND password = #{password}
 	</select>
 </mapper>

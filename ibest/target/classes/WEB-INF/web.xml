@@ -9,7 +9,11 @@
 		<welcome-file>/index.html</welcome-file>
 		<welcome-file>/index.jsp</welcome-file>
 	</welcome-file-list>
-
+	<!-- log4j配置文件地址 -->  
+	 <context-param>  
+	  <param-name>log4jConfigLocation</param-name>  
+	  <param-value>classpath:META-INF/log4j.properties</param-value>  
+	</context-param>  
 	<!--加载Spring的配置文件到上下文中去 -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
@@ -31,15 +35,18 @@
 		<!--配置容器在启动的时候就加载这个servlet并实例化 -->
 		<load-on-startup>1</load-on-startup>
 	</servlet>
-	<servlet-mapping>    
-        <servlet-name>default</servlet-name>    
-        <url-pattern>*.html</url-pattern>    
-	</servlet-mapping> 
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.html</url-pattern>
+	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>spring</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 	<!-- spring mvc end -->
+	<listener>  
+		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>  
+	 </listener>  
 	<!-- Spring监听器 -->
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>

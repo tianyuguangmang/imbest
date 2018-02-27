@@ -10,43 +10,37 @@
 		<result column="a_user_id" property="userId"></result>
 		<result column="a_buy_count" property="count"></result>
 		<result column="a_status" property="status"></result>
-		<association property="product" javaType="com.ty.ibest.entity.ProductAttribute">
-            <id column="a_product_id" property="id"></id>
+		<association property="product"
+			javaType="com.ty.ibest.entity.ProductAttribute">
+			<id column="a_product_id" property="id"></id>
 			<result column="p_name" property="name"></result>
 			<result column="p_img_url" property="imgUrl"></result>
 			<result column="p_origin_price" property="originPrice"></result>
 			<result column="p_current_price" property="currentPrice"></result>
 			<result column="p_sale" property="sale"></result>
 			<result column="p_type" property="type"></result>
-         </association>
-		
-	
+		</association>
+
+
 	</resultMap>
 	<select id="getOrder" resultMap="BaseResult">
 		SELECT *
 		FROM
 		a_order,m_product
-		WHERE a_order.a_product_id = m_product.id and a_order.m_mid = #{merchantId}
+		WHERE a_order.a_product_id = m_product.id and a_order.m_mid =
+		#{merchantId}
 	</select>
-	<!-- <select id="getOrder" resultMap="BaseResult">
-		SELECT 
-		o.id as id,
-		o.merchantId as m_mid,
-		p.name as p_name
-		FROM
-		a_order o,m_product p
-		WHERE o.a_product_id = p.id and o.m_mid = #{merchantId}
-	</select> -->
-	<!--  <select id="getOrder" resultMap="BaseResult">
-		SELECT *
-		FROM
-		a_order
-		WHERE m_mid = #{merchantId}
-	</select>  -->
-	<insert id="addOrder" parameterType="OrderMessage" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO a_order(m_mid, a_product_id,a_address_id,a_user_id,a_buy_count,a_status)
-        VALUES(#{merchantId},#{productId},#{addressId},#{userId},#{count},#{status})
-    </insert>
+	<!-- <select id="getOrder" resultMap="BaseResult"> SELECT o.id as id, o.merchantId 
+		as m_mid, p.name as p_name FROM a_order o,m_product p WHERE o.a_product_id 
+		= p.id and o.m_mid = #{merchantId} </select> -->
+	<!-- <select id="getOrder" resultMap="BaseResult"> SELECT * FROM a_order 
+		WHERE m_mid = #{merchantId} </select> -->
+	<insert id="addOrder" parameterType="OrderMessage"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO a_order(m_mid,
+		a_product_id,a_address_id,a_user_id,a_buy_count,a_status)
+		VALUES(#{merchantId},#{productId},#{addressId},#{userId},#{count},#{status})
+	</insert>
 
- 
+
 </mapper>

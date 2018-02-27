@@ -4,26 +4,28 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
-<body><div>真的才sfs，我额积分我发</div>
-<!-- <form method="post" action="register">
+<body>
+	<div>真的才sfs，我额积分我发</div>
+	<!-- <form method="post" action="register">
 	
 </form> -->
 
-<!-- <form method="post" action="img/upload" enctype="multipart/form-data">
+	<!-- <form method="post" action="img/upload" enctype="multipart/form-data">
 	<input type="hidden" name="user" value="123"/>
 	<input type="file" name="img"/>
 	<input type="submit" value="提交"/>
 	
 </form> -->
-<div style="width:90px; height:110px; overflow:hidden; border:1px solid red;">  
-<div id="imgDiv"> </div>  
-</div>  
-<br>  
-<input type="file" value="上传文件">  
+	<div
+		style="width: 90px; height: 110px; overflow: hidden; border: 1px solid red;">
+		<div id="imgDiv"></div>
+	</div>
+	<br>
+	<input type="file" value="上传文件">
 
 </body>
 <script src="js/jquery1.js"></script>
- <script src="js/imgUpload.js"></script> 
+<script src="js/imgUpload.js"></script>
 
 <!-- <script src="js/juqery.Jcrop.js"></script>
 <script src="js/jquery-form.js"></script> -->
@@ -48,13 +50,21 @@ wAjax("address/update","JSON_POST",params,function(res){
 	console.log(res);
 })  */
 var params = {
+		status:"wanmei",
+		orderId:1,
+		type:1
+}
+ wAjax("msorder/delete","POST",params,function(res){
+	console.log(res);
+}) 
+/* var params = {
 		mainImage:"http://img.zcool.cn/community/01690955496f930000019ae92f3a4e.jpg@2o.jpg",
 		name:"er个大百花",
 		productId:1
 }
  wAjax("supplier/product/update","JSON_POST",params,function(res){
 	console.log(res);
-}) 
+})  */
 /* var params = 
 		name:"xmw",
 		phone:18754800737,

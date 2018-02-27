@@ -4,7 +4,7 @@
 <mapper namespace="com.ty.ibest.mapper.MerchantMapper">
 	<resultMap id="BaseResult" type="com.ty.ibest.entity.Merchant">
 		<id column="m_mid" property="merchantId"></id>
-		
+
 		<result column="m_name" property="name"></result>
 		<result column="m_phone" property="phone"></result>
 		<result column="m_province" property="province"></result>
@@ -18,77 +18,81 @@
 		<result column="m_open_time" property="openTime"></result>
 		<result column="m_save_money" property="saveMoney"></result>
 		<result column="m_profit" property="profit"></result>
-	
+
 	</resultMap>
 	<select id="getMerchant" resultMap="BaseResult">
 		SELECT *
-		FROM            
+		FROM
 		m_merchant
 
 	</select>
 	<select id="searchByPhone" resultMap="BaseResult">
 		SELECT *
-		FROM            
-		m_merchant  WHERE m_phone = #{phone}
+		FROM
+		m_merchant
+		WHERE m_phone = #{phone}
 	</select>
 	<select id="isLogin" resultMap="BaseResult">
 		SELECT *
-		FROM            
-		m_merchant  WHERE m_phone = #{phone} AND m_password = #{password}
+		FROM
+		m_merchant WHERE
+		m_phone = #{phone} AND m_password = #{password}
 	</select>
-	<insert id="addMerchant" parameterType="Merchant" useGeneratedKeys="true" keyProperty="m_mid">
-        INSERT INTO m_merchant(m_name,m_phone
-        <!-- ,m_province,m_city,
-        m_region,m_block,m_wx_code,m_longitute,m_latitude,m_send_price,m_open_time -->
-        )
-        VALUES(#{name
-        },#{phone}
-        
-        <!-- ,#{province},#{city},#{region},#{block},
-        #{wxCode},#{longitute},#{latitude},#{sendPrice},#{openTime} -->
-        )
-    </insert>
-    <insert id="registerMerchant" useGeneratedKeys="true">
-        INSERT INTO m_merchant(m_phone, m_password)
-        VALUES(#{phone},#{password})
-        <selectKey resultType="int" order="AFTER" keyProperty="m_mid"> 
-	    SELECT LAST_INSERT_ID() AS m_mid 
-	    </selectKey>
-    </insert>
+	<insert id="addMerchant" parameterType="Merchant"
+		useGeneratedKeys="true" keyProperty="m_mid">
+		INSERT INTO m_merchant(m_name,m_phone
+		<!-- ,m_province,m_city, m_region,m_block,m_wx_code,m_longitute,m_latitude,m_send_price,m_open_time -->
+		)
+		VALUES(#{name
+		},#{phone}
 
-    <update id="updateMerchant" parameterType="Merchant">
-        UPDATE m_merchant
-        SET
-        m_name =#{name},
-        m_province = #{province},
-        m_city = #{city},
-        m_region = #{region},
-        m_block = #{block},
-        m_wx_code = #{wxCode},
-        m_longitute = #{longitute},
-        m_latitude = #{latitude},
-        m_send_price = #{sendPrice},
-        m_open_time = #{openTime}
-       
-        WHERE
-        m_phone =
-        #{phone}
-   
-   </update>
+		<!-- ,#{province},#{city},#{region},#{block}, #{wxCode},#{longitute},#{latitude},#{sendPrice},#{openTime} -->
+		)
+	</insert>
+	<insert id="registerMerchant" useGeneratedKeys="true">
+		INSERT INTO m_merchant(m_phone, m_password)
+		VALUES(#{phone},#{password})
+		<selectKey resultType="int" order="AFTER" keyProperty="m_mid">
+			SELECT LAST_INSERT_ID() AS m_mid
+		</selectKey>
+	</insert>
 
-    <update id="payProfit">
-        UPDATE m_merchant
-        SET
-        m_profit = 0
-        
-       
-        WHERE
-        m_mid =
-        #{id}
-   
-   </update>
+	<update id="updateMerchant" parameterType="Merchant">
+		UPDATE m_merchant
+		SET
+		m_name =#{name},
+		m_province = #{province},
+		m_city = #{city},
+		m_region =
+		#{region},
+		m_block = #{block},
+		m_wx_code = #{wxCode},
+		m_longitute =
+		#{longitute},
+		m_latitude = #{latitude},
+		m_send_price = #{sendPrice},
+		m_open_time = #{openTime}
 
-    <delete id="deleteMerchant" parameterType="int">
-        DELETE FROM m_merchant WHERE m_mid = #{merchantId}
-    </delete>
+		WHERE
+		m_phone =
+		#{phone}
+
+	</update>
+
+	<update id="payProfit">
+		UPDATE m_merchant
+		SET
+		m_profit = 0
+
+
+		WHERE
+		m_mid =
+		#{id}
+
+	</update>
+
+	<delete id="deleteMerchant" parameterType="int">
+		DELETE FROM m_merchant
+		WHERE m_mid = #{merchantId}
+	</delete>
 </mapper>

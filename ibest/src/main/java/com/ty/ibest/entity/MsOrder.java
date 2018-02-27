@@ -1,64 +1,40 @@
 package com.ty.ibest.entity;
 
+import java.util.List;
+import java.util.Map;
+
 public class MsOrder {
-	private int productId;
-	private String mainImage;
-	private String name;
-	private float originPrice;
-	private float resetPrice;
-	private int stock;
-	private int soldNumber;
-	private String sku;
+	private int orderId;
+	private String productList;
+	private String createTime;
 	private String status;
+	private int merchantId;
+	private String mName;
+	private String mAddress;
+	private String mDetailAddress;
+	private String mNickName;
+	private String mAvatar;
 	private int supplierId;
-	private int cateId;
-	public int getProductId() {
-		return productId;
+	private String orderNumber;
+	private boolean mDelete;
+	private boolean sDelete;
+	public int getOrderId() {
+		return orderId;
 	}
-	public void setProductId(int productId) {
-		this.productId = productId;
+	public void setOrderId(int orderId) {
+		this.orderId = orderId;
 	}
-	public String getMainImage() {
-		return mainImage;
+	public String getProductList() {
+		return productList;
 	}
-	public void setMainImage(String mainImage) {
-		this.mainImage = mainImage;
+	public void setProductList(String productList) {
+		this.productList = productList;
 	}
-	public String getName() {
-		return name;
+	public String getCreateTime() {
+		return createTime;
 	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public float getOriginPrice() {
-		return originPrice;
-	}
-	public void setOriginPrice(float originPrice) {
-		this.originPrice = originPrice;
-	}
-	public float getResetPrice() {
-		return resetPrice;
-	}
-	public void setResetPrice(float resetPrice) {
-		this.resetPrice = resetPrice;
-	}
-	public int getStock() {
-		return stock;
-	}
-	public void setStock(int stock) {
-		this.stock = stock;
-	}
-	public int getSoldNumber() {
-		return soldNumber;
-	}
-	public void setSoldNumber(int soldNumber) {
-		this.soldNumber = soldNumber;
-	}
-	public String getSku() {
-		return sku;
-	}
-	public void setSku(String sku) {
-		this.sku = sku;
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
 	}
 	public String getStatus() {
 		return status;
@@ -66,20 +42,66 @@ public class MsOrder {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	public int getMerchantId() {
+		return merchantId;
+	}
+	public void setMerchantId(int merchantId) {
+		this.merchantId = merchantId;
+	}
+	public String getmName() {
+		return mName;
+	}
+	public void setmName(String mName) {
+		this.mName = mName;
+	}
+	public String getmAddress() {
+		return mAddress;
+	}
+	public void setmAddress(String mAddress) {
+		this.mAddress = mAddress;
+	}
+	public String getmDetailAddress() {
+		return mDetailAddress;
+	}
+	public void setmDetailAddress(String mDetailAddress) {
+		this.mDetailAddress = mDetailAddress;
+	}
+	public String getmNickName() {
+		return mNickName;
+	}
+	public void setmNickName(String mNickName) {
+		this.mNickName = mNickName;
+	}
+	public String getmAvatar() {
+		return mAvatar;
+	}
+	public void setmAvatar(String mAvatar) {
+		this.mAvatar = mAvatar;
+	}
 	public int getSupplierId() {
 		return supplierId;
 	}
 	public void setSupplierId(int supplierId) {
 		this.supplierId = supplierId;
 	}
-	public int getCateId() {
-		return cateId;
+	public String getOrderNumber() {
+		return orderNumber;
 	}
-	public void setCateId(int cateId) {
-		this.cateId = cateId;
+	public void setOrderNumber(String orderNumber) {
+		this.orderNumber = orderNumber;
 	}
-	
-	
+	public boolean ismDelete() {
+		return mDelete;
+	}
+	public void setmDelete(boolean mDelete) {
+		this.mDelete = mDelete;
+	}
+	public boolean issDelete() {
+		return sDelete;
+	}
+	public void setsDelete(boolean sDelete) {
+		this.sDelete = sDelete;
+	}
 	
 	
 }
