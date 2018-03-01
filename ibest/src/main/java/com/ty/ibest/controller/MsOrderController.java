@@ -1,6 +1,8 @@
 package com.ty.ibest.controller;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,18 +17,30 @@ import com.ty.ibest.entity.MsOrder;
 import com.ty.ibest.service.MsOrderService;
 import com.ty.ibest.utils.Results;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 @Controller
 public class MsOrderController extends BaseController{
 	@Autowired
 	MsOrderService msOrderService;
-	@RequestMapping(value="/msorder/add",method = RequestMethod.POST,consumes="application/json")
+	@RequestMapping(value="/msorder/add",method = RequestMethod.POST)
 	@ResponseBody
-	public Results<MsOrder> addMsOrder(@RequestBody MsOrder msOrder){
+	public Results<MsOrder> addMsOrder(@RequestParam String list){
+		
 		try{
-			int id = msOrderService.addMsOrder(msOrder);
-			System.out.println(id);
-			if(id>0)
-			return successResult(msOrder);
+			//int id = msOrderService.addMsOrder(list);
+			System.out.println(list);
+			
+			 msOrderService.addMsOrder(list);
+			/*for(Map<String,Object> map:jsStr){
+				for(String m:map.keySet()){
+					System.out.println(m+","+map.get(m));
+				}
+			}*/
+			
+			//if(id>0)
+			return successResult(null);
 		}catch(Exception e){
 		}
 		return failResult(555,"ÃÌº” ß∞‹");

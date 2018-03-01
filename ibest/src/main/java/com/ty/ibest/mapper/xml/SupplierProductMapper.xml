@@ -21,6 +21,12 @@
 		s_product WHERE
 		supplier_id = #{supplierId}
 	</select>
+	<select id="getProductById" resultMap="BaseResult" parameterType="int">
+		SELECT *
+		FROM
+		s_product WHERE
+		product_id = #{productId}
+	</select>
 	<insert id="addProduct" parameterType="SupplierProduct"
 		useGeneratedKeys="true" keyProperty="productId">
 		INSERT INTO s_product

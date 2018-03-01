@@ -50,13 +50,14 @@ wAjax("address/update","JSON_POST",params,function(res){
 	console.log(res);
 })  */
 var params = {
-		status:"wanmei",
-		orderId:1,
-		type:1
+		list:JSON.stringify([{
+			productId:1
+		}])
 }
- wAjax("msorder/delete","POST",params,function(res){
+ wAjax("msorder/add","POST",params,function(res){
 	console.log(res);
 }) 
+
 /* var params = {
 		mainImage:"http://img.zcool.cn/community/01690955496f930000019ae92f3a4e.jpg@2o.jpg",
 		name:"er个大百花",
