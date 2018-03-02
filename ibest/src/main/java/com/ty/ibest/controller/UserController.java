@@ -15,42 +15,52 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageInfo;
 import com.ty.ibest.entity.Admin;
-import com.ty.ibest.entity.Merchant;
-import com.ty.ibest.service.MerchantService;
+import com.ty.ibest.entity.User;
+import com.ty.ibest.service.UserService;
 import com.ty.ibest.utils.Results;
 
 import net.sf.json.JSONArray;
 
 @Controller
-public class MerchantController extends BaseController{
+public class UserController extends BaseController{
+	
 	@Autowired
-	MerchantService merchantService;
-	@RequestMapping(value="/merchant/add",method =RequestMethod.POST)
+	UserService userService;
+	@RequestMapping(value="/user/add",method =RequestMethod.POST)
 	@ResponseBody
-	public Results<Merchant> addMerchant(@RequestBody Merchant merchant){
+	public Results<User> addUser(@RequestBody User merchant){
 		try{
 			
-			merchantService.addMerchant(merchant);
+			userService.addMerchant(merchant);
 			return successResult(merchant);
 		}catch(Exception e){
 			
 		}
 		return failResult(555,"添加失败");
-		
-		
-		
+	}
+	@RequestMapping(value="/user/wxcode",method =RequestMethod.POST)
+	@ResponseBody
+	public Results<User> userWxcode(String wxcode){
+		try{
+			String openId = wxcode;
+			
+			return successResult(null);
+		}catch(Exception e){
+			
+		}
+		return failResult(555,"添加失败");
 	}
 	@RequestMapping(value="/register",method =RequestMethod.POST)
 	@ResponseBody
-	public Results<Merchant> register(@RequestParam String phone,@RequestParam String password){
+	public Results<User> register(@RequestParam String phone,@RequestParam String password){
 		try{
 			//先判断验证码 
 			//查询是不是已经存在这个商户
 			
-			Merchant mc = merchantService.searchByPhone(phone);
+			User mc = userService.searchByPhone(phone);
 			
 			if(mc == null){
-				int x = merchantService.registerMerchant(phone,password);
+				int x = userService.registerMerchant(phone,password);
 				if(x>0){
 					return successResult(null);
 				}
@@ -69,12 +79,12 @@ public class MerchantController extends BaseController{
 	}
 	@RequestMapping(value="login",method =RequestMethod.POST)
 	@ResponseBody
-	public Results<Merchant> login(@RequestParam String phone,@RequestParam String password,HttpSession session){
+	public Results<User> login(@RequestParam String phone,@RequestParam String password,HttpSession session){
 		try{
 			//先判断验证码 
 			//查询是不是已经存在这个商户
 			
-			Merchant mc = merchantService.isLogin(phone,password);
+			User mc = userService.isLogin(phone,password);
 			if(mc!=null){
 				session.setAttribute("merchantInfo", mc);
 			}
@@ -92,9 +102,9 @@ public class MerchantController extends BaseController{
 	//向商户支付利润
 	@RequestMapping(value="/merchant/payprofit")
 	@ResponseBody
-	public Results<Merchant> payProfit(@RequestParam int id,@RequestParam float value){
+	public Results<User> payProfit(@RequestParam int id,@RequestParam float value){
 		try{
-			int x = merchantService.payProfit(id,value);
+			int x = userService.payProfit(id,value);
 		
 			return successResult(null);
 			
@@ -108,9 +118,9 @@ public class MerchantController extends BaseController{
 	}
 	@RequestMapping(value="/merchant/update",method =RequestMethod.POST)
 	@ResponseBody
-	public Results<Merchant> updateMerchant(@RequestBody Merchant merchant,HttpSession session){
+	public Results<User> updateMerchant(@RequestBody User merchant,HttpSession session){
 		try{
-			Merchant mc = (Merchant)session.getAttribute("merchantInfo");
+			User mc = (User)session.getAttribute("merchantInfo");
 			System.out.println(mc.getPhone());
 			if(mc!=null){
 				
@@ -126,7 +136,7 @@ public class MerchantController extends BaseController{
 					
 				}
 			}*/
-			int x = merchantService.updateMerchant(merchant);
+			int x = userService.updateMerchant(merchant);
 			System.out.println(x);
 			if(x>0){
 				return successResult(null);
@@ -147,7 +157,7 @@ public class MerchantController extends BaseController{
 	
 	@RequestMapping(value="/merchant/list",method = RequestMethod.GET)
 	@ResponseBody
-	public Results<PageInfo<Merchant>> getMerchant(@RequestParam int current,@RequestParam int size,HttpSession session){
+	public Results<PageInfo<User>> getMerchant(@RequestParam int current,@RequestParam int size,HttpSession session){
 		try{
 			/*Admin admin = (Admin)session.getAttribute("adminInfo");
 			System.out.println(admin.getPhone());*/
@@ -164,7 +174,7 @@ public class MerchantController extends BaseController{
 				}
 			}*/
 			System.out.println(current);
-			PageInfo<Merchant> pageInfo = merchantService.getMerchant(current,size);
+			PageInfo<User> pageInfo = merchantService.getMerchant(current,size);
 			return successResult(pageInfo);
 			//}else{
 			//	return failResult(555,"未登录");

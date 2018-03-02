@@ -51,7 +51,8 @@ wAjax("address/update","JSON_POST",params,function(res){
 })  */
 var params = {
 		list:JSON.stringify([{
-			productId:1
+			productId:1,
+			count:1
 		}])
 }
  wAjax("msorder/add","POST",params,function(res){

@@ -15,6 +15,9 @@
 		<result column="m_avatar" property="mAvatar"></result>
 		<result column="supplier_id" property="supplierId"></result>
 		<result column="order_number" property="orderNumber"></result>
+		<result column="total_money" property="totalMoney"></result>
+		<result column="final_cost" property="finalCost"></result>
+		<result column="gains_money" property="gainsMoney"></result>
 		<result column="m_delete" property="mDelete"></result>
 		<result column="s_delete" property="sDelete"></result>
 	</resultMap>
@@ -39,15 +42,17 @@
 		status,merchant_id,
 		m_name,m_address,m_detail_address,
 		m_nick_name,m_avatar,
-		supplier_id,order_number,m_delete,
-		s_delete)
+		supplier_id,order_number,
+		total_money,gains_money,final_cost,
+		m_delete,s_delete)
 		VALUES
 		(#{productList},#{createTime},
 		#{status},#{merchantId},
 		#{mName},#{mAddress},#{mDetailAddress},
 		#{mNickName},#{mAvatar},
-		#{supplierId},#{orderNumber},#{mDelete},
-		#{sDelete})
+		#{supplierId},#{orderNumber},
+		#{totalMoney},#{gainsMoney},#{finalCost},
+		#{mDelete},#{sDelete})
 	</insert>
 
 	<update id="updateMsOrder">

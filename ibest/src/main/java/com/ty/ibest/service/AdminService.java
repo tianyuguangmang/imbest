@@ -7,7 +7,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.ty.ibest.entity.Admin;
-import com.ty.ibest.entity.Merchant;
+import com.ty.ibest.entity.User;
 
 public interface AdminService {
 

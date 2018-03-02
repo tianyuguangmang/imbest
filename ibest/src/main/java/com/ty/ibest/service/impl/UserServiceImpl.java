@@ -7,16 +7,16 @@ import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.ty.ibest.entity.Merchant;
+import com.ty.ibest.entity.User;
 import com.ty.ibest.entity.ProductAttribute;
 import com.ty.ibest.mapper.MerchantMapper;
-import com.ty.ibest.service.MerchantService;
+import com.ty.ibest.service.UserService;
 @Service
-public class MerchantServiceImpl implements MerchantService{
+public class UserServiceImpl implements UserService{
 	@Autowired
 	MerchantMapper merchantMapper;
 
-	public int addMerchant(Merchant merchant) {
+	public int addMerchant(User merchant) {
 		try{
 			merchantMapper.addMerchant(merchant);
 			return merchant.getMerchantId();
@@ -27,16 +27,16 @@ public class MerchantServiceImpl implements MerchantService{
 		return 0;
 	}
 
-	public PageInfo<Merchant> getMerchant(int current,int size) {
+	public PageInfo<User> getMerchant(int current,int size) {
 		
 		// TODO Auto-generated method stub
 		PageHelper.startPage(current, size);
-        List<Merchant> list = merchantMapper.getMerchant();
-        PageInfo<Merchant> pageInfo = new PageInfo<Merchant>(list);
+        List<User> list = merchantMapper.getMerchant();
+        PageInfo<User> pageInfo = new PageInfo<User>(list);
         return pageInfo;
 		//return merchantMapper.getMerchant(start,size);
 	}
-	public Merchant searchByPhone(String phone){
+	public User searchByPhone(String phone){
 		try{
 			System.out.println(phone);
 			return merchantMapper.searchByPhone(phone);
@@ -52,7 +52,7 @@ public class MerchantServiceImpl implements MerchantService{
 		return 0;
 	}
 
-	public int updateMerchant(Merchant merchant) {
+	public int updateMerchant(User merchant) {
 		try{
 			
 			int x = merchantMapper.updateMerchant(merchant);
@@ -94,7 +94,7 @@ public class MerchantServiceImpl implements MerchantService{
 		return 0;
 		
 	}
-	public Merchant isLogin(String phone,String password){
+	public User isLogin(String phone,String password){
 		try{
 			return merchantMapper.isLogin(phone, password);
 		}catch(Exception e){

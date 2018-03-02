@@ -3,21 +3,26 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ty.ibest.mapper.MerchantMapper">
 	<resultMap id="BaseResult" type="com.ty.ibest.entity.Merchant">
-		<id column="m_mid" property="merchantId"></id>
+		<id column="merchant_id" property="merchantId"></id>
 
-		<result column="m_name" property="name"></result>
-		<result column="m_phone" property="phone"></result>
-		<result column="m_province" property="province"></result>
-		<result column="m_city" property="city"></result>
-		<result column="m_region" property="region"></result>
-		<result column="m_block" property="block"></result>
-		<result column="m_wx_code" property="wxCode"></result>
-		<result column="m_longitute" property="longitute"></result>
-		<result column="m_latitude" property="latitude"></result>
-		<result column="m_send_price" property="sendPrice"></result>
-		<result column="m_open_time" property="openTime"></result>
-		<result column="m_save_money" property="saveMoney"></result>
-		<result column="m_profit" property="profit"></result>
+		<result column="nick_name" property="nickName"></result>
+		<result column="avatar" property="avatar"></result>
+		<result column="open_id" property="openId"></result>
+		<result column="create_time" property="createTime"></result>
+		<result column="am_start_time" property="amStartTime"></result>
+		<result column="am_end_time" property="amEndTime"></result>
+		<result column="pm_start_time" property="pmStartTime"></result>
+		<result column="pm_end_time" property="pmEndTime"></result>
+		<result column="phone" property="phone"></result>
+		<result column="real_name" property="realName"></result>
+		<result column="address" property="address"></result>
+		<result column="detail_address" property="detailAddress"></result>
+		<result column="send_price" property="sendPrice"></result>
+		<result column="delivery_fee" property="deliveryFee"></result>
+		<result column="longitude" property="longitude"></result>
+		<result column="latitude" property="latitude"></result>
+		<result column="account_amount" property="account_amount"></result>
+	
 
 	</resultMap>
 	<select id="getMerchant" resultMap="BaseResult">
@@ -40,14 +45,9 @@
 	</select>
 	<insert id="addMerchant" parameterType="Merchant"
 		useGeneratedKeys="true" keyProperty="m_mid">
-		INSERT INTO m_merchant(m_name,m_phone
-		<!-- ,m_province,m_city, m_region,m_block,m_wx_code,m_longitute,m_latitude,m_send_price,m_open_time -->
-		)
-		VALUES(#{name
-		},#{phone}
-
-		<!-- ,#{province},#{city},#{region},#{block}, #{wxCode},#{longitute},#{latitude},#{sendPrice},#{openTime} -->
-		)
+		INSERT INTO merchant(real_name,phone)
+		VALUES(#{realName
+		},#{phone})
 	</insert>
 	<insert id="registerMerchant" useGeneratedKeys="true">
 		INSERT INTO m_merchant(m_phone, m_password)

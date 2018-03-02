@@ -29,18 +29,9 @@ public class MsOrderController extends BaseController{
 	public Results<MsOrder> addMsOrder(@RequestParam String list){
 		
 		try{
-			//int id = msOrderService.addMsOrder(list);
-			System.out.println(list);
-			
-			 msOrderService.addMsOrder(list);
-			/*for(Map<String,Object> map:jsStr){
-				for(String m:map.keySet()){
-					System.out.println(m+","+map.get(m));
-				}
-			}*/
-			
-			//if(id>0)
-			return successResult(null);
+			MsOrder msOrder = msOrderService.addMsOrder(list);
+			if(msOrder != null)
+			return successResult(msOrder);
 		}catch(Exception e){
 		}
 		return failResult(555,"ÃÌº” ß∞‹");

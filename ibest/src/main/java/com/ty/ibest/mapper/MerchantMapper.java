@@ -4,15 +4,15 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.ty.ibest.entity.Merchant;
+import com.ty.ibest.entity.User;
 
 public interface MerchantMapper {
-	int addMerchant(Merchant merchant);
-	List<Merchant> getMerchant();
+	int addMerchant(User merchant);
+	List<User> getMerchant();
 	int deleteMerchant(@Param("merchantId") int merchantId);
-	int updateMerchant(Merchant merchant);
+	int updateMerchant(User merchant);
 	int registerMerchant(@Param("phone") String phone,@Param("password") String password);
-	Merchant searchByPhone(@Param("phone") String phone);
-	Merchant isLogin(@Param("phone") String phone,@Param("password") String password);
+	User searchByPhone(@Param("phone") String phone);
+	User isLogin(@Param("phone") String phone,@Param("password") String password);
 	int payProfit(@Param("id") int id);
 }

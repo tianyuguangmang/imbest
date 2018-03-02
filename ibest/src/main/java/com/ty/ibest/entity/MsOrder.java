@@ -16,8 +16,39 @@ public class MsOrder {
 	private String mAvatar;
 	private int supplierId;
 	private String orderNumber;
+	/**
+	 * 供应商成本
+	 */
+	private float finalCost;
+	/**
+	 * 商户总付款
+	 */
+	private float totalMoney;
+	/**
+	 * 平台盈利金额
+	 */
+	private float gainsMoney;
 	private boolean mDelete;
 	private boolean sDelete;
+	
+	public float getFinalCost() {
+		return finalCost;
+	}
+	public void setFinalCost(float finalCost) {
+		this.finalCost = finalCost;
+	}
+	public float getTotalMoney() {
+		return totalMoney;
+	}
+	public void setTotalMoney(float totalMoney) {
+		this.totalMoney = totalMoney;
+	}
+	public float getGainsMoney() {
+		return gainsMoney;
+	}
+	public void setGainsMoney(float gainsMoney) {
+		this.gainsMoney = gainsMoney;
+	}
 	public int getOrderId() {
 		return orderId;
 	}
