@@ -3,7 +3,7 @@ import com.github.pagehelper.PageInfo;
 import com.ty.ibest.entity.User;
 
 public interface UserService {
-	int addMerchant(User merchant);
+	int addUser(String openId);
 	PageInfo<User> getMerchant(int current,int size);
 	int deleteMerchant(int merchantId);
 	int updateMerchant(User merchant);

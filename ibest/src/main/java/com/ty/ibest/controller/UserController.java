@@ -26,24 +26,16 @@ public class UserController extends BaseController{
 	
 	@Autowired
 	UserService userService;
-	@RequestMapping(value="/user/add",method =RequestMethod.POST)
-	@ResponseBody
-	public Results<User> addUser(@RequestBody User merchant){
-		try{
-			
-			userService.addMerchant(merchant);
-			return successResult(merchant);
-		}catch(Exception e){
-			
-		}
-		return failResult(555,"Ìí¼ÓÊ§°Ü");
-	}
+
 	@RequestMapping(value="/user/wxcode",method =RequestMethod.POST)
 	@ResponseBody
 	public Results<User> userWxcode(String wxcode){
 		try{
 			String openId = wxcode;
 			
+			int id = userService.addUser(openId);
+			
+			if(id>0)
 			return successResult(null);
 		}catch(Exception e){
 			
@@ -174,7 +166,7 @@ public class UserController extends BaseController{
 				}
 			}*/
 			System.out.println(current);
-			PageInfo<User> pageInfo = merchantService.getMerchant(current,size);
+			PageInfo<User> pageInfo = userService.getMerchant(current,size);
 			return successResult(pageInfo);
 			//}else{
 			//	return failResult(555,"Î´µÇÂ¼");

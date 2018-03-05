@@ -50,12 +50,9 @@ wAjax("address/update","JSON_POST",params,function(res){
 	console.log(res);
 })  */
 var params = {
-		list:JSON.stringify([{
-			productId:1,
-			count:1
-		}])
+		wxcode:"123"
 }
- wAjax("msorder/add","POST",params,function(res){
+ wAjax("user/wxcode","POST",params,function(res){
 	console.log(res);
 }) 
 

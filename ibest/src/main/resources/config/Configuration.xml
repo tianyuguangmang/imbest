@@ -9,7 +9,7 @@
 		<typeAlias alias="SupplierProduct" type="com.ty.ibest.entity.SupplierProduct" />
 		<typeAlias alias="MsOrder" type="com.ty.ibest.entity.MsOrder" />
 		<typeAlias alias="OrderMessage" type="com.ty.ibest.entity.OrderMessage" />
-		<typeAlias alias="Merchant" type="com.ty.ibest.entity.Merchant" />
+		<typeAlias alias="User" type="com.ty.ibest.entity.User" />
 	</typeAliases>
 	<!-- 配置分页插件 -->
 	<plugins>

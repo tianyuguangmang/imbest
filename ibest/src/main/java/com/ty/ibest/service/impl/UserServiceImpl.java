@@ -9,19 +9,23 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.ty.ibest.entity.User;
 import com.ty.ibest.entity.ProductAttribute;
-import com.ty.ibest.mapper.MerchantMapper;
+import com.ty.ibest.mapper.UserMapper;
 import com.ty.ibest.service.UserService;
 @Service
 public class UserServiceImpl implements UserService{
 	@Autowired
-	MerchantMapper merchantMapper;
-
-	public int addMerchant(User merchant) {
+	UserMapper userMapper;
+	
+	public int addUser(String openId) {
 		try{
-			merchantMapper.addMerchant(merchant);
-			return merchant.getMerchantId();
-		}catch(Exception e){
+			System.out.println(openId);
+			int userId = userMapper.addUser(openId);
+			System.out.println(userId);
 			
+			if(userId>0)
+			return 1 ;
+		}catch(Exception e){
+			System.out.println(e);
 		}
 		// TODO Auto-generated method stub
 		return 0;
@@ -31,7 +35,7 @@ public class UserServiceImpl implements UserService{
 		
 		// TODO Auto-generated method stub
 		PageHelper.startPage(current, size);
-        List<User> list = merchantMapper.getMerchant();
+        List<User> list = userMapper.getMerchant();
         PageInfo<User> pageInfo = new PageInfo<User>(list);
         return pageInfo;
 		//return merchantMapper.getMerchant(start,size);
@@ -39,7 +43,7 @@ public class UserServiceImpl implements UserService{
 	public User searchByPhone(String phone){
 		try{
 			System.out.println(phone);
-			return merchantMapper.searchByPhone(phone);
+			return userMapper.searchByPhone(phone);
 		}catch(Exception e){
 			return null;
 		}
@@ -55,7 +59,7 @@ public class UserServiceImpl implements UserService{
 	public int updateMerchant(User merchant) {
 		try{
 			
-			int x = merchantMapper.updateMerchant(merchant);
+			int x = userMapper.updateMerchant(merchant);
 			
 			System.out.println("smsg"+x);
 			
@@ -70,7 +74,7 @@ public class UserServiceImpl implements UserService{
 	public int payProfit(int id,float value) {
 		try{
 			
-			int x = merchantMapper.payProfit(id);
+			int x = userMapper.payProfit(id);
 			
 			System.out.println("smsg"+x);
 			
@@ -85,7 +89,7 @@ public class UserServiceImpl implements UserService{
 	public int registerMerchant(String phone,String password){
 		try{
 		
-			int x = merchantMapper.registerMerchant(phone,password);
+			int x = userMapper.registerMerchant(phone,password);
 		
 			return x;
 		}catch(Exception e){
@@ -96,7 +100,7 @@ public class UserServiceImpl implements UserService{
 	}
 	public User isLogin(String phone,String password){
 		try{
-			return merchantMapper.isLogin(phone, password);
+			return userMapper.isLogin(phone, password);
 		}catch(Exception e){
 			
 		}

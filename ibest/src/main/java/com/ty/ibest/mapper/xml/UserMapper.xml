@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ty.ibest.mapper.MerchantMapper">
-	<resultMap id="BaseResult" type="com.ty.ibest.entity.Merchant">
-		<id column="merchant_id" property="merchantId"></id>
+<mapper namespace="com.ty.ibest.mapper.UserMapper">
+	<resultMap id="BaseResult" type="com.ty.ibest.entity.User">
+		<id column="user_id" property="userId"></id>
 
 		<result column="nick_name" property="nickName"></result>
 		<result column="avatar" property="avatar"></result>
@@ -43,11 +43,13 @@
 		m_merchant WHERE
 		m_phone = #{phone} AND m_password = #{password}
 	</select>
-	<insert id="addMerchant" parameterType="Merchant"
-		useGeneratedKeys="true" keyProperty="m_mid">
-		INSERT INTO merchant(real_name,phone)
-		VALUES(#{realName
-		},#{phone})
+	<insert id="addUser" parameterType="String"
+		useGeneratedKeys="true" keyProperty="userId">
+		INSERT INTO user(open_id)
+		VALUES(#{openId})
+		<selectKey keyProperty="userId" resultType="java.lang.Integer">
+	      select LAST_INSERT_ID() as userId
+	      </selectKey>
 	</insert>
 	<insert id="registerMerchant" useGeneratedKeys="true">
 		INSERT INTO m_merchant(m_phone, m_password)
@@ -57,7 +59,7 @@
 		</selectKey>
 	</insert>
 
-	<update id="updateMerchant" parameterType="Merchant">
+	<update id="updateMerchant" parameterType="User">
 		UPDATE m_merchant
 		SET
 		m_name =#{name},

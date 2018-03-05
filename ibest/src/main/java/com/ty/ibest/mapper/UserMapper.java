@@ -6,8 +6,8 @@ import org.apache.ibatis.annotations.Param;
 
 import com.ty.ibest.entity.User;
 
-public interface MerchantMapper {
-	int addMerchant(User merchant);
+public interface UserMapper {
+	int addUser(@Param("openId") String openId);
 	List<User> getMerchant();
 	int deleteMerchant(@Param("merchantId") int merchantId);
 	int updateMerchant(User merchant);

@@ -4,7 +4,7 @@ public class User {
 	
 	private int current;
 	private int size;
-	private int merchantId;
+	private int userId;
 	private String nickName;
 	private String avatar;
 	private String openId;
@@ -35,11 +35,12 @@ public class User {
 	public void setSize(int size) {
 		this.size = size;
 	}
-	public int getMerchantId() {
-		return merchantId;
+	
+	public int getUserId() {
+		return userId;
 	}
-	public void setMerchantId(int merchantId) {
-		this.merchantId = merchantId;
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 	public String getNickName() {
 		return nickName;
