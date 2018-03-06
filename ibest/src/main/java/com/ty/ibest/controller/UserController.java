@@ -30,37 +30,42 @@ public class UserController extends BaseController{
 	@RequestMapping(value="/user/wxcode",method =RequestMethod.POST)
 	@ResponseBody
 	public Results<User> userWxcode(String wxcode){
-		try{
-			String openId = wxcode;
-			
-			int id = userService.addUser(openId);
-			
-			if(id>0)
-			return successResult(null);
-		}catch(Exception e){
-			
+		String openId = null;
+		User user = null;
+		openId = wxcode;
+		user = userService.queryUserByOpenId(openId);
+		if(user == null){
+			user = new User();
+			user.setOpenId(openId);
+			int id = userService.addUser(user);	
+			if(id==0){
+			  return failResult(555,"添加失败");
+			}
 		}
-		return failResult(555,"添加失败");
+		return successResult(user);
 	}
-	@RequestMapping(value="/register",method =RequestMethod.POST)
+	//商家与供应商的注册
+	@RequestMapping(value="/ms/register",method =RequestMethod.POST)
 	@ResponseBody
-	public Results<User> register(@RequestParam String phone,@RequestParam String password){
+	public Results<User> register(String phone,String type,String wxcode){
+		String openId = wxcode;
+		User user =null;
 		try{
-			//先判断验证码 
-			//查询是不是已经存在这个商户
-			
-			User mc = userService.searchByPhone(phone);
-			
-			if(mc == null){
-				int x = userService.registerMerchant(phone,password);
+			user = userService.searchByPhone(phone);
+			if(user == null){
+				//发起支付，支付成功后数据保存
+				user = new User();
+				user.setPhone(phone);
+				user.setType(type);
+				user.setOpenId(openId);
+				int x = userService.toRegister(user);
 				if(x>0){
 					return successResult(null);
 				}
 			}else{
-				return failResult(555,"该手机号已注册");
+				return failResult(555,"该手机号已被注册");
 			}
 			
-			return successResult(mc);
 		}catch(Exception e){
 			
 		}
@@ -69,45 +74,7 @@ public class UserController extends BaseController{
 		
 		
 	}
-	@RequestMapping(value="login",method =RequestMethod.POST)
-	@ResponseBody
-	public Results<User> login(@RequestParam String phone,@RequestParam String password,HttpSession session){
-		try{
-			//先判断验证码 
-			//查询是不是已经存在这个商户
-			
-			User mc = userService.isLogin(phone,password);
-			if(mc!=null){
-				session.setAttribute("merchantInfo", mc);
-			}
-	
-			
-			return successResult(mc);
-		}catch(Exception e){
-			
-		}
-		return failResult(555,"注册失败");
-		
-		
-		
-	}
-	//向商户支付利润
-	@RequestMapping(value="/merchant/payprofit")
-	@ResponseBody
-	public Results<User> payProfit(@RequestParam int id,@RequestParam float value){
-		try{
-			int x = userService.payProfit(id,value);
-		
-			return successResult(null);
-			
-		}catch(Exception e){
-			
-		}
-		return failResult(555,"修改失败");
-		
-		
-		
-	}
+
 	@RequestMapping(value="/merchant/update",method =RequestMethod.POST)
 	@ResponseBody
 	public Results<User> updateMerchant(@RequestBody User merchant,HttpSession session){

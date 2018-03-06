@@ -31,34 +31,48 @@
 		m_merchant
 
 	</select>
-	<select id="searchByPhone" resultMap="BaseResult">
-		SELECT *
-		FROM
-		m_merchant
-		WHERE m_phone = #{phone}
-	</select>
+
 	<select id="isLogin" resultMap="BaseResult">
 		SELECT *
 		FROM
 		m_merchant WHERE
 		m_phone = #{phone} AND m_password = #{password}
 	</select>
-	<insert id="addUser" parameterType="String"
+	<insert id="addUser" parameterType="User"
 		useGeneratedKeys="true" keyProperty="userId">
 		INSERT INTO user(open_id)
 		VALUES(#{openId})
-		<selectKey keyProperty="userId" resultType="java.lang.Integer">
+<!-- 		<selectKey keyProperty="userId" resultType="java.lang.Integer">
 	      select LAST_INSERT_ID() as userId
-	      </selectKey>
+	      </selectKey> -->
 	</insert>
-	<insert id="registerMerchant" useGeneratedKeys="true">
-		INSERT INTO m_merchant(m_phone, m_password)
-		VALUES(#{phone},#{password})
-		<selectKey resultType="int" order="AFTER" keyProperty="m_mid">
-			SELECT LAST_INSERT_ID() AS m_mid
-		</selectKey>
-	</insert>
+	<select id="queryUserByOpenId" resultMap="BaseResult">
+		SELECT *
+		FROM
+		user WHERE open_id = #{openId}
 
+	</select>
+		<select id="searchByPhone" resultMap="BaseResult">
+		SELECT *
+		FROM
+		user
+		WHERE phone = #{phone}
+	</select>
+	<!-- <insert id="toRegister" useGeneratedKeys="true">
+		INSERT INTO user(phone, type)
+		VALUES(#{phone},#{type})
+		<selectKey resultType="int" order="AFTER" keyProperty="userId">
+			SELECT LAST_INSERT_ID() AS userId
+		</selectKey>
+	</insert> -->
+	<update id="toRegister" parameterType="User">
+		UPDATE user SET
+		phone =#{phone},
+		type = #{type}
+		WHERE
+		open_id =
+		#{openId}
+	</update>
 	<update id="updateMerchant" parameterType="User">
 		UPDATE m_merchant
 		SET

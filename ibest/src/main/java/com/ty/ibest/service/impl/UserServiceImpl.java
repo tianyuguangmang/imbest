@@ -15,22 +15,39 @@ import com.ty.ibest.service.UserService;
 public class UserServiceImpl implements UserService{
 	@Autowired
 	UserMapper userMapper;
-	
-	public int addUser(String openId) {
+	public int addUser(User user) {
 		try{
-			System.out.println(openId);
-			int userId = userMapper.addUser(openId);
-			System.out.println(userId);
-			
+			int userId = userMapper.addUser(user);
 			if(userId>0)
-			return 1 ;
+			return userId;
+		}catch(Exception e){
+			System.out.println(e);
+		}
+		return 0;
+	}
+	public User queryUserByOpenId(String openId) {
+		try{
+			
+			User user = userMapper.queryUserByOpenId(openId);
+		
+			
+			if(user!=null)
+			return user ;
 		}catch(Exception e){
 			System.out.println(e);
 		}
 		// TODO Auto-generated method stub
-		return 0;
+		return null;
 	}
-
+	public User searchByPhone(String phone){
+		try{
+			return userMapper.searchByPhone(phone);
+		}catch(Exception e){
+			return null;
+		}
+		
+		
+	}
 	public PageInfo<User> getMerchant(int current,int size) {
 		
 		// TODO Auto-generated method stub
@@ -40,16 +57,7 @@ public class UserServiceImpl implements UserService{
         return pageInfo;
 		//return merchantMapper.getMerchant(start,size);
 	}
-	public User searchByPhone(String phone){
-		try{
-			System.out.println(phone);
-			return userMapper.searchByPhone(phone);
-		}catch(Exception e){
-			return null;
-		}
-		
-		
-	}
+	
 
 	public int deleteMerchant(int merchantId) {
 		// TODO Auto-generated method stub
@@ -86,11 +94,9 @@ public class UserServiceImpl implements UserService{
 		// TODO Auto-generated method stub
 		return 0;
 	}
-	public int registerMerchant(String phone,String password){
+	public int toRegister(User user){
 		try{
-		
-			int x = userMapper.registerMerchant(phone,password);
-		
+			int x = userMapper.toRegister(user);
 			return x;
 		}catch(Exception e){
 			

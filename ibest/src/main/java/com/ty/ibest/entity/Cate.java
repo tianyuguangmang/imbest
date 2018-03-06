@@ -1,12 +1,6 @@
 package com.ty.ibest.entity;
 
-import java.util.List;
-import java.util.Map;
-
-import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.annotations.TableName;
-import com.baomidou.mybatisplus.enums.IdType;
-public class ProductCategory {
+public class Cate {
 
 	int cateId;
 

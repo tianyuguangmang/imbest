@@ -8,11 +8,9 @@ import org.springframework.stereotype.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.ty.ibest.entity.ProductAttribute;
-import com.ty.ibest.entity.ProductCategory;
+
 import com.ty.ibest.mapper.ProductAttributeMapper;
-import com.ty.ibest.mapper.ProductCategoryMapper;
 import com.ty.ibest.service.ProductAttributeService;
-import com.ty.ibest.service.ProductCategoryService;
 @Service
 public class ProductAttributeServiceImpl implements ProductAttributeService{
 	@Autowired
