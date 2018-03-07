@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ty.ibest.mapper.MerchantProductMapper">
+	<resultMap id="BaseResult" type="com.ty.ibest.entity.MerchantProduct">
+		<id column="product_id" property="productId"></id>
+		<result column="origin_id" property="originId"></result>
+		<result column="main_image" property="mainImage"></result>
+		<result column="name" property="name"></result>
+		<result column="origin_price" property="originPrice"></result>
+		<result column="reset_price" property="resetPrice"></result>
+		<result column="stock" property="stock"></result>
+		<result column="sold_number" property="soldNumber"></result>
+		<result column="sku" property="sku"></result>
+		<result column="status" property="status"></result>
+		<result column="merchant_id" property="merchantId"></result>
+		<result column="cate_id" property="cateId"></result>
+	</resultMap>
+	<select id="getProduct" resultMap="BaseResult">
+		SELECT *
+		FROM
+		m_product WHERE
+		merchant_id = #{merchantId}
+	</select>
+	<select id="getProductById" resultMap="BaseResult" parameterType="int">
+		SELECT *
+		FROM
+		m_product WHERE
+		product_id = #{productId}
+	</select>
+	<insert id="addProduct" parameterType="MerchantProduct"
+		useGeneratedKeys="true" keyProperty="productId">
+		INSERT INTO m_product
+		(origin_id,main_image,name,
+		origin_price,reset_price,
+		stock,sold_number,sku,
+		status,merchant_id,cate_id)
+		VALUES (#{originId},#{mainImage},#{name},
+		#{originPrice},#{resetPrice},
+		#{stock},#{soldNumber},#{sku},
+		#{status},#{merchantId},#{cateId})
+	</insert>
+
+	<update id="updateProduct" parameterType="MerchantProduct">
+		UPDATE m_product
+		SET
+		main_image=#{mainImage},
+		origin_id = #{originId},
+		name = #{name},
+		origin_price = #{originPrice},
+		reset_price = #{resetPrice},
+		stock = #{stock},
+		sold_number =
+		#{soldNumber},
+		sku = #{sku},
+		status = #{status},
+		supplier_id =
+		#{supplierId},
+		cate_id = #{cateId}
+		WHERE
+		product_id =
+		#{productId}
+	</update>
+
+
+	<delete id="deleteProduct" parameterType="int">
+		DELETE FROM m_product
+		WHERE product_id = #{productId}
+	</delete>
+</mapper>

@@ -50,12 +50,17 @@ wAjax("address/update","JSON_POST",params,function(res){
 	console.log(res);
 })  */
 var params = {
-		title:"xiaowaSn"
+		name:"xiaowaSn",
+		cateId:1,
+		originPrice:10,
+		resetPrice:20
 }
- wAjax("cate/add","POST",params,function(res){
+ wAjax("merchant/product/add","JSON_POST",params,function(res){
 	console.log(res);
 }) 
-
+ wAjax("merchant/product/list","GET",{size:2,current:1,merchantId:0},function(res){
+	console.log(res);
+}) 
 /* var params = {
 		mainImage:"http://img.zcool.cn/community/01690955496f930000019ae92f3a4e.jpg@2o.jpg",
 		name:"er个大百花",
