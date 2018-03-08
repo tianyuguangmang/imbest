@@ -1,8 +1,5 @@
 package com.ty.ibest.entity;
 
-import java.util.List;
-import java.util.Map;
-
 public class MsOrder {
 	private int orderId;
 	private String productList;

@@ -1,12 +1,8 @@
 package com.ty.ibest.controller;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,10 +12,6 @@ import com.ty.ibest.entity.MsOrder;
 
 import com.ty.ibest.service.MsOrderService;
 import com.ty.ibest.utils.Results;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-
 @Controller
 public class MsOrderController extends BaseController{
 	@Autowired
@@ -36,7 +28,8 @@ public class MsOrderController extends BaseController{
 		}
 		return failResult(555,"ÃÌº” ß∞‹");
 	}
-	@RequestMapping(value="/merchant/order/list",method = RequestMethod.GET)
+	
+	@RequestMapping(value="/merchant/msorder/list",method = RequestMethod.GET)
 	@ResponseBody
 	public Results<List<MsOrder>> getMerchantOrder(@RequestParam String merchantId){
 		try{
@@ -46,7 +39,7 @@ public class MsOrderController extends BaseController{
 		}
 		return failResult(555,"ªÒ»° ß∞‹");
 	}
-	@RequestMapping(value="/supplier/order/list",method = RequestMethod.GET)
+	@RequestMapping(value="/supplier/msorder/list",method = RequestMethod.GET)
 	@ResponseBody
 	public Results<List<MsOrder>> getSupplierOrder(@RequestParam String supplierId){
 		try{

@@ -6,11 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ty.ibest.entity.Address;
-import com.ty.ibest.entity.ProductAttribute;
 import com.ty.ibest.mapper.AddressMapper;
-import com.ty.ibest.mapper.ProductAttributeMapper;
 import com.ty.ibest.service.AddressService;
-import com.ty.ibest.service.ProductAttributeService;
 @Service
 public class AddressServiceImpl implements AddressService{
 	@Autowired

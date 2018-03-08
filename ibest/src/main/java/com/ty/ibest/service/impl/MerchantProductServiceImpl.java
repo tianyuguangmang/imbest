@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.ty.ibest.entity.MerchantProduct;
-import com.ty.ibest.entity.ProductAttribute;
 import com.ty.ibest.mapper.MerchantProductMapper;
 import com.ty.ibest.service.MerchantProductService;
 @Service

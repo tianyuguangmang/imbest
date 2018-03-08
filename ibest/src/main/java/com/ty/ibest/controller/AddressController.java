@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ty.ibest.entity.Address;
-import com.ty.ibest.entity.ProductAttribute;
 import com.ty.ibest.service.AddressService;
 import com.ty.ibest.utils.Results;
 
@@ -47,7 +46,7 @@ public class AddressController extends BaseController{
 	}
 	@RequestMapping(value="/address/delete",method = RequestMethod.POST)
 	@ResponseBody
-	public Results<ProductAttribute> deleteAddress(@RequestParam int addressId){ 
+	public Results<Address> deleteAddress(@RequestParam int addressId){ 
 		try{
 			int x =addressService.deleteAddress(addressId);
 			if(x>0){

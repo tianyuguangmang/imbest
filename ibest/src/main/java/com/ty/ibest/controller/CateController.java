@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.ty.ibest.entity.Cate;
 import com.ty.ibest.service.CateService;
 import com.ty.ibest.utils.Results;
 
@@ -20,11 +21,11 @@ public class CateController extends BaseController{
 	CateService cateService;
 	@RequestMapping(value = "/cate/add", method = RequestMethod.POST)
 	@ResponseBody
-	public Results addCate(String title){
+	public Results<Boolean> addCate(String title){
 		try{
 			int keyId = cateService.addCate(title);
 			if(keyId>0)
-			return successResult(true);
+			return successResult(null);
 		}catch(Exception e){
 			
 		}
@@ -32,9 +33,9 @@ public class CateController extends BaseController{
 	}
 	@RequestMapping(value = "/cate/list", method = RequestMethod.GET)
 	@ResponseBody
-	public Results getGoodsCate(){
+	public Results<List<Cate>> getGoodsCate(){
 		try{
-			List list = cateService.queryProductCate();
+			List<Cate> list = cateService.queryProductCate();
 			return successResult(list);
 		}catch(Exception e){
 			
@@ -43,11 +44,11 @@ public class CateController extends BaseController{
 	}
 	@RequestMapping(value = "/cate/delete", method = RequestMethod.POST)
 	@ResponseBody
-	public Results deleteGoodsCate(@RequestParam int id){
+	public Results<Boolean> deleteGoodsCate(@RequestParam int id){
 		try{
 			System.out.println(id);
 			cateService.deleteCate(id);
-			return successResult(true);
+			return successResult(null);
 			
 		}catch(Exception e){
 			

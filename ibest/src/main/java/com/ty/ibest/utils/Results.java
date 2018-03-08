@@ -1,7 +1,5 @@
 package com.ty.ibest.utils;
 
-import java.util.HashMap;
-import java.util.Map;
 
 public class Results<T> {
 	int code;

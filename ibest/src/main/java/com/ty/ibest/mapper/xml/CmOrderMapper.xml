@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ty.ibest.mapper.CmOrderMapper">
+	<resultMap id="BaseResult" type="com.ty.ibest.entity.CmOrder">
+		<id column="order_id" property="orderId"></id>
+		<result column="product_list" property="productList"></result>
+		<result column="create_time" property="createTime"></result>
+		<result column="status" property="status"></result>
+		<result column="merchant_id" property="merchantId"></result>
+		<result column="c_name" property="cName"></result>
+		<result column="c_address" property="cAddress"></result>
+		<result column="c_detail_address" property="cDetailAddress"></result>
+		<result column="c_nick_name" property="cNickName"></result>
+		<result column="c_avatar" property="cAvatar"></result>
+		<result column="consumer_id" property="consumerId"></result>
+		<result column="order_number" property="orderNumber"></result>
+		<result column="total_money" property="totalMoney"></result>
+		<result column="final_cost" property="finalCost"></result>
+		<result column="gains_money" property="gainsMoney"></result>
+		<result column="m_delete" property="mDelete"></result>
+		<result column="c_delete" property="cDelete"></result>
+	</resultMap>
+	<select id="getMerchantOrder" resultMap="BaseResult">
+		SELECT *
+		FROM
+		cm_order
+		WHERE
+		merchant_id = #{merchantId}
+	</select>
+	<select id="getConsumerOrder" resultMap="BaseResult">
+		SELECT *
+		FROM
+		cm_order
+		WHERE
+		consumer_id = #{consumerId}
+	</select>
+	<insert id="addCmOrder" parameterType="CmOrder"
+		useGeneratedKeys="true" keyProperty="orderId">
+		INSERT INTO cm_order
+		(product_list,create_time,
+		status,merchant_id,
+		c_name,c_address,c_detail_address,
+		c_nick_name,c_avatar,
+		consumer_id,order_number,
+		total_money,gains_money,final_cost,
+		m_delete,c_delete)
+		VALUES
+		(#{productList},#{createTime},
+		#{status},#{merchantId},
+		#{cName},#{cAddress},#{cDetailAddress},
+		#{cNickName},#{cAvatar},
+		#{consumerId},#{orderNumber},
+		#{totalMoney},#{gainsMoney},#{finalCost},
+		#{mDelete},#{cDelete})
+	</insert>
+
+	<update id="updateCmOrder">
+		UPDATE cm_order
+		SET
+		status = #{status}
+		<!-- main_image=#{mainImage}, name = #{name}, origin_price = #{originPrice}, 
+			reset_price = #{resetPrice}, create_time = #{createTime}, merchant_id = #{merchantId}, 
+			m_name = #{mName}, m_address = #{mAddress}, m_detail_address = #{mDetailAddress}, 
+			m_nick_name = #{mNickName}, m_avatar = #{mAvatar}, supplier_id = #{supplierId}, 
+			order_number = #{orderNumber}, m_delete = #{mDelete}, s_delete = #{sDelete}, 
+			cate_id = #{cateId} -->
+		WHERE
+		order_id =
+		#{orderId}
+	</update>
+	<update id="deleteCmOrder">
+		UPDATE cm_order
+		<set>
+			<if test="type == 1">
+				m_delete = 1
+			</if>
+			<if test="type == 2">
+				c_delete = 1
+			</if>
+		</set>
+		WHERE
+		order_id =
+		#{orderId}
+	</update>
+
+</mapper>

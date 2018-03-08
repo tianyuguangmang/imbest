@@ -24,7 +24,7 @@
 		VALUES(#{name},#{phone},#{address},#{detail},#{isDefault},#{consumerId})
 	</insert>
 
-	<update id="updateAddress" parameterType="ProductAttribute">
+	<update id="updateAddress" parameterType="Address">
 		UPDATE address
 		SET
 		name=

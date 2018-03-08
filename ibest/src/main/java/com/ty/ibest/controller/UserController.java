@@ -1,8 +1,4 @@
 package com.ty.ibest.controller;
-
-import java.util.List;
-import java.util.Map;
-
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +10,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageInfo;
-import com.ty.ibest.entity.Admin;
 import com.ty.ibest.entity.User;
 import com.ty.ibest.service.UserService;
 import com.ty.ibest.utils.Results;
-
-import net.sf.json.JSONArray;
-
 @Controller
 public class UserController extends BaseController{
 	
@@ -81,30 +73,10 @@ public class UserController extends BaseController{
 		try{
 			User mc = (User)session.getAttribute("merchantInfo");
 			System.out.println(mc.getPhone());
-			if(mc!=null){
-				
-			
-			/*if(merchant.getName()!= null){
-				JSONArray json = JSONArray.fromObject(merchant.getName());//userStrÊÇjson×Ö·û´®
-				for(int i=0;i<json.size();i++){
-					System.out.println(json.get(i));
-					Map<String,Object> map = (Map) json.get(i);
-					for(String s:map.keySet()){
-						System.out.println(map.get(s));
-					}
-					
-				}
-			}*/
 			int x = userService.updateMerchant(merchant);
-			System.out.println(x);
 			if(x>0){
 				return successResult(null);
 			}
-			}else{
-				return failResult(555,"Î´µÇÂ¼");
-			}
-			
-			
 		}catch(Exception e){
 			
 		}

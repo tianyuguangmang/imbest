@@ -3,38 +3,38 @@ package com.ty.ibest.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
-import com.ty.ibest.entity.MsOrder;
+import com.ty.ibest.entity.CmOrder;
+import com.ty.ibest.entity.MerchantProduct;
 import com.ty.ibest.entity.SupplierProduct;
-import com.ty.ibest.mapper.MsOrderMapper;
-import com.ty.ibest.mapper.SupplierProductMapper;
-import com.ty.ibest.service.MsOrderService;
+import com.ty.ibest.mapper.CmOrderMapper;
+import com.ty.ibest.mapper.MerchantProductMapper;
+import com.ty.ibest.service.CmOrderService;
 
 import net.sf.json.JSONArray;
 
 @Service
-public class MsOrderServiceImpl implements MsOrderService{
+public class CmOrderServiceImpl implements CmOrderService{
 	@Autowired
-	MsOrderMapper msOrderMapper;
+	CmOrderMapper cmOrderMapper;
 	@Autowired
-	SupplierProductMapper productMapper;
-	public MsOrder addMsOrder(String list) {
+	MerchantProductMapper productMapper;
+	public CmOrder addCmOrder(String list) {
 		try{
 		
 			JSONArray jsonArray = JSONArray.fromObject(list);
-			List<Map<String,Object>> mapListJson = (List)jsonArray;
-			List<SupplierProduct> productList = new ArrayList();
-			MsOrder msOrder = new MsOrder();
+			List<Map<String,Object>> mapListJson = (List<Map<String,Object>>)jsonArray;
+			List<MerchantProduct> productList = new ArrayList<MerchantProduct>();
+			CmOrder msOrder = new CmOrder();
 			float totalMoney = 0;
 			float finalCost = 0;
 	        for (int i = 0; i < mapListJson.size(); i++) {
 	            Map<String,Object> obj=mapListJson.get(i);
 	            
-	            SupplierProduct product = productMapper.getProductById((Integer)obj.get("productId"));
+	            MerchantProduct product = productMapper.getProductById((Integer)obj.get("productId"));
 	           
 	            totalMoney += (Integer)obj.get("count")*product.getResetPrice();
 	            finalCost += (Integer)obj.get("count")*product.getOriginPrice();
@@ -53,7 +53,7 @@ public class MsOrderServiceImpl implements MsOrderService{
 	        msOrder.setFinalCost(finalCost);
 	        msOrder.setGainsMoney(totalMoney - finalCost);
 	        msOrder.setProductList(json);
-	        int ms = msOrderMapper.addMsOrder(msOrder);
+	        int ms = cmOrderMapper.addCmOrder(msOrder);
 		
 			///int orderId = msOrderMapper.addMsOrder(msOrder);
 			if(ms>0)
@@ -67,10 +67,10 @@ public class MsOrderServiceImpl implements MsOrderService{
 		
 	}
 
-	public List<MsOrder> getMerchantOrder(String merchantId) {
+	public List<CmOrder> getMerchantOrder(String merchantId) {
 		
 		try{
-			List<MsOrder> list = msOrderMapper.getMerchantOrder(merchantId);
+			List<CmOrder> list = cmOrderMapper.getMerchantOrder(merchantId);
 			return list;
 		}catch(Exception e){
 			
@@ -79,10 +79,10 @@ public class MsOrderServiceImpl implements MsOrderService{
 		
 		
 	}
-	public List<MsOrder> getSupplierOrder(String supplierId) {
+	public List<CmOrder> getConsumerOrder(String consumerId) {
 		
 		try{
-			List<MsOrder> list = msOrderMapper.getSupplierOrder(supplierId);
+			List<CmOrder> list = cmOrderMapper.getConsumerOrder(consumerId);
 			return list;
 		}catch(Exception e){
 			
@@ -91,7 +91,7 @@ public class MsOrderServiceImpl implements MsOrderService{
 	}
 	public int deleteMsOrder(int orderId,int type) {
 		try{
-			msOrderMapper.deleteMsOrder(orderId, type);
+			cmOrderMapper.deleteCmOrder(orderId, type);
 			return orderId;
 		}catch(Exception e){
 			
@@ -99,13 +99,23 @@ public class MsOrderServiceImpl implements MsOrderService{
 		return 0;
 	}
 
-	public int updateMsOrder(String status,int orderId) {
+	public int updateCmOrder(int orderId,String status) {
 		try{
-			msOrderMapper.updateMsOrder(status, orderId);
+			cmOrderMapper.updateCmOrder(orderId,status);
 			return 1;
 		}catch(Exception e){
 			System.out.println(e);
 		}
+		return 0;
+	}
+
+	public CmOrder addMsOrder(String list) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public int deleteCmOrder(int orderId, int type) {
+		// TODO Auto-generated method stub
 		return 0;
 	}
 	

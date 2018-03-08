@@ -49,7 +49,7 @@ $(document).ready(function() {
 wAjax("address/update","JSON_POST",params,function(res){
 	console.log(res);
 })  */
-var params = {
+/* var params = {
 		name:"xiaowaSn",
 		cateId:1,
 		originPrice:10,
@@ -60,61 +60,17 @@ var params = {
 }) 
  wAjax("merchant/product/list","GET",{size:2,current:1,merchantId:0},function(res){
 	console.log(res);
+})  */
+var param = {
+	list:JSON.stringify([{
+		productId:1,
+		count:10
+	}])
+}
+
+wAjax("cmorder/add","POST",param,function(res){
+	
 }) 
-/* var params = {
-		mainImage:"http://img.zcool.cn/community/01690955496f930000019ae92f3a4e.jpg@2o.jpg",
-		name:"er个大百花",
-		productId:1
-}
- wAjax("supplier/product/update","JSON_POST",params,function(res){
-	console.log(res);
-})  */
-/* var params = 
-		name:"xmw",
-		phone:18754800737,
-		merchantId:1
-}
-/* wAjax("merchant/add","JSON_POST",params,function(res){
-	console.log(res);
-}) */
-/*params.name = "b白色";
 
-wAjax("merchant/update","JSON_POST",params,function(res){
-	console.log(res);
-}) */
-/* wAjax("product/add","JSON_POST",{name:'xw',imgUrl:'123'},function(res){
-	console.log(res);
-	wAjax("product/list","POST",{},function(res){
-		console.log(res);
-	}) 
-})  */
-/* wAjax("admin/tologin","POST",{phone:"admin",password:"123"},function(res){
-		console.log(res);
-	}) */
-	/* wAjax("register","POST",{phone:'187',password:'123'},function(res){
-		console.log(res);
-	}) 
-		wAjax("login","POST",{phone:'187',password:'123'},function(res){
-		console.log(res);
-
-wAjax("merchant/update","JSON_POST",{
-	phone:'187',
-	name:"白花花2s,S"
-},function(res){
-	console.log(res);
-})    
-		}) 
-	wAjax("goods/addcate","POST",{title:"日常用品"},function(){
-		wAjax("goods/getcate","POST",{},function(){
-			
-		})
-	}) */
-/* var params = {
-	merchantId:11,
-	name:"白花花2"
-}
-wAjax("merchant/update","JSON_POST",params,function(res){
-	console.log(res);
-})  */
 </script>
 </html>
