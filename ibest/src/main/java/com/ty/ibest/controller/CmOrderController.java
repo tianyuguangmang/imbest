@@ -7,27 +7,37 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ty.ibest.entity.CmOrder;
 import com.ty.ibest.service.CmOrderService;
+import com.ty.ibest.utils.RedisCacheUtil;
 import com.ty.ibest.utils.Results;
 
 
 @Controller
 public class CmOrderController extends BaseController{
 	@Autowired
+	private RedisCacheUtil redisCache;
+	@Autowired
 	CmOrderService cmOrderService;
+	
 	@RequestMapping(value="/cmorder/add",method = RequestMethod.POST)
 	@ResponseBody
 	public Results<CmOrder> addCmOrder(String list){
 		try{
 			System.out.println(list);
+			String key = "test";  
+	        String value = "valuetest";  
+	        redisCache.sset(key, value);
+	        String st = redisCache.sget(key);
+	        System.out.println(st);
+
 			CmOrder cmOrder = cmOrderService.addCmOrder(list);
 			if(cmOrder != null)
 			return successResult(cmOrder);
 		}catch(Exception e){
+			System.out.println(e);
 		}
 		return failResult(555,"ÃÌº” ß∞‹");
 	}
