@@ -24,6 +24,18 @@ public class UserServiceImpl implements UserService{
 		}
 		return 0;
 	}
+	public User queryUserByPhone(String phone) {
+		try{
+			
+			User user = userMapper.queryUserByPhone(phone);			
+			if(user!=null)
+			return user ;
+		}catch(Exception e){
+			System.out.println(e);
+		}
+		// TODO Auto-generated method stub
+		return null;
+	}
 	public User queryUserByOpenId(String openId) {
 		try{
 			

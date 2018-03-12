@@ -14,6 +14,15 @@ public class CmOrder {
 	private String cAvatar;
 	private int consumerId;
 	private String orderNumber;
+	private String cPhone;
+	
+	
+	public String getcPhone() {
+		return cPhone;
+	}
+	public void setcPhone(String cPhone) {
+		this.cPhone = cPhone;
+	}
 	/**
 	 * 供应商成本
 	 */

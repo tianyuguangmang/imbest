@@ -9,6 +9,7 @@ import com.ty.ibest.entity.Address;
 public interface AddressMapper {
 	int addAddress(Address address);
 	List<Address> getAddress(@Param("consumerId") int consumerId);
+	Address getAddressById(@Param("addressId") int addressId);
 	int deleteAddress(@Param("addressId") int addressId);
 	int updateAddress(Address address);
 }

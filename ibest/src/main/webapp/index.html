@@ -61,6 +61,24 @@ wAjax("address/update","JSON_POST",params,function(res){
  wAjax("merchant/product/list","GET",{size:2,current:1,merchantId:0},function(res){
 	console.log(res);
 })  */
+/* var params = {
+		name:"xiaowaSn",
+		cateId:2,
+		originPrice:10,
+		resetPrice:20,
+		merchantId:1,
+		stock:20
+}
+
+wAjax("merchant/product/add","JSON_POST",params,function(res){
+	console.log(res);
+}) 
+wAjax("merchant/product/delete","POST",{productId:1},function(res){
+	console.log(res);
+}) */
+wAjax("user/wxcode","POST",{wxcode:123},function(res){
+	console.log(res);
+})
 var param = {
 	list:JSON.stringify([{
 		productId:1,
@@ -68,9 +86,12 @@ var param = {
 	}])
 }
 
-wAjax("cmorder/add","POST",param,function(res){
-	
-}) 
+ wAjax("cmorder/save","POST",param,function(res){
+	 
+	 wAjax("cmorder/info","GET",null,function(res){
+			
+	 })
+})  
 
 </script>
 </html>

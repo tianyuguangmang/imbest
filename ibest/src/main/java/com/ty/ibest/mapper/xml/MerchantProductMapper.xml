@@ -20,7 +20,10 @@
 		SELECT *
 		FROM
 		m_product WHERE
-		merchant_id = #{merchantId}
+		merchant_id = #{merchantId} 
+		<if test="cateId != 0">
+			AND cate_id = #{cateId}
+		</if>
 	</select>
 	<select id="getProductById" resultMap="BaseResult" parameterType="int">
 		SELECT *

@@ -10,18 +10,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageInfo;
+import com.ty.ibest.constant.InfoConstant;
 import com.ty.ibest.entity.User;
 import com.ty.ibest.service.UserService;
 import com.ty.ibest.utils.Results;
 @Controller
 public class UserController extends BaseController{
-	
+	final String USER_INFO = "USER_INFO";
 	@Autowired
 	UserService userService;
 
 	@RequestMapping(value="/user/wxcode",method =RequestMethod.POST)
 	@ResponseBody
-	public Results<User> userWxcode(String wxcode){
+	public Results<User> userWxcode(String wxcode,HttpSession session){
 		String openId = null;
 		User user = null;
 		openId = wxcode;
@@ -34,29 +35,70 @@ public class UserController extends BaseController{
 			  return failResult(555,"添加失败");
 			}
 		}
+		session.setAttribute(InfoConstant.USER_INFO, user);
 		return successResult(user);
 	}
-	//商家与供应商的注册
-	@RequestMapping(value="/ms/register",method =RequestMethod.POST)
+	/**
+	 * 成为供应商
+	 * 需要支付50元成为供应商
+	 * @param phone
+	 * @param validCode
+	 * @param userId
+	 * @return
+	 */
+	@RequestMapping(value="/supplier/register",method =RequestMethod.POST)
 	@ResponseBody
-	public Results<User> register(String phone,String type,String wxcode){
-		String openId = wxcode;
-		User user =null;
+	public Results<User> supplierRegister(String phone,String validCode,String userId,HttpSession session){
+		User user = null;
 		try{
-			user = userService.searchByPhone(phone);
-			if(user == null){
-				//发起支付，支付成功后数据保存
-				user = new User();
-				user.setPhone(phone);
-				user.setType(type);
-				user.setOpenId(openId);
-				int x = userService.toRegister(user);
-				if(x>0){
-					return successResult(null);
-				}
-			}else{
-				return failResult(555,"该手机号已被注册");
+			user = userService.queryUserByPhone(phone);
+			if(user != null){
+				return failResult(555,"注册失败");
 			}
+			//进行支付
+			user = (User)session.getAttribute(InfoConstant.USER_INFO);
+			user.setPhone(phone);
+			user.setType("SUPPLIER");
+			int id = userService.toRegister(user);
+			if(id>0){
+				return successResult(user);
+			}
+			
+			
+		}catch(Exception e){
+			
+		}
+		return failResult(555,"注册失败");
+		
+		
+		
+	}
+	/**
+	 * 成为商家
+	 * 需要支付50元成为商家
+	 * @param phone
+	 * @param validCode
+	 * @param userId
+	 * @return
+	 */
+	@RequestMapping(value="/merchant/register",method =RequestMethod.POST)
+	@ResponseBody
+	public Results<User> merchantRegister(String phone,String validCode,String userId,HttpSession session){
+		User user = null;
+		try{
+			user = userService.queryUserByPhone(phone);
+			if(user != null){
+				return failResult(555,"注册失败");
+			}
+			//进行支付
+			user = (User)session.getAttribute(USER_INFO);
+			user.setPhone(phone);
+			user.setType("MERCHANT");
+			int id = userService.toRegister(user);
+			if(id>0){
+				return successResult(user);
+			}
+			
 			
 		}catch(Exception e){
 			

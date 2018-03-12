@@ -17,6 +17,12 @@
 		address WHERE
 		consumer_id = #{consumerId}
 	</select>
+	<select id="getAddressById" resultMap="BaseResult">
+		SELECT *
+		FROM
+		address WHERE
+		address_id = #{addressId}
+	</select>
 	<insert id="addAddress" parameterType="Address"
 		useGeneratedKeys="true" keyProperty="addressId">
 		INSERT INTO address(name,

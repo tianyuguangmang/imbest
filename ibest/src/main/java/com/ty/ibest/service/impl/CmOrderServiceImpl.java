@@ -7,24 +7,33 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
+import com.ty.ibest.constant.InfoConstant;
+import com.ty.ibest.entity.Address;
 import com.ty.ibest.entity.CmOrder;
 import com.ty.ibest.entity.MerchantProduct;
 import com.ty.ibest.entity.SupplierProduct;
+import com.ty.ibest.entity.User;
+import com.ty.ibest.mapper.AddressMapper;
 import com.ty.ibest.mapper.CmOrderMapper;
 import com.ty.ibest.mapper.MerchantProductMapper;
 import com.ty.ibest.service.CmOrderService;
+import com.ty.ibest.utils.RedisCacheUtil;
 
 import net.sf.json.JSONArray;
 
 @Service
 public class CmOrderServiceImpl implements CmOrderService{
 	@Autowired
+	private RedisCacheUtil redisCache;
+	@Autowired
 	CmOrderMapper cmOrderMapper;
 	@Autowired
 	MerchantProductMapper productMapper;
-	public CmOrder addCmOrder(String list) {
+	@Autowired 
+	AddressMapper addressMapper;
+	public CmOrder saveCmOrder(String list) {
 		try{
-		
+			
 			JSONArray jsonArray = JSONArray.fromObject(list);
 			List<Map<String,Object>> mapListJson = (List<Map<String,Object>>)jsonArray;
 			List<MerchantProduct> productList = new ArrayList<MerchantProduct>();
@@ -53,11 +62,32 @@ public class CmOrderServiceImpl implements CmOrderService{
 	        msOrder.setFinalCost(finalCost);
 	        msOrder.setGainsMoney(totalMoney - finalCost);
 	        msOrder.setProductList(json);
-	        int ms = cmOrderMapper.addCmOrder(msOrder);
-		
-			///int orderId = msOrderMapper.addMsOrder(msOrder);
-			if(ms>0)
+	        redisCache.sset(InfoConstant.CM_ORDER, JSON.toJSONString(msOrder));
 			return msOrder;
+			
+		}catch(Exception e){
+			System.out.println(e);	
+			
+		}
+		return null;
+		
+	}
+	public CmOrder addCmOrder(CmOrder cmOrder,int addressId,User user) {
+		try{
+			Address address = addressMapper.getAddressById(addressId);
+			if(address != null){
+				cmOrder.setcAddress(address.getAddress());
+				cmOrder.setcDetailAddress(address.getDetail());
+				cmOrder.setcName(address.getName());
+				cmOrder.setcPhone(address.getPhone());
+				cmOrder.setConsumerId(user.getUserId());
+				
+			}
+			
+			int id = cmOrderMapper.addCmOrder(cmOrder);
+			if(id>0){
+				return cmOrder;
+			}
 			
 		}catch(Exception e){
 			System.out.println(e);	

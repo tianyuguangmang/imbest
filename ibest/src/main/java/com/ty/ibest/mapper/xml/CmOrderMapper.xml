@@ -9,6 +9,8 @@
 		<result column="status" property="status"></result>
 		<result column="merchant_id" property="merchantId"></result>
 		<result column="c_name" property="cName"></result>
+		
+		<result column="c_phone" property="cPhone"></result>
 		<result column="c_address" property="cAddress"></result>
 		<result column="c_detail_address" property="cDetailAddress"></result>
 		<result column="c_nick_name" property="cNickName"></result>
@@ -40,7 +42,7 @@
 		INSERT INTO cm_order
 		(product_list,create_time,
 		status,merchant_id,
-		c_name,c_address,c_detail_address,
+		c_name,c_phone,c_address,c_detail_address,
 		c_nick_name,c_avatar,
 		consumer_id,order_number,
 		total_money,gains_money,final_cost,
@@ -48,7 +50,7 @@
 		VALUES
 		(#{productList},#{createTime},
 		#{status},#{merchantId},
-		#{cName},#{cAddress},#{cDetailAddress},
+		#{cName},#{cPhone},#{cAddress},#{cDetailAddress},
 		#{cNickName},#{cAvatar},
 		#{consumerId},#{orderNumber},
 		#{totalMoney},#{gainsMoney},#{finalCost},

@@ -29,11 +29,11 @@ public class MerchantProductServiceImpl implements MerchantProductService{
 		return 0;
 	}
 
-	public PageInfo<MerchantProduct> getProduct(String merchantId,int current,int size) {
+	public PageInfo<MerchantProduct> getProduct(String merchantId,int cateId,int current,int size) {
 		PageInfo<MerchantProduct> pageInfo = null;
 		try{
 			PageHelper.startPage(current, size);
-	        List<MerchantProduct> list = mproductMapper.getProduct(merchantId);
+	        List<MerchantProduct> list = mproductMapper.getProduct(merchantId,cateId);
 	        pageInfo = new PageInfo<MerchantProduct>(list);
 		}catch(Exception e){
 			

@@ -29,9 +29,9 @@ public class MerchantProductController extends BaseController{
 	}
 	@RequestMapping(value="/merchant/product/list",method = RequestMethod.GET)
 	@ResponseBody
-	public Results<PageInfo<MerchantProduct>> getProduct(String merchantId,int current,int size){
+	public Results<PageInfo<MerchantProduct>> getProduct(String merchantId,int cateId,int current,int size){
 		try{
-			PageInfo<MerchantProduct> pageInfo = product.getProduct(merchantId,current,size);
+			PageInfo<MerchantProduct> pageInfo = product.getProduct(merchantId,cateId,current,size);
 			return successResult(pageInfo);
 		}catch(Exception e){
 		}

@@ -52,7 +52,12 @@
 		user WHERE open_id = #{openId}
 
 	</select>
-		<select id="searchByPhone" resultMap="BaseResult">
+	<select id="queryUserByPhone" resultMap="BaseResult">
+		SELECT *
+		FROM
+		user WHERE phone = #{phone}
+	</select>
+	<select id="searchByPhone" resultMap="BaseResult">
 		SELECT *
 		FROM
 		user
