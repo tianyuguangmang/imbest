@@ -11,7 +11,6 @@ import com.ty.ibest.constant.InfoConstant;
 import com.ty.ibest.entity.Address;
 import com.ty.ibest.entity.CmOrder;
 import com.ty.ibest.entity.MerchantProduct;
-import com.ty.ibest.entity.SupplierProduct;
 import com.ty.ibest.entity.User;
 import com.ty.ibest.mapper.AddressMapper;
 import com.ty.ibest.mapper.CmOrderMapper;
@@ -62,7 +61,9 @@ public class CmOrderServiceImpl implements CmOrderService{
 	        msOrder.setFinalCost(finalCost);
 	        msOrder.setGainsMoney(totalMoney - finalCost);
 	        msOrder.setProductList(json);
+	        System.out.println(InfoConstant.CM_ORDER);
 	        redisCache.sset(InfoConstant.CM_ORDER, JSON.toJSONString(msOrder));
+	       
 			return msOrder;
 			
 		}catch(Exception e){

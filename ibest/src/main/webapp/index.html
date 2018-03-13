@@ -78,20 +78,24 @@ wAjax("merchant/product/delete","POST",{productId:1},function(res){
 }) */
 wAjax("user/wxcode","POST",{wxcode:123},function(res){
 	console.log(res);
+	var param = {
+			list:JSON.stringify([{
+				productId:2,
+				count:10
+			}])
+		}
+	 wAjax("cmorder/save","POST",param,function(res){
+		 
+		 wAjax("cmorder/info","GET",null,function(res){
+			 wAjax("cmorder/add","POST",{addressId:3},function(res){
+					
+			 })	
+		 })
+	})  
 })
-var param = {
-	list:JSON.stringify([{
-		productId:1,
-		count:10
-	}])
-}
 
- wAjax("cmorder/save","POST",param,function(res){
-	 
-	 wAjax("cmorder/info","GET",null,function(res){
-			
-	 })
-})  
+
+
 
 </script>
 </html>
