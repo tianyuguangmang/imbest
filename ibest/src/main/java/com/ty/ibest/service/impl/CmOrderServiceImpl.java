@@ -61,6 +61,7 @@ public class CmOrderServiceImpl implements CmOrderService{
 	        msOrder.setFinalCost(finalCost);
 	        msOrder.setGainsMoney(totalMoney - finalCost);
 	        msOrder.setProductList(json);
+	        
 	        System.out.println(InfoConstant.CM_ORDER);
 	        redisCache.sset(InfoConstant.CM_ORDER, JSON.toJSONString(msOrder));
 	       
@@ -75,7 +76,9 @@ public class CmOrderServiceImpl implements CmOrderService{
 	}
 	public CmOrder addCmOrder(CmOrder cmOrder,int addressId,User user) {
 		try{
+			System.out.println(addressId);
 			Address address = addressMapper.getAddressById(addressId);
+			System.out.println(address.getAddress());
 			if(address != null){
 				cmOrder.setcAddress(address.getAddress());
 				cmOrder.setcDetailAddress(address.getDetail());
