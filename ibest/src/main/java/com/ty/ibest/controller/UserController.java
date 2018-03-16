@@ -32,15 +32,15 @@ public class UserController extends BaseController{
 			user.setOpenId(openId);
 			int id = userService.addUser(user);	
 			if(id==0){
-			  return failResult(555,"Ìí¼ÓÊ§°Ü");
+			  return failResult(555,"æ·»åŠ å¤±è´¥");
 			}
 		}
 		session.setAttribute(InfoConstant.USER_INFO, user);
 		return successResult(user);
 	}
 	/**
-	 * ³ÉÎª¹©Ó¦ÉÌ
-	 * ĞèÒªÖ§¸¶50Ôª³ÉÎª¹©Ó¦ÉÌ
+	 * æˆä¸ºä¾›åº”å•†
+	 * éœ€è¦æ”¯ä»˜50å…ƒæˆä¸ºä¾›åº”å•†
 	 * @param phone
 	 * @param validCode
 	 * @param userId
@@ -50,32 +50,31 @@ public class UserController extends BaseController{
 	@ResponseBody
 	public Results<User> supplierRegister(String phone,String validCode,String userId,HttpSession session){
 		User user = null;
+		String backMsg = null;
 		try{
 			user = userService.queryUserByPhone(phone);
 			if(user != null){
-				return failResult(555,"×¢²áÊ§°Ü");
+				return failResult(555,"æ‰‹æœºå·å·²ç»æ³¨å†Œ");
 			}
-			//½øĞĞÖ§¸¶
+			//è¿›è¡Œæ”¯ä»˜
 			user = (User)session.getAttribute(InfoConstant.USER_INFO);
 			user.setPhone(phone);
 			user.setType("SUPPLIER");
-			int id = userService.toRegister(user);
-			if(id>0){
+			backMsg = userService.toRegister(user);
+			if(backMsg.equals("SUCCESS")){
 				return successResult(user);
 			}
-			
-			
 		}catch(Exception e){
 			
 		}
-		return failResult(555,"×¢²áÊ§°Ü");
+		return failResult(555,backMsg);
 		
 		
 		
 	}
 	/**
-	 * ³ÉÎªÉÌ¼Ò
-	 * ĞèÒªÖ§¸¶50Ôª³ÉÎªÉÌ¼Ò
+	 * æˆä¸ºå•†å®¶
+	 * éœ€è¦æ”¯ä»˜50å…ƒæˆä¸ºå•†å®¶
 	 * @param phone
 	 * @param validCode
 	 * @param userId
@@ -85,17 +84,18 @@ public class UserController extends BaseController{
 	@ResponseBody
 	public Results<User> merchantRegister(String phone,String validCode,String userId,HttpSession session){
 		User user = null;
+		String backMsg = null;
 		try{
 			user = userService.queryUserByPhone(phone);
 			if(user != null){
-				return failResult(555,"×¢²áÊ§°Ü");
+				return failResult(555,"æ‰‹æœºå·å·²è¢«æ³¨å†Œ");
 			}
-			//½øĞĞÖ§¸¶
-			user = (User)session.getAttribute(USER_INFO);
+			//è¿›è¡Œæ”¯ä»˜
+			user = (User)session.getAttribute(InfoConstant.USER_INFO);
 			user.setPhone(phone);
 			user.setType("MERCHANT");
-			int id = userService.toRegister(user);
-			if(id>0){
+			backMsg = userService.toRegister(user);
+			if(backMsg.equals("SUCCESS")){
 				return successResult(user);
 			}
 			
@@ -103,7 +103,7 @@ public class UserController extends BaseController{
 		}catch(Exception e){
 			
 		}
-		return failResult(555,"×¢²áÊ§°Ü");
+		return failResult(555,backMsg);
 		
 		
 		
@@ -122,7 +122,7 @@ public class UserController extends BaseController{
 		}catch(Exception e){
 			
 		}
-		return failResult(555,"ĞŞ¸ÄÊ§°Ü");
+		return failResult(555,"ä¿®æ”¹å¤±è´¥");
 		
 		
 		
@@ -136,7 +136,7 @@ public class UserController extends BaseController{
 			System.out.println(admin.getPhone());*/
 			//if(admin!=null){
 			/*if(merchant.getName()!= null){
-				JSONArray json = JSONArray.fromObject(merchant.getName());//userStrÊÇjson×Ö·û´®
+				JSONArray json = JSONArray.fromObject(merchant.getName());//userStræ˜¯jsonå­—ç¬¦ä¸²
 				for(int i=0;i<json.size();i++){
 					System.out.println(json.get(i));
 					Map<String,Object> map = (Map) json.get(i);
@@ -150,14 +150,14 @@ public class UserController extends BaseController{
 			PageInfo<User> pageInfo = userService.getMerchant(current,size);
 			return successResult(pageInfo);
 			//}else{
-			//	return failResult(555,"Î´µÇÂ¼");
+			//	return failResult(555,"æœªç™»å½•");
 			//}
 			
 			
 		}catch(Exception e){
 			
 		}
-		return failResult(555,"»ñÈ¡Ê§°Ü");
+		return failResult(555,"è·å–å¤±è´¥");
 		
 		
 		

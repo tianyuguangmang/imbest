@@ -10,7 +10,7 @@ public interface UserService {
 	PageInfo<User> getMerchant(int current,int size);
 	int deleteMerchant(int merchantId);
 	int updateMerchant(User merchant);
-	int toRegister(User user);
+	String toRegister(User user);
 	
 	User isLogin(String phone,String password);
 	int payProfit(int id,float value);

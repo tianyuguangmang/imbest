@@ -28,27 +28,37 @@ public class CmOrderController extends BaseController{
 	CmOrderService cmOrderService;
 	@RequestMapping(value="/cmorder/save",method = RequestMethod.POST)
 	@ResponseBody
-	public Results<CmOrder> saveCmOrder(String list){
+	public Results<CmOrder> saveCmOrder(String list,HttpSession session){
 		try{
-			CmOrder cmOrder = cmOrderService.saveCmOrder(list);
-			if(cmOrder != null)
+			User user = (User)session.getAttribute(InfoConstant.USER_INFO);
+			if(user == null){
+				return failResult(555,"ç”¨æˆ·ä¿¡æ¯è·å–å¤±è´¥");
+			}
+			String backMsg = cmOrderService.saveCmOrder(list,user.getUserId());
+			if(backMsg.equals("SUCCESS"))
 			return successResult(null);
 		}catch(Exception e){
 			System.out.println(e);
 		}
-		return failResult(555,"Ìí¼ÓÊ§°Ü");
+		return failResult(555,"ä¿å­˜ä¿¡æ¯å¤±è´¥");
 	}
 	@RequestMapping(value="/cmorder/info",method = RequestMethod.GET)
 	@ResponseBody
-	public Results<CmOrder> infoCmOrder(){
+	public Results<CmOrder> infoCmOrder(HttpSession session){
 		try{
-			JSONObject jsonObj=JSONObject.fromObject(redisCache.sget(InfoConstant.CM_ORDER));
-			CmOrder cmOrder = (CmOrder) JSONObject.toBean(jsonObj,CmOrder.class);
-			return successResult(cmOrder);
+			User user = (User)session.getAttribute(InfoConstant.USER_INFO);
+			if(user == null){
+				return failResult(555,"ç”¨æˆ·ä¿¡æ¯è·å–å¤±è´¥");
+			}
+			JSONObject jsonObj=JSONObject.fromObject(redisCache.sget(InfoConstant.CM_ORDER+"_"+user.getUserId()));
+			if(jsonObj != null){
+				CmOrder cmOrder = (CmOrder) JSONObject.toBean(jsonObj,CmOrder.class);
+				return successResult(cmOrder);
+			}
 		}catch(Exception e){
 			System.out.println(e);
 		}
-		return failResult(555,"Ìí¼ÓÊ§°Ü");
+		return failResult(555,"è·å–ä¿¡æ¯å¤±è´¥");
 	}
 	@RequestMapping(value="/cmorder/add",method = RequestMethod.POST)
 	@ResponseBody
@@ -57,13 +67,13 @@ public class CmOrderController extends BaseController{
 			User user =(User) session.getAttribute(InfoConstant.USER_INFO);
 			JSONObject jsonObj=JSONObject.fromObject(redisCache.sget(InfoConstant.CM_ORDER));
 			CmOrder cmOrder = (CmOrder) JSONObject.toBean(jsonObj,CmOrder.class);
-			cmOrder = cmOrderService.addCmOrder(cmOrder,addressId,user);
-			if(cmOrder != null)
+			String backMsg = cmOrderService.addCmOrder(cmOrder,addressId,user);
+			if(backMsg.equals("SUCCESS"))
 			return successResult(cmOrder);
 		}catch(Exception e){
 			System.out.println(e);
 		}
-		return failResult(555,"Ìí¼ÓÊ§°Ü");
+		return failResult(555,"æ·»åŠ å¤±è´¥");
 	}
 	@RequestMapping(value="/merchant/cmorder/list",method = RequestMethod.GET)
 	@ResponseBody
@@ -73,7 +83,7 @@ public class CmOrderController extends BaseController{
 			return successResult(list);
 		}catch(Exception e){
 		}
-		return failResult(555,"»ñÈ¡Ê§°Ü");
+		return failResult(555,"è·å–åˆ—è¡¨å¤±è´¥");
 	}
 	@RequestMapping(value="/consumer/cmorder/list",method = RequestMethod.GET)
 	@ResponseBody
@@ -83,7 +93,7 @@ public class CmOrderController extends BaseController{
 			return successResult(list);
 		}catch(Exception e){
 		}
-		return failResult(555,"»ñÈ¡Ê§°Ü");
+		return failResult(555,"è·å–åˆ—è¡¨å¤±è´¥");
 	}
 	@RequestMapping(value="/cmorder/delete",method = RequestMethod.POST)
 	@ResponseBody
@@ -94,7 +104,7 @@ public class CmOrderController extends BaseController{
 		}catch(Exception e){
 			
 		}
-		return failResult(555,"É¾³ıÊ§°Ü");
+		return failResult(555,"åˆ é™¤å¤±è´¥");
 	}
 	
 	@RequestMapping(value="/cmorder/update",method = RequestMethod.POST,consumes="application/json")
@@ -106,7 +116,7 @@ public class CmOrderController extends BaseController{
 		}catch(Exception e){
 			
 		}
-		return failResult(555,"¸üĞÂÊ§°Ü");
+		return failResult(555,"ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½");
 	}
 	
 

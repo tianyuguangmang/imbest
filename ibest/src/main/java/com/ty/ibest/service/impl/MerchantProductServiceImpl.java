@@ -15,18 +15,21 @@ public class MerchantProductServiceImpl implements MerchantProductService{
 	@Autowired
 	MerchantProductMapper mproductMapper;
 
-	public int addProduct(MerchantProduct mproduct) {
+	public String addProduct(MerchantProduct product) {
 		try{
-			int keyId = mproductMapper.addProduct(mproduct);
-			System.out.println(keyId);
-			System.out.println(mproduct.getProductId());
+			if(product.getOriginPrice() == 0||product.getMainImage()==null 
+					|| product.getStock() == 0 || product.getMerchantId() == 0
+					||product.getCateId() == 0||product.getName() == null){
+				return "商品设置信息不正确";
+			}
+			int keyId = mproductMapper.addProduct(product);
 			if(keyId>0)
-			return mproduct.getProductId();
+			return "SUCCESS";
 			
 		}catch(Exception e){
 			System.out.println(e);	
 		}
-		return 0;
+		return "添加失败";
 	}
 
 	public PageInfo<MerchantProduct> getProduct(String merchantId,int cateId,int current,int size) {

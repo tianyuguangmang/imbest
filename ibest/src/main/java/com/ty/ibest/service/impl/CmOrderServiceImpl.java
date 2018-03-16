@@ -30,7 +30,7 @@ public class CmOrderServiceImpl implements CmOrderService{
 	MerchantProductMapper productMapper;
 	@Autowired 
 	AddressMapper addressMapper;
-	public CmOrder saveCmOrder(String list) {
+	public String saveCmOrder(String list,int userId) {
 		try{
 			
 			JSONArray jsonArray = JSONArray.fromObject(list);
@@ -41,40 +41,25 @@ public class CmOrderServiceImpl implements CmOrderService{
 			float finalCost = 0;
 	        for (int i = 0; i < mapListJson.size(); i++) {
 	            Map<String,Object> obj=mapListJson.get(i);
-	            
 	            MerchantProduct product = productMapper.getProductById((Integer)obj.get("productId"));
-	           
 	            totalMoney += (Integer)obj.get("count")*product.getResetPrice();
 	            finalCost += (Integer)obj.get("count")*product.getOriginPrice();
 	            productList.add(product);
-	            /*for(Entry<String,Object> entry : obj.entrySet()){
-	                String strkey1 = entry.getKey();
-	                Object value = entry.getValue();
-	               
-	                SupplierProduct product = productMapper.getProductById( (Integer)value);
-	                System.out.println(product.getName());
-	                //System.out.println("KEY:"+strkey1+"  -->  Value:"+strval1+"\n");
-	            }*/
 	        }
 	        String json = JSON.toJSONString(productList);
 	        msOrder.setTotalMoney(totalMoney);
 	        msOrder.setFinalCost(finalCost);
 	        msOrder.setGainsMoney(totalMoney - finalCost);
 	        msOrder.setProductList(json);
-	        
-	        System.out.println(InfoConstant.CM_ORDER);
-	        redisCache.sset(InfoConstant.CM_ORDER, JSON.toJSONString(msOrder));
-	       
-			return msOrder;
-			
+	        redisCache.sset(InfoConstant.CM_ORDER+"_"+userId, JSON.toJSONString(msOrder));
+			return "SUCCESS";
 		}catch(Exception e){
-			System.out.println(e);	
-			
+			System.out.println(e);				
 		}
-		return null;
+		return "保存信息失败";
 		
 	}
-	public CmOrder addCmOrder(CmOrder cmOrder,int addressId,User user) {
+	public String addCmOrder(CmOrder cmOrder,int addressId,User user) {
 		try{
 			System.out.println(addressId);
 			Address address = addressMapper.getAddressById(addressId);
@@ -87,17 +72,16 @@ public class CmOrderServiceImpl implements CmOrderService{
 				cmOrder.setConsumerId(user.getUserId());
 				
 			}
-			
-			int id = cmOrderMapper.addCmOrder(cmOrder);
-			if(id>0){
-				return cmOrder;
+			int key = cmOrderMapper.addCmOrder(cmOrder);
+			if(key>0){
+				return "SUCCESS";
 			}
 			
 		}catch(Exception e){
 			System.out.println(e);	
 			
 		}
-		return null;
+		return "添加失败";
 		
 	}
 

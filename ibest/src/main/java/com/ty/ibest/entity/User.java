@@ -20,8 +20,8 @@ public class User {
 	private float sendPrice;
 	private float deliveryFee;
 	private float accountAmount;
-	private String longitude;//经度
-	private String latitude;//维度
+	private String longitude;//缁忓害
+	private String latitude;//缁村害
 	private String type;
 	public int getCurrent() {
 		return current;

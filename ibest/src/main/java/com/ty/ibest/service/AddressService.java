@@ -7,7 +7,7 @@ import com.ty.ibest.entity.Address;
 
 
 public interface AddressService {
-	int addAddress(Address address);
+	String addAddress(Address address);
 	List<Address> getAddress(int consumerId);
 	int deleteAddress(int addressId);
 	int updateAddress(Address address);

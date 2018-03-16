@@ -18,8 +18,11 @@ public class RegValid {
 		}
 		return false;
 	}
-	public Boolean validPhone(String phone){
-		return this.valid(RegExp.validPhone, phone);
+	public Boolean validPhone(String value){
+		return this.valid(RegExp.validPhone, value);
+	}
+	public Boolean limitMore5(String value){
+		return this.valid(RegExp.limitMore5, value);
 	}
 
 }

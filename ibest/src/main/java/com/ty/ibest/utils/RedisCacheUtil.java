@@ -20,10 +20,10 @@ public class RedisCacheUtil {
     }
     
     /**
-     * ÏòHashÖĞÌí¼ÓÖµ
-     * @param key      ¿ÉÒÔ¶ÔÓ¦Êı¾İ¿âÖĞµÄ±íÃû
-      * @param field    ¿ÉÒÔ¶ÔÓ¦Êı¾İ¿â±íÖĞµÄÎ¨Ò»Ë÷Òı
-     * @param value    ´æÈëredisÖĞµÄÖµ
+     * å‘Hashä¸­æ·»åŠ å€¼
+     * @param key      å¯ä»¥å¯¹åº”æ•°æ®åº“ä¸­çš„è¡¨å
+      * @param field    å¯ä»¥å¯¹åº”æ•°æ®åº“è¡¨ä¸­çš„å”¯ä¸€ç´¢å¼•
+     * @param value    å­˜å…¥redisä¸­çš„å€¼
      */
     public void hset(String key, String field, String value) {
         if(key == null || "".equals(key)){
@@ -33,7 +33,7 @@ public class RedisCacheUtil {
     }
     
     /**
-     * ´ÓredisÖĞÈ¡³öÖµ
+     * ä»redisä¸­å–å‡ºå€¼
      * @param key
      * @param field
      * @return
@@ -46,7 +46,7 @@ public class RedisCacheUtil {
     }
     
     /**
-     * ÅĞ¶Ï ÊÇ·ñ´æÔÚ key ÒÔ¼° hash key
+     * åˆ¤æ–­ æ˜¯å¦å­˜åœ¨ key ä»¥åŠ hash key
      * @param key
      * @param field
      * @return
@@ -59,7 +59,7 @@ public class RedisCacheUtil {
     }
     
     /**
-     * ²éÑ¯ keyÖĞ¶ÔÓ¦¶àÉÙÌõÊı¾İ
+     * æŸ¥è¯¢ keyä¸­å¯¹åº”å¤šå°‘æ¡æ•°æ®
      * @param key
      * @return
      */
@@ -71,7 +71,7 @@ public class RedisCacheUtil {
     }
     
     /**
-     * É¾³ı
+     * åˆ é™¤
      * @param key
      * @param field
      */

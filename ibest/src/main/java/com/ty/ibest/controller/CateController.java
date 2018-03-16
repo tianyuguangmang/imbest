@@ -29,7 +29,7 @@ public class CateController extends BaseController{
 		}catch(Exception e){
 			
 		}
-		return failResult(555,"Ìí¼ÓÊ§°Ü");
+		return failResult(555,"æ·»åŠ å¤±è´¥");
 	}
 	@RequestMapping(value = "/cate/list", method = RequestMethod.GET)
 	@ResponseBody
@@ -40,7 +40,7 @@ public class CateController extends BaseController{
 		}catch(Exception e){
 			
 		}
-		return failResult(555,"Î´»ñÈ¡µ½ÉÌÆ··ÖÀà");
+		return failResult(555,"æœªè·å–åˆ°å•†å“åˆ†ç±»");
 	}
 	@RequestMapping(value = "/cate/delete", method = RequestMethod.POST)
 	@ResponseBody
@@ -56,7 +56,7 @@ public class CateController extends BaseController{
 		
 	
 		
-		return failResult(555,"æ·»åŠ ç›®å½•å¤±è´¥");
+		return failResult(555,"å¨£è¯²å§é©î†¼ç¶æ¾¶è¾«è§¦");
 	}
 
 }

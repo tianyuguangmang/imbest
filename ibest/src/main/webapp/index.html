@@ -40,71 +40,41 @@ $(document).ready(function() {
     	 console.log("123");
      }});  
 }); 
-/* var params = {
-	name:"xiaowang",
-	phone:18754800737,
-	detail:"somsxinzhun",
-	addressId:1
-}
-wAjax("address/update","JSON_POST",params,function(res){
-	console.log(res);
-})  */
-/* var params = {
-		name:"xiaowaSn",
-		cateId:1,
-		originPrice:10,
-		resetPrice:20
-}
- wAjax("merchant/product/add","JSON_POST",params,function(res){
-	console.log(res);
-}) 
- wAjax("merchant/product/list","GET",{size:2,current:1,merchantId:0},function(res){
-	console.log(res);
-})  */
-/* var params = {
-		name:"xiaowaSn",
-		cateId:2,
-		originPrice:10,
-		resetPrice:20,
-		merchantId:1,
-		stock:20
-}
-
-wAjax("merchant/product/add","JSON_POST",params,function(res){
-	console.log(res);
-}) 
-wAjax("merchant/product/delete","POST",{productId:1},function(res){
+/* wAjax("address/add","JSON_POST",{name:"xmw",
+	phone:18754800737,detail:"无窗我额我饿我饿",address:"我的符文"},function(res){
 	console.log(res);
 }) */
-/* var params = {
-		name:"xiaowaSn",
-		cateId:2,
-		originPrice:10,
-		resetPrice:20,
-		merchantId:1,
-		stock:20
-}
 
-wAjax("merchant/product/add","JSON_POST",params,function(res){
+var param = {
+	mainImage:"msg",
+	name:"一个傻瓜",
+	originPrice:10,
+	cateId:1,
+	stock:10
+}
+/* wAjax("merchant/product/add","JSON_POST",param,function(res){
 	console.log(res);
-})  */
-wAjax("user/wxcode","POST",{wxcode:123},function(res){
+})
+  wAjax("merchant/register","POST",{valid:123,phone:18754800745,userId:2},function(res){
 	console.log(res);
-	var param = {
+ })  */
+ wAjax("user/wxcode","POST",{wxcode:12345},function(res){
+	console.log(res);
+		var param = {
 			list:JSON.stringify([{
-				productId:2,
+				productId:5,
 				count:10
 			}])
 		}
-	 wAjax("cmorder/save","POST",param,function(res){
+	 wAjax("msorder/save","POST",param,function(res){
 		 
-		 wAjax("cmorder/info","GET",null,function(res){
-			 wAjax("cmorder/add","POST",{addressId:2},function(res){
+		 wAjax("msorder/info","GET",null,function(res){
+			 wAjax("msorder/add","POST",{addressId:3},function(res){
 					
 			 })	
 		 })
-	})  
-})
+	})
+}) 
 
 
 

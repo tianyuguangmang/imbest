@@ -1,4 +1,6 @@
 package com.ty.ibest.controller;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -8,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageInfo;
+import com.ty.ibest.constant.InfoConstant;
 import com.ty.ibest.entity.MerchantProduct;
+import com.ty.ibest.entity.User;
 import com.ty.ibest.service.MerchantProductService;
 import com.ty.ibest.utils.Results;
 
@@ -18,14 +22,25 @@ public class MerchantProductController extends BaseController{
 	MerchantProductService product;
 	@RequestMapping(value="/merchant/product/add",method = RequestMethod.POST,consumes="application/json")
 	@ResponseBody
-	public Results<MerchantProduct> addProduct(@RequestBody MerchantProduct mproduct){
+	public Results<MerchantProduct> addProduct(@RequestBody MerchantProduct mproduct,HttpSession session){
+		String backMsg = "";
 		try{
-			int productId = product.addProduct(mproduct);
-			if(productId>0)
+			User user = (User)session.getAttribute(InfoConstant.USER_INFO);
+			if(user == null){
+				return failResult(555,"Áî®Êà∑‰ø°ÊÅØËé∑ÂèñÂ§±Ë¥•");
+			}
+			System.out.println(user.getType());
+			if(!user.getType().equals("MERCHANT")){
+				return failResult(555,"‰∏çÊòØÂïÜÂÆ∂");
+			}
+			mproduct.setMerchantId(user.getUserId());
+			backMsg = product.addProduct(mproduct);
+			if(backMsg.equals("SUCCESS"))
 			return successResult(mproduct);
 		}catch(Exception e){
+			
 		}
-		return failResult(555,"ÃÌº” ß∞‹");
+		return failResult(555,backMsg);
 	}
 	@RequestMapping(value="/merchant/product/list",method = RequestMethod.GET)
 	@ResponseBody
@@ -35,7 +50,7 @@ public class MerchantProductController extends BaseController{
 			return successResult(pageInfo);
 		}catch(Exception e){
 		}
-		return failResult(555,"ªÒ»° ß∞‹");
+		return failResult(555,"Ëé∑ÂèñÂ§±Ë¥•");
 	}
 	@RequestMapping(value="/merchant/product/delete",method = RequestMethod.POST)
 	@ResponseBody
@@ -46,7 +61,7 @@ public class MerchantProductController extends BaseController{
 		}catch(Exception e){
 			
 		}
-		return failResult(555,"…æ≥˝ ß∞‹");
+		return failResult(555,"Âà†Èô§Â§±Ë¥•");
 	}
 	@RequestMapping(value="/merchant/product/update",method = RequestMethod.POST,consumes="application/json")
 	@ResponseBody
@@ -57,7 +72,7 @@ public class MerchantProductController extends BaseController{
 		}catch(Exception e){
 			
 		}
-		return failResult(555,"∏¸–¬ ß∞‹");
+		return failResult(555,"Êõ¥Êñ∞Â§±Ë¥•");
 	}
 	
 

@@ -6,8 +6,8 @@ import com.ty.ibest.entity.CmOrder;
 import com.ty.ibest.entity.User;
 
 public interface CmOrderService {
-	CmOrder saveCmOrder(String list);
-	CmOrder addCmOrder(CmOrder cmOrder,int addressId,User user);
+	String saveCmOrder(String list,int userId);
+	String addCmOrder(CmOrder cmOrder,int addressId,User user);
 	List<CmOrder> getMerchantOrder(String merchantId);
 	List<CmOrder> getConsumerOrder(String consumerId);
 	int deleteCmOrder(int orderId,int type);

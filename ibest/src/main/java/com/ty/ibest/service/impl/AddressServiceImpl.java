@@ -8,22 +8,28 @@ import org.springframework.stereotype.Service;
 import com.ty.ibest.entity.Address;
 import com.ty.ibest.mapper.AddressMapper;
 import com.ty.ibest.service.AddressService;
+import com.ty.ibest.utils.RegValid;
 @Service
 public class AddressServiceImpl implements AddressService{
 	@Autowired
 	AddressMapper addressMapper;
+	@Autowired
+	RegValid reg;
 
-	public int addAddress(Address address) {
-		
+	public String addAddress(Address address) {
 		try{
-			
-			addressMapper.addAddress(address);
-			return address.getAddressId();
+			if(!reg.validPhone(address.getPhone())||!(reg.limitMore5(address.getDetail()))||address.getAddress()==null){
+				return "地址信息错误";
+			}
+			int key = addressMapper.addAddress(address);
+			if(key > 0){
+				return "SUCCESS";
+			}
 		}catch(Exception e){
 			System.out.println(e);
 			
 		}
-		return 0;
+		return "添加失败";
 	}
 
 	public List<Address> getAddress(int consumerId) {

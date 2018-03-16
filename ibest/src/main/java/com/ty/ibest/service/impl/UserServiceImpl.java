@@ -10,10 +10,13 @@ import com.github.pagehelper.PageInfo;
 import com.ty.ibest.entity.User;
 import com.ty.ibest.mapper.UserMapper;
 import com.ty.ibest.service.UserService;
+import com.ty.ibest.utils.RegValid;
 @Service
 public class UserServiceImpl implements UserService{
 	@Autowired
 	UserMapper userMapper;
+	@Autowired
+	RegValid reg;
 	public int addUser(User user) {
 		try{
 			int userId = userMapper.addUser(user);
@@ -105,14 +108,18 @@ public class UserServiceImpl implements UserService{
 		// TODO Auto-generated method stub
 		return 0;
 	}
-	public int toRegister(User user){
+	public String toRegister(User user){
 		try{
-			int x = userMapper.toRegister(user);
-			return x;
+			if(!reg.validPhone(user.getPhone())){
+				return "手机号不正确";
+			}
+			int key = userMapper.toRegister(user);
+			if(key>0)
+			return "SUCCESS";
 		}catch(Exception e){
 			
 		}
-		return 0;
+		return "注册失败";
 		
 	}
 	public User isLogin(String phone,String password){

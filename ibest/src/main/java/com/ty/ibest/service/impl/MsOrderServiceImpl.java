@@ -8,63 +8,89 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
+import com.ty.ibest.constant.InfoConstant;
+import com.ty.ibest.entity.Address;
+import com.ty.ibest.entity.CmOrder;
+import com.ty.ibest.entity.MerchantProduct;
 import com.ty.ibest.entity.MsOrder;
 import com.ty.ibest.entity.SupplierProduct;
+import com.ty.ibest.entity.User;
+import com.ty.ibest.mapper.AddressMapper;
 import com.ty.ibest.mapper.MsOrderMapper;
 import com.ty.ibest.mapper.SupplierProductMapper;
 import com.ty.ibest.service.MsOrderService;
+import com.ty.ibest.utils.RedisCacheUtil;
 
 import net.sf.json.JSONArray;
 
 @Service
 public class MsOrderServiceImpl implements MsOrderService{
 	@Autowired
+	private RedisCacheUtil redisCache;
+	@Autowired 
+	AddressMapper addressMapper;
+	@Autowired
 	MsOrderMapper msOrderMapper;
 	@Autowired
 	SupplierProductMapper productMapper;
-	public MsOrder addMsOrder(String list) {
+	public String saveMsOrder(String list,int userId) {
 		try{
-		
+			
 			JSONArray jsonArray = JSONArray.fromObject(list);
-			List<Map<String,Object>> mapListJson = (List)jsonArray;
+			List<Map<String,Object>> mapListJson  = (List)jsonArray;
 			List<SupplierProduct> productList = new ArrayList();
 			MsOrder msOrder = new MsOrder();
 			float totalMoney = 0;
 			float finalCost = 0;
 	        for (int i = 0; i < mapListJson.size(); i++) {
 	            Map<String,Object> obj=mapListJson.get(i);
-	            
 	            SupplierProduct product = productMapper.getProductById((Integer)obj.get("productId"));
-	           
+	            System.out.println("product"+product);
+	            if(product == null){
+	            	return "未找到商品";
+	            }
 	            totalMoney += (Integer)obj.get("count")*product.getResetPrice();
 	            finalCost += (Integer)obj.get("count")*product.getOriginPrice();
 	            productList.add(product);
-	            /*for(Entry<String,Object> entry : obj.entrySet()){
-	                String strkey1 = entry.getKey();
-	                Object value = entry.getValue();
-	               
-	                SupplierProduct product = productMapper.getProductById( (Integer)value);
-	                System.out.println(product.getName());
-	                //System.out.println("KEY:"+strkey1+"  -->  Value:"+strval1+"\n");
-	            }*/
 	        }
 	        String json = JSON.toJSONString(productList);
 	        msOrder.setTotalMoney(totalMoney);
 	        msOrder.setFinalCost(finalCost);
 	        msOrder.setGainsMoney(totalMoney - finalCost);
 	        msOrder.setProductList(json);
-	        int ms = msOrderMapper.addMsOrder(msOrder);
+	        redisCache.sset(InfoConstant.MS_ORDER+"_"+userId, JSON.toJSONString(msOrder));
+			return "SUCCESS";
+		}catch(Exception e){
+			System.out.println(e);				
+		}
+		return "保存信息失败";
 		
-			///int orderId = msOrderMapper.addMsOrder(msOrder);
-			if(ms>0)
-			return msOrder;
+	}
+	public String addMsOrder(MsOrder msOrder,int addressId,User user) {
+		try{
+			System.out.println(addressId);
+			Address address = addressMapper.getAddressById(addressId);
+			if(address == null){
+				return "未找的地址";
+			}
+			if(address != null){
+			
+				msOrder.setmAddress(address.getAddress());
+				msOrder.setmDetailAddress(address.getDetail());
+				msOrder.setmName(address.getName());
+				msOrder.setmAvatar(user.getAvatar());
+				msOrder.setMerchantId(user.getUserId());
+			}
+			int key = msOrderMapper.addMsOrder(msOrder);
+			if(key>0){
+				return "SUCCESS";
+			}
 			
 		}catch(Exception e){
 			System.out.println(e);	
 			
 		}
-		return null;
-		
+		return "添加失败";
 	}
 
 	public List<MsOrder> getMerchantOrder(String merchantId) {

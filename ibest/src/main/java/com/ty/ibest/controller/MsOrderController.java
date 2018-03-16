@@ -1,6 +1,9 @@
 package com.ty.ibest.controller;
 
 import java.util.List;
+
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,25 +11,73 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.ty.ibest.constant.InfoConstant;
+import com.ty.ibest.entity.CmOrder;
 import com.ty.ibest.entity.MsOrder;
-
+import com.ty.ibest.entity.User;
 import com.ty.ibest.service.MsOrderService;
+import com.ty.ibest.utils.RedisCacheUtil;
 import com.ty.ibest.utils.Results;
+
+import net.sf.json.JSONObject;
 @Controller
 public class MsOrderController extends BaseController{
 	@Autowired
+	private RedisCacheUtil redisCache;
+	@Autowired
 	MsOrderService msOrderService;
+	@RequestMapping(value="/msorder/save",method = RequestMethod.POST)
+	@ResponseBody
+	public Results<MsOrder> saveMsOrder(String list,HttpSession session){
+		String backMsg = null;
+		try{
+			User user = (User)session.getAttribute(InfoConstant.USER_INFO);
+			if(user == null){
+				return failResult(555,"ç”¨æˆ·ä¿¡æ¯è·å–å¤±è´¥");
+			}
+			backMsg = msOrderService.saveMsOrder(list,user.getUserId());
+			if(backMsg.equals("SUCCESS"))
+			return successResult(null);
+		}catch(Exception e){
+			System.out.println(e);
+		}
+		return failResult(555,backMsg);
+	}
+	@RequestMapping(value="/msorder/info",method = RequestMethod.GET)
+	@ResponseBody
+	public Results<MsOrder> infoMsOrder(HttpSession session){
+		try{
+			User user = (User)session.getAttribute(InfoConstant.USER_INFO);
+			if(user == null){
+				return failResult(555,"ç”¨æˆ·ä¿¡æ¯è·å–å¤±è´¥");
+			}
+			JSONObject jsonObj=JSONObject.fromObject(redisCache.sget(InfoConstant.MS_ORDER+"_"+user.getUserId()));
+			if(jsonObj != null){
+				MsOrder msOrder = (MsOrder) JSONObject.toBean(jsonObj,MsOrder.class);
+				return successResult(msOrder);
+			}
+		}catch(Exception e){
+			System.out.println(e);
+		}
+		return failResult(555,"è·å–ä¿¡æ¯å¤±è´¥");
+	}
 	@RequestMapping(value="/msorder/add",method = RequestMethod.POST)
 	@ResponseBody
-	public Results<MsOrder> addMsOrder(@RequestParam String list){
-		
+	public Results<MsOrder> addMsOrder(int addressId,HttpSession session){
+		String backMsg = null;
 		try{
-			MsOrder msOrder = msOrderService.addMsOrder(list);
-			if(msOrder != null)
+			User user =(User) session.getAttribute(InfoConstant.USER_INFO);
+			if(user == null){
+				failResult(555,"ç”¨æˆ·ä¿¡æ¯è·å–å¤±è´¥");
+			}
+			JSONObject jsonObj=JSONObject.fromObject(redisCache.sget(InfoConstant.MS_ORDER+"_"+user.getUserId()));
+			MsOrder msOrder = (MsOrder) JSONObject.toBean(jsonObj,MsOrder.class);
+		    backMsg = msOrderService.addMsOrder(msOrder,addressId,user);
+			if(backMsg.equals("SUCCESS"))
 			return successResult(msOrder);
 		}catch(Exception e){
 		}
-		return failResult(555,"Ìí¼ÓÊ§°Ü");
+		return failResult(555,backMsg);
 	}
 	
 	@RequestMapping(value="/merchant/msorder/list",method = RequestMethod.GET)
@@ -37,7 +88,7 @@ public class MsOrderController extends BaseController{
 			return successResult(list);
 		}catch(Exception e){
 		}
-		return failResult(555,"»ñÈ¡Ê§°Ü");
+		return failResult(555,"ï¿½ï¿½È¡Ê§ï¿½ï¿½");
 	}
 	@RequestMapping(value="/supplier/msorder/list",method = RequestMethod.GET)
 	@ResponseBody
@@ -47,7 +98,7 @@ public class MsOrderController extends BaseController{
 			return successResult(list);
 		}catch(Exception e){
 		}
-		return failResult(555,"»ñÈ¡Ê§°Ü");
+		return failResult(555,"ï¿½ï¿½È¡Ê§ï¿½ï¿½");
 	}
 	@RequestMapping(value="/msorder/delete",method = RequestMethod.POST)
 	@ResponseBody
@@ -58,7 +109,7 @@ public class MsOrderController extends BaseController{
 		}catch(Exception e){
 			
 		}
-		return failResult(555,"É¾³ıÊ§°Ü");
+		return failResult(555,"É¾ï¿½ï¿½Ê§ï¿½ï¿½");
 	}
 	@RequestMapping(value="/msorder/update",method = RequestMethod.POST,consumes="application/json")
 	@ResponseBody
@@ -69,7 +120,7 @@ public class MsOrderController extends BaseController{
 		}catch(Exception e){
 			
 		}
-		return failResult(555,"¸üĞÂÊ§°Ü");
+		return failResult(555,"ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½");
 	}
 	
 

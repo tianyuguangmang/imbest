@@ -13,15 +13,23 @@ public class SupplierProductServiceImpl implements SupplierProductService{
 	@Autowired
 	SupplierProductMapper sproductMapper;
 
-	public int addProduct(SupplierProduct sproduct) {
+	public String addProduct(SupplierProduct sproduct) {
+		
 		try{
-			int productId = sproductMapper.addProduct(sproduct);
-			return productId;
+			
+			if(sproduct.getOriginPrice() == 0||sproduct.getMainImage()==null 
+					|| sproduct.getStock() == 0 || sproduct.getSupplierId() == 0
+					||sproduct.getCateId() == 0||sproduct.getName() == null){
+				return "商品设置信息不正确";
+			}
+			int key = sproductMapper.addProduct(sproduct);
+			if(key > 0)
+			return "SUCCESS";
 			
 		}catch(Exception e){
 			System.out.println(e);	
 		}
-		return 0;
+		return "添加失败";
 	}
 
 	public List<SupplierProduct> getProduct(String supplierId) {
