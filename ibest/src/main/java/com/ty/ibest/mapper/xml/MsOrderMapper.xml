@@ -54,7 +54,6 @@
 		#{totalMoney},#{gainsMoney},#{finalCost},
 		#{mDelete},#{sDelete})
 	</insert>
-
 	<update id="updateMsOrder">
 		UPDATE ms_order
 		SET
@@ -65,6 +64,16 @@
 			m_nick_name = #{mNickName}, m_avatar = #{mAvatar}, supplier_id = #{supplierId}, 
 			order_number = #{orderNumber}, m_delete = #{mDelete}, s_delete = #{sDelete}, 
 			cate_id = #{cateId} -->
+		WHERE
+		order_id =
+		#{orderId}
+	</update>
+	<update id="supplierSendGoods">
+		UPDATE ms_order
+		SET
+		status = #{status},
+		order_number = #{orderNumber},
+		courier = #{courier}
 		WHERE
 		order_id =
 		#{orderId}

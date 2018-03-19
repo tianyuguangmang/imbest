@@ -22,6 +22,7 @@ public class SupplierProductServiceImpl implements SupplierProductService{
 					||sproduct.getCateId() == 0||sproduct.getName() == null){
 				return "商品设置信息不正确";
 			}
+			sproduct.setResetPrice(sproduct.getOriginPrice());
 			int key = sproductMapper.addProduct(sproduct);
 			if(key > 0)
 			return "SUCCESS";

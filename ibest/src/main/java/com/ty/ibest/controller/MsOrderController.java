@@ -28,14 +28,14 @@ public class MsOrderController extends BaseController{
 	MsOrderService msOrderService;
 	@RequestMapping(value="/msorder/save",method = RequestMethod.POST)
 	@ResponseBody
-	public Results<MsOrder> saveMsOrder(String list,HttpSession session){
+	public Results<MsOrder> saveMsOrder(String list,Integer supplierId,HttpSession session){
 		String backMsg = null;
 		try{
 			User user = (User)session.getAttribute(InfoConstant.USER_INFO);
 			if(user == null){
 				return failResult(555,"用户信息获取失败");
 			}
-			backMsg = msOrderService.saveMsOrder(list,user.getUserId());
+			backMsg = msOrderService.saveMsOrder(list,supplierId,user.getUserId());
 			if(backMsg.equals("SUCCESS"))
 			return successResult(null);
 		}catch(Exception e){
@@ -61,6 +61,23 @@ public class MsOrderController extends BaseController{
 		}
 		return failResult(555,"获取信息失败");
 	}
+	@RequestMapping(value="/msorder/send",method = RequestMethod.POST)
+	@ResponseBody
+	public Results<MsOrder> supplierSendGoods(Integer orderId,String orderNumber,String courier,HttpSession session){
+		try{
+			User user = (User)session.getAttribute(InfoConstant.USER_INFO);
+			if(user == null){
+				return failResult(555,"用户信息获取失败");
+			}
+			String backMsg = msOrderService.supplierSendGoods(orderId,orderNumber,courier);
+			if(backMsg.equals("SUCCESS")){
+				return successResult(null);
+			}
+		}catch(Exception e){
+			System.out.println(e);
+		}
+		return failResult(555,"失败");
+	}
 	@RequestMapping(value="/msorder/add",method = RequestMethod.POST)
 	@ResponseBody
 	public Results<MsOrder> addMsOrder(int addressId,HttpSession session){
@@ -72,6 +89,8 @@ public class MsOrderController extends BaseController{
 			}
 			JSONObject jsonObj=JSONObject.fromObject(redisCache.sget(InfoConstant.MS_ORDER+"_"+user.getUserId()));
 			MsOrder msOrder = (MsOrder) JSONObject.toBean(jsonObj,MsOrder.class);
+			//发起支付：支付成功 status
+			msOrder.setStatus("WAIT_PAY");
 		    backMsg = msOrderService.addMsOrder(msOrder,addressId,user);
 			if(backMsg.equals("SUCCESS"))
 			return successResult(msOrder);
@@ -88,7 +107,7 @@ public class MsOrderController extends BaseController{
 			return successResult(list);
 		}catch(Exception e){
 		}
-		return failResult(555,"��ȡʧ��");
+		return failResult(555,"订单列表失败");
 	}
 	@RequestMapping(value="/supplier/msorder/list",method = RequestMethod.GET)
 	@ResponseBody
@@ -98,7 +117,7 @@ public class MsOrderController extends BaseController{
 			return successResult(list);
 		}catch(Exception e){
 		}
-		return failResult(555,"��ȡʧ��");
+		return failResult(555,"订单列表失败");
 	}
 	@RequestMapping(value="/msorder/delete",method = RequestMethod.POST)
 	@ResponseBody
@@ -109,18 +128,18 @@ public class MsOrderController extends BaseController{
 		}catch(Exception e){
 			
 		}
-		return failResult(555,"ɾ��ʧ��");
+		return failResult(555,"失败");
 	}
 	@RequestMapping(value="/msorder/update",method = RequestMethod.POST,consumes="application/json")
 	@ResponseBody
 	public Results<MsOrder> updateMsOrder(int orderId,String status){ 
 		try{
-			msOrderService.updateMsOrder(status, orderId);
+			msOrderService.updateMsOrder(orderId, status);
 			return successResult(null);
 		}catch(Exception e){
 			
 		}
-		return failResult(555,"����ʧ��");
+		return failResult(555,"失败");
 	}
 	
 

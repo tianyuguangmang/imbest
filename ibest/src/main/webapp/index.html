@@ -64,7 +64,8 @@ var param = {
 			list:JSON.stringify([{
 				productId:5,
 				count:10
-			}])
+			}]),
+			supplierId:19
 		}
 	 wAjax("msorder/save","POST",param,function(res){
 		 
@@ -74,6 +75,9 @@ var param = {
 			 })	
 		 })
 	})
+	 wAjax("msorder/send","POST",{orderNumber:"123153324",orderId:17,courier:"小新"},function(res){
+			
+	 })	
 }) 
 
 

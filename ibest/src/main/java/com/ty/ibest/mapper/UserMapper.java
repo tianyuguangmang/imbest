@@ -9,7 +9,10 @@ import com.ty.ibest.entity.User;
 public interface UserMapper {
 	int addUser(User user);
 	User queryUserByOpenId(@Param("openId") String openId);
+	User queryUserByUserId(@Param("userId") Integer userId);
 	User queryUserByPhone(@Param("phone") String phone);
+	
+	
 	List<User> getMerchant();
 	int deleteMerchant(@Param("merchantId") int merchantId);
 	int updateMerchant(User merchant);
