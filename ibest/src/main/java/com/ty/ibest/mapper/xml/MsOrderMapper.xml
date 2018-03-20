@@ -29,6 +29,13 @@
 		WHERE
 		merchant_id = #{merchantId}
 	</select>
+	<select id="getMsOrderById" resultMap="BaseResult">
+		SELECT *
+		FROM
+		ms_order
+		WHERE
+		order_id = #{orderId}
+	</select>
 	<select id="getSupplierOrder" resultMap="BaseResult">
 		SELECT *
 		FROM

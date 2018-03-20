@@ -132,6 +132,9 @@ public class MsOrderServiceImpl implements MsOrderService{
 
 
 	public String updateMsOrder(Integer orderId,String status) {
+		if(status.equals("CONFIRM_RECEIVE")){
+			MsOrder msOrder = msOrderMapper.getMsOrderById(orderId);
+		}
 		Integer key = msOrderMapper.updateMsOrder(orderId,status);
 		if(key>0){
 		  return "SUCCESS";
