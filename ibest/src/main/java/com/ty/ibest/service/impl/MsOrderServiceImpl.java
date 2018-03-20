@@ -75,19 +75,16 @@ public class MsOrderServiceImpl implements MsOrderService{
 		return "保存信息失败";
 		
 	}
-	public String addMsOrder(MsOrder msOrder,int addressId,User user) {
+	public String addMsOrder(MsOrder msOrder,User user) {
 		try{
-			System.out.println(addressId);
-			Address address = addressMapper.getAddressById(addressId);
-			if(address == null){
-				return "未找相关的地址";
-			}
-			msOrder.setmAddress(address.getAddress());
-			msOrder.setmDetailAddress(address.getDetail());
-			msOrder.setmName(address.getName());
+			
+			msOrder.setmAddress(user.getAddress());
+			msOrder.setmDetailAddress(user.getDetailAddress());
+			msOrder.setmName(user.getRealName());
 			msOrder.setmAvatar(user.getAvatar());
 			msOrder.setMerchantId(user.getUserId());
-			int key = msOrderMapper.addMsOrder(msOrder);
+			msOrder.setmPhone(user.getPhone());
+			Integer key = msOrderMapper.addMsOrder(msOrder);
 			if(key>0){
 				return "SUCCESS";
 			}
@@ -99,18 +96,19 @@ public class MsOrderServiceImpl implements MsOrderService{
 		return "添加失败";
 	}
 	public String supplierSendGoods(Integer orderId,String orderNumber,String courier){
+		System.out.println(orderId);
 		
 		Integer key = msOrderMapper.supplierSendGoods(orderId,"WAIT_REVEIVE",orderNumber,courier);
+		System.out.println(key);
 		if(key >0){
 		  return "SUCCESS";
 		}
-		return "修改失败";
+		return "未找到此订单";
 		
 		
 	};
 
 	public List<MsOrder> getMerchantOrder(String merchantId) {
-		
 		try{
 			List<MsOrder> list = msOrderMapper.getMerchantOrder(merchantId);
 			return list;
@@ -133,14 +131,12 @@ public class MsOrderServiceImpl implements MsOrderService{
 	}
 
 
-	public Integer updateMsOrder(Integer orderId,String status) {
-		try{
-			msOrderMapper.updateMsOrder(orderId,status);
-			return 1;
-		}catch(Exception e){
-			System.out.println(e);
+	public String updateMsOrder(Integer orderId,String status) {
+		Integer key = msOrderMapper.updateMsOrder(orderId,status);
+		if(key>0){
+		  return "SUCCESS";
 		}
-		return 0;
+		return "更新失败";
 	}
 	public Integer deleteMsOrder(Integer orderId, Integer type) {
 		try{

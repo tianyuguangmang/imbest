@@ -78,20 +78,20 @@ public class UserServiceImpl implements UserService{
 		return 0;
 	}
 
-	public int updateMerchant(User merchant) {
+	public String updateMerchant(User merchant) {
 		try{
-			
-			int x = userMapper.updateMerchant(merchant);
-			
-			System.out.println("smsg"+x);
-			
-			return x;
+			if(merchant.getPhone()==null||merchant.getAddress()==null
+					||merchant.getDetailAddress()==null||merchant.getRealName()==null){
+				return "编辑信息有误";
+			}
+			Integer key = userMapper.updateMerchant(merchant);
+			if(key>0){
+				return "SUCCESS";
+			}
 		}catch(Exception e){
 			
 		}
-		
-		// TODO Auto-generated method stub
-		return 0;
+		return "编辑失败";
 	}
 	public int payProfit(int id,float value) {
 		try{
@@ -111,7 +111,7 @@ public class UserServiceImpl implements UserService{
 	public String toRegister(User user){
 		try{
 			if(!reg.validPhone(user.getPhone())){
-				return "�ֻ��Ų���ȷ";
+				return "�ֻ��Ų���ȷ";
 			}
 			int key = userMapper.toRegister(user);
 			if(key>0)
@@ -119,7 +119,7 @@ public class UserServiceImpl implements UserService{
 		}catch(Exception e){
 			
 		}
-		return "ע��ʧ��";
+		return "ע��ʧ��";
 		
 	}
 	public User isLogin(String phone,String password){

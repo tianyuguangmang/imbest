@@ -22,6 +22,7 @@ public class MerchantProductServiceImpl implements MerchantProductService{
 					||product.getCateId() == 0||product.getName() == null){
 				return "商品设置信息不正确";
 			}
+			product.setResetPrice(product.getOriginPrice());
 			int keyId = mproductMapper.addProduct(product);
 			if(keyId>0)
 			return "SUCCESS";

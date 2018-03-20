@@ -15,7 +15,7 @@ public interface UserMapper {
 	
 	List<User> getMerchant();
 	int deleteMerchant(@Param("merchantId") int merchantId);
-	int updateMerchant(User merchant);
+	Integer updateMerchant(User merchant);
 	int toRegister(User user);
 	User searchByPhone(@Param("phone") String phone);
 	User isLogin(@Param("phone") String phone,@Param("password") String password);

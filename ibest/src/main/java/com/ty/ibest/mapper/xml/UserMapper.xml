@@ -84,25 +84,15 @@
 		#{openId}
 	</update>
 	<update id="updateMerchant" parameterType="User">
-		UPDATE m_merchant
-		SET
-		m_name =#{name},
-		m_province = #{province},
-		m_city = #{city},
-		m_region =
-		#{region},
-		m_block = #{block},
-		m_wx_code = #{wxCode},
-		m_longitute =
-		#{longitute},
-		m_latitude = #{latitude},
-		m_send_price = #{sendPrice},
-		m_open_time = #{openTime}
-
+		UPDATE user SET
+		phone =#{phone},address =#{address},detail_address =#{detailAddress},
+		real_name =#{realName},am_start_time =#{amStartTime},pm_start_time =#{pmStartTime},
+		am_end_time =#{amEndTime},pm_end_time =#{pmEndTime},phone =#{phone},
+		nick_name =#{nickName},longitude =#{longitude},latitude =#{latitude},
+		send_price =#{sendPrice},delivery_fee =#{deliveryFee},avatar =#{avatar}
 		WHERE
-		m_phone =
-		#{phone}
-
+		user_id =
+		#{userId}
 	</update>
 
 	<update id="payProfit">

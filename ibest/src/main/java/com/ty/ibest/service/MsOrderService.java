@@ -7,10 +7,10 @@ import com.ty.ibest.entity.User;
 public interface MsOrderService {
 	String saveMsOrder(String list,Integer supplierId,Integer userId);
 	String supplierSendGoods(Integer orderId,String orderNumber,String courier);
-	String addMsOrder(MsOrder msOrder,int addressId,User user);
+	String addMsOrder(MsOrder msOrder,User user);
 	List<MsOrder> getMerchantOrder(String merchantId);
 	List<MsOrder> getSupplierOrder(String supplierId);
 	Integer deleteMsOrder(Integer orderId,Integer type);
-	Integer updateMsOrder(Integer orderId,String status);
+	String updateMsOrder(Integer orderId,String status);
 	
 }

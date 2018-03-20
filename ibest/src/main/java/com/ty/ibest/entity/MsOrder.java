@@ -22,6 +22,7 @@ public class MsOrder {
 	private String mDetailAddress;
 	private String mNickName;
 	private String mAvatar;
+	private String mPhone;
 	private int supplierId;
 	private String orderNumber;
 	/**
@@ -39,6 +40,12 @@ public class MsOrder {
 	private boolean mDelete;
 	private boolean sDelete;
 	
+	public String getmPhone() {
+		return mPhone;
+	}
+	public void setmPhone(String mPhone) {
+		this.mPhone = mPhone;
+	}
 	public float getFinalCost() {
 		return finalCost;
 	}

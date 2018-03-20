@@ -104,28 +104,26 @@ public class UserController extends BaseController{
 			
 		}
 		return failResult(555,backMsg);
-		
-		
-		
 	}
 
-	@RequestMapping(value="/merchant/update",method =RequestMethod.POST)
+	@RequestMapping(value="/merchant/update",method =RequestMethod.POST,consumes="application/json")
 	@ResponseBody
 	public Results<User> updateMerchant(@RequestBody User merchant,HttpSession session){
+		String backMsg = null;
 		try{
-			User mc = (User)session.getAttribute("merchantInfo");
-			System.out.println(mc.getPhone());
-			int x = userService.updateMerchant(merchant);
-			if(x>0){
-				return successResult(null);
+			User user =(User) session.getAttribute(InfoConstant.USER_INFO);
+			if(user == null||!user.getType().equals("MERCHANT")){
+				return failResult(555,"用户信息获取失败");
+			}
+			merchant.setUserId(user.getUserId());
+			backMsg = userService.updateMerchant(merchant);
+			if(backMsg.equals("SUCCESS")){
+				return successResult(merchant);
 			}
 		}catch(Exception e){
 			
 		}
-		return failResult(555,"修改失败");
-		
-		
-		
+		return failResult(555,backMsg);
 	}
 	
 	@RequestMapping(value="/merchant/list",method = RequestMethod.GET)

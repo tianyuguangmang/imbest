@@ -9,6 +9,7 @@
 		<result column="status" property="status"></result>
 		<result column="merchant_id" property="merchantId"></result>
 		<result column="m_name" property="mName"></result>
+		<result column="m_phone" property="mPhone"></result>
 		<result column="m_address" property="mAddress"></result>
 		<result column="m_detail_address" property="mDetailAddress"></result>
 		<result column="m_nick_name" property="mNickName"></result>
@@ -39,7 +40,7 @@
 		useGeneratedKeys="true" keyProperty="orderId">
 		INSERT INTO ms_order
 		(product_list,create_time,
-		status,merchant_id,
+		status,merchant_id,m_phone,
 		m_name,m_address,m_detail_address,
 		m_nick_name,m_avatar,
 		supplier_id,order_number,
@@ -47,7 +48,7 @@
 		m_delete,s_delete)
 		VALUES
 		(#{productList},#{createTime},
-		#{status},#{merchantId},
+		#{status},#{merchantId},#{mPhone},
 		#{mName},#{mAddress},#{mDetailAddress},
 		#{mNickName},#{mAvatar},
 		#{supplierId},#{orderNumber},

@@ -9,7 +9,7 @@ public interface UserService {
 	User searchByPhone(String phone);
 	PageInfo<User> getMerchant(int current,int size);
 	int deleteMerchant(int merchantId);
-	int updateMerchant(User merchant);
+	String updateMerchant(User merchant);
 	String toRegister(User user);
 	
 	User isLogin(String phone,String password);

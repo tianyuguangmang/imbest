@@ -64,34 +64,38 @@ public class MsOrderController extends BaseController{
 	@RequestMapping(value="/msorder/send",method = RequestMethod.POST)
 	@ResponseBody
 	public Results<MsOrder> supplierSendGoods(Integer orderId,String orderNumber,String courier,HttpSession session){
+		String backMsg = null;
 		try{
 			User user = (User)session.getAttribute(InfoConstant.USER_INFO);
 			if(user == null){
 				return failResult(555,"用户信息获取失败");
 			}
-			String backMsg = msOrderService.supplierSendGoods(orderId,orderNumber,courier);
+			backMsg = msOrderService.supplierSendGoods(orderId,orderNumber,courier);
 			if(backMsg.equals("SUCCESS")){
 				return successResult(null);
 			}
 		}catch(Exception e){
 			System.out.println(e);
 		}
-		return failResult(555,"失败");
+		return failResult(555,backMsg);
 	}
 	@RequestMapping(value="/msorder/add",method = RequestMethod.POST)
 	@ResponseBody
-	public Results<MsOrder> addMsOrder(int addressId,HttpSession session){
+	public Results<MsOrder> addMsOrder(HttpSession session){
 		String backMsg = null;
 		try{
 			User user =(User) session.getAttribute(InfoConstant.USER_INFO);
-			if(user == null){
-				failResult(555,"用户信息获取失败");
+			if(user == null||!user.getType().equals("MERCHANT")){
+				return failResult(555,"用户信息获取失败");
+			}
+			if(user.getAddress() == null||user.getPhone() == null){
+				return failResult(555,"请编辑个人信息");
 			}
 			JSONObject jsonObj=JSONObject.fromObject(redisCache.sget(InfoConstant.MS_ORDER+"_"+user.getUserId()));
 			MsOrder msOrder = (MsOrder) JSONObject.toBean(jsonObj,MsOrder.class);
 			//发起支付：支付成功 status
 			msOrder.setStatus("WAIT_PAY");
-		    backMsg = msOrderService.addMsOrder(msOrder,addressId,user);
+		    backMsg = msOrderService.addMsOrder(msOrder,user);
 			if(backMsg.equals("SUCCESS"))
 			return successResult(msOrder);
 		}catch(Exception e){
@@ -130,16 +134,19 @@ public class MsOrderController extends BaseController{
 		}
 		return failResult(555,"失败");
 	}
-	@RequestMapping(value="/msorder/update",method = RequestMethod.POST,consumes="application/json")
+	@RequestMapping(value="/msorder/update",method = RequestMethod.POST)
 	@ResponseBody
-	public Results<MsOrder> updateMsOrder(int orderId,String status){ 
-		try{
-			msOrderService.updateMsOrder(orderId, status);
-			return successResult(null);
-		}catch(Exception e){
-			
+	public Results<MsOrder> updateMsOrder(int orderId,String status,HttpSession session){ 
+		User user =(User) session.getAttribute(InfoConstant.USER_INFO);
+		if(user == null){
+			failResult(555,"用户信息获取失败");
 		}
-		return failResult(555,"失败");
+		String backMsg = null;
+		backMsg = msOrderService.updateMsOrder(orderId, status);
+		if(backMsg.equals("SUCCESS")){
+			return successResult(null);
+		}
+		return failResult(555,backMsg);
 	}
 	
 
