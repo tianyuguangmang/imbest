@@ -6,7 +6,7 @@ import com.ty.ibest.entity.CmOrder;
 import com.ty.ibest.entity.User;
 
 public interface CmOrderService {
-	String saveCmOrder(String list,int userId);
+	String saveCmOrder(String list,Integer merchantId,Integer userId);
 	String addCmOrder(CmOrder cmOrder,int addressId,User user);
 	List<CmOrder> getMerchantOrder(String merchantId);
 	List<CmOrder> getConsumerOrder(String consumerId);

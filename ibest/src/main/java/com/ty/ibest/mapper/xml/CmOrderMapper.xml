@@ -40,7 +40,7 @@
 	<insert id="addCmOrder" parameterType="CmOrder"
 		useGeneratedKeys="true" keyProperty="orderId">
 		INSERT INTO cm_order
-		(product_list,create_time,
+		(product_list,
 		status,merchant_id,
 		c_name,c_phone,c_address,c_detail_address,
 		c_nick_name,c_avatar,
@@ -48,7 +48,7 @@
 		total_money,gains_money,final_cost,
 		m_delete,c_delete)
 		VALUES
-		(#{productList},#{createTime},
+		(#{productList},
 		#{status},#{merchantId},
 		#{cName},#{cPhone},#{cAddress},#{cDetailAddress},
 		#{cNickName},#{cAvatar},

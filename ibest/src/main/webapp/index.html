@@ -5,7 +5,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<div>真的才sfs，我额积分我发</div>
+	<div>1</div>
 	<!-- <form method="post" action="register">
 	
 </form> -->
@@ -16,12 +16,12 @@
 	<input type="submit" value="提交"/>
 	
 </form> -->
-	<div
+	<!-- <div
 		style="width: 90px; height: 110px; overflow: hidden; border: 1px solid red;">
 		<div id="imgDiv"></div>
 	</div>
 	<br>
-	<input type="file" value="上传文件">
+	<input type="file" value="上传文件"> -->
 
 </body>
 <script src="js/jquery1.js"></script>
@@ -59,21 +59,38 @@ var param = {
 	console.log(res);
  })  */
  wAjax("user/wxcode","POST",{wxcode:12345},function(res){
-	console.log(res);
-		var param = {
+	 wAjax("merchant/update","JSON_POST",{
+		 phone:"18112341234",
+		 realName:"xiaohe",
+		 address:"山东是地址",
+		 detailAddress:"智慧路58号"
+	 },function(res){
+		 
+	 })
+	 var param = {
 			list:JSON.stringify([{
 				productId:5,
 				count:10
-			}])
+			}]),
+			supplierId:19
 		}
+/* 	 wAjax("address/add","JSON_POST",{name:"小王",phone:"13412345611",detail:"我飞蛾违法未范围",address:"山东省喊饿阁微观"},function(res){
+			
+	 })	 */
 	 wAjax("msorder/save","POST",param,function(res){
 		 
 		 wAjax("msorder/info","GET",null,function(res){
-			 wAjax("msorder/add","POST",{addressId:3},function(res){
+			 wAjax("msorder/add","POST",{addressId:29},function(res){
 					
 			 })	
 		 })
-	})
+	}) 
+	/*  wAjax("msorder/send","POST",{orderNumber:"123153324",orderId:117,courier:"小新"},function(res){
+			
+	 })	
+	 wAjax("msorder/update","POST",{orderNumber:"123153324",orderId:18,status:"CONFIRM_RECEIVE"},function(res){
+			
+	 })	 */
 }) 
 
 

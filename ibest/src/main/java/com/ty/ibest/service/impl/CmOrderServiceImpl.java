@@ -15,6 +15,7 @@ import com.ty.ibest.entity.User;
 import com.ty.ibest.mapper.AddressMapper;
 import com.ty.ibest.mapper.CmOrderMapper;
 import com.ty.ibest.mapper.MerchantProductMapper;
+import com.ty.ibest.mapper.UserMapper;
 import com.ty.ibest.service.CmOrderService;
 import com.ty.ibest.utils.RedisCacheUtil;
 
@@ -30,18 +31,28 @@ public class CmOrderServiceImpl implements CmOrderService{
 	MerchantProductMapper productMapper;
 	@Autowired 
 	AddressMapper addressMapper;
-	public String saveCmOrder(String list,int userId) {
+	@Autowired
+	UserMapper userMapper;
+	public String saveCmOrder(String list,Integer merchantId,Integer userId) {
 		try{
 			
 			JSONArray jsonArray = JSONArray.fromObject(list);
 			List<Map<String,Object>> mapListJson = (List<Map<String,Object>>)jsonArray;
 			List<MerchantProduct> productList = new ArrayList<MerchantProduct>();
 			CmOrder msOrder = new CmOrder();
+			
 			float totalMoney = 0;
 			float finalCost = 0;
+			User user = userMapper.queryUserByUserId(merchantId);
+			if(user == null||!user.getType().equals("MERCHANT")){
+				return "没有商家信息";
+			}
 	        for (int i = 0; i < mapListJson.size(); i++) {
 	            Map<String,Object> obj=mapListJson.get(i);
 	            MerchantProduct product = productMapper.getProductById((Integer)obj.get("productId"));
+	            if(product == null||product.getMerchantId()!=merchantId){
+	            	return "未找到商品";
+	            }
 	            totalMoney += (Integer)obj.get("count")*product.getResetPrice();
 	            finalCost += (Integer)obj.get("count")*product.getOriginPrice();
 	            productList.add(product);
@@ -51,6 +62,7 @@ public class CmOrderServiceImpl implements CmOrderService{
 	        msOrder.setFinalCost(finalCost);
 	        msOrder.setGainsMoney(totalMoney - finalCost);
 	        msOrder.setProductList(json);
+	        msOrder.setMerchantId(merchantId);
 	        redisCache.sset(InfoConstant.CM_ORDER+"_"+userId, JSON.toJSONString(msOrder));
 			return "SUCCESS";
 		}catch(Exception e){
@@ -61,17 +73,16 @@ public class CmOrderServiceImpl implements CmOrderService{
 	}
 	public String addCmOrder(CmOrder cmOrder,int addressId,User user) {
 		try{
-			System.out.println(addressId);
+	
 			Address address = addressMapper.getAddressById(addressId);
-			System.out.println(address.getAddress());
-			if(address != null){
-				cmOrder.setcAddress(address.getAddress());
-				cmOrder.setcDetailAddress(address.getDetail());
-				cmOrder.setcName(address.getName());
-				cmOrder.setcPhone(address.getPhone());
-				cmOrder.setConsumerId(user.getUserId());
-				
+			if(address == null||address.getConsumerId()!=user.getUserId()){
+				return "未找相关的地址";
 			}
+			cmOrder.setcAddress(address.getAddress());
+			cmOrder.setcDetailAddress(address.getDetail());
+			cmOrder.setcName(address.getName());
+			cmOrder.setcPhone(address.getPhone());
+			cmOrder.setConsumerId(user.getUserId());
 			int key = cmOrderMapper.addCmOrder(cmOrder);
 			if(key>0){
 				return "SUCCESS";

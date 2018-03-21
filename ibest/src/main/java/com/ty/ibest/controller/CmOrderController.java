@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ty.ibest.constant.InfoConstant;
 import com.ty.ibest.entity.CmOrder;
+import com.ty.ibest.entity.MsOrder;
 import com.ty.ibest.entity.User;
 import com.ty.ibest.service.CmOrderService;
 import com.ty.ibest.utils.RedisCacheUtil;
@@ -28,19 +29,23 @@ public class CmOrderController extends BaseController{
 	CmOrderService cmOrderService;
 	@RequestMapping(value="/cmorder/save",method = RequestMethod.POST)
 	@ResponseBody
-	public Results<CmOrder> saveCmOrder(String list,HttpSession session){
+	public Results<CmOrder> saveCmOrder(String list,Integer merchantId,HttpSession session){
+		String backMsg = null;
 		try{
 			User user = (User)session.getAttribute(InfoConstant.USER_INFO);
 			if(user == null){
 				return failResult(555,"用户信息获取失败");
 			}
-			String backMsg = cmOrderService.saveCmOrder(list,user.getUserId());
+			backMsg = cmOrderService.saveCmOrder(list,merchantId,user.getUserId());
 			if(backMsg.equals("SUCCESS"))
 			return successResult(null);
 		}catch(Exception e){
 			System.out.println(e);
+			
 		}
-		return failResult(555,"保存信息失败");
+		
+		
+		return failResult(555,backMsg);
 	}
 	@RequestMapping(value="/cmorder/info",method = RequestMethod.GET)
 	@ResponseBody
@@ -60,20 +65,25 @@ public class CmOrderController extends BaseController{
 		}
 		return failResult(555,"获取信息失败");
 	}
+	
 	@RequestMapping(value="/cmorder/add",method = RequestMethod.POST)
 	@ResponseBody
 	public Results<CmOrder> addCmOrder(int addressId,HttpSession session){
+		String backMsg = null;
 		try{
 			User user =(User) session.getAttribute(InfoConstant.USER_INFO);
 			JSONObject jsonObj=JSONObject.fromObject(redisCache.sget(InfoConstant.CM_ORDER));
 			CmOrder cmOrder = (CmOrder) JSONObject.toBean(jsonObj,CmOrder.class);
-			String backMsg = cmOrderService.addCmOrder(cmOrder,addressId,user);
-			if(backMsg.equals("SUCCESS"))
-			return successResult(cmOrder);
+			//发起支付支付失败
+			cmOrder.setStatus("WAIT_PAY");
+			backMsg = cmOrderService.addCmOrder(cmOrder,addressId,user);
+			if(backMsg.equals("SUCCESS")){
+				return successResult(cmOrder);
+			}
 		}catch(Exception e){
 			System.out.println(e);
 		}
-		return failResult(555,"添加失败");
+		return failResult(555,backMsg);
 	}
 	@RequestMapping(value="/merchant/cmorder/list",method = RequestMethod.GET)
 	@ResponseBody
@@ -116,7 +126,7 @@ public class CmOrderController extends BaseController{
 		}catch(Exception e){
 			
 		}
-		return failResult(555,"����ʧ��");
+		return failResult(555,"订单更新");
 	}
 	
 

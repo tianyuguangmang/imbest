@@ -4,6 +4,17 @@ public class MsOrder {
 	private int orderId;
 	private String productList;
 	private String createTime;
+	/**
+	 * 待付款  付款 待发货(取消订单：需要跟卖家协商  待收货  确认收货（验证货物是否存在问题有问题可以退货） 待评价 已评价  已完成
+	 *	0   1    2                   3      4						      5	  6	  7
+	 *	0:可立即取消订单 (WAIT_PAY)
+	 *	1-2 可以跟商家进行协商进行订单取消。(PAID)(WAIT_DELIVERY)
+	 *	3-4 7天内可以进行退换货(WAIT_REVEIVE) (CONFIRM_RECEIVE) 
+	 *	5-6 确定收货之后才会出现，如不进行确认收货，7天后将自动进行确认收货，确认收货之后的7天内可进行评价，超过7天将会自动进行评价。
+	 *	(WAIT_RATE) (RATED)
+	 *	7 订单评价完成之后，将会进行金额计算，算出该订单成本、订单盈利、订单总价。
+	 *	(FINISHED)
+	 */
 	private String status;
 	private int merchantId;
 	private String mName;
@@ -11,23 +22,30 @@ public class MsOrder {
 	private String mDetailAddress;
 	private String mNickName;
 	private String mAvatar;
+	private String mPhone;
 	private int supplierId;
 	private String orderNumber;
 	/**
-	 * ��Ӧ�̳ɱ�
+	 * 成本
 	 */
 	private float finalCost;
 	/**
-	 * �̻��ܸ���
+	 * 付款
 	 */
 	private float totalMoney;
 	/**
-	 * ƽ̨ӯ�����
+	 * 盈利
 	 */
 	private float gainsMoney;
 	private boolean mDelete;
 	private boolean sDelete;
 	
+	public String getmPhone() {
+		return mPhone;
+	}
+	public void setmPhone(String mPhone) {
+		this.mPhone = mPhone;
+	}
 	public float getFinalCost() {
 		return finalCost;
 	}

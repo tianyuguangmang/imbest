@@ -18,6 +18,7 @@ import com.ty.ibest.entity.User;
 import com.ty.ibest.mapper.AddressMapper;
 import com.ty.ibest.mapper.MsOrderMapper;
 import com.ty.ibest.mapper.SupplierProductMapper;
+import com.ty.ibest.mapper.UserMapper;
 import com.ty.ibest.service.MsOrderService;
 import com.ty.ibest.utils.RedisCacheUtil;
 
@@ -33,7 +34,9 @@ public class MsOrderServiceImpl implements MsOrderService{
 	MsOrderMapper msOrderMapper;
 	@Autowired
 	SupplierProductMapper productMapper;
-	public String saveMsOrder(String list,int userId) {
+	@Autowired
+	UserMapper userMapper;
+	public String saveMsOrder(String list,Integer supplierId,Integer userId) {
 		try{
 			
 			JSONArray jsonArray = JSONArray.fromObject(list);
@@ -42,6 +45,11 @@ public class MsOrderServiceImpl implements MsOrderService{
 			MsOrder msOrder = new MsOrder();
 			float totalMoney = 0;
 			float finalCost = 0;
+			User user = userMapper.queryUserByUserId(supplierId);
+			if(user == null||!user.getType().equals("SUPPLIER")){
+				return "没有商家信息";
+			}
+				
 	        for (int i = 0; i < mapListJson.size(); i++) {
 	            Map<String,Object> obj=mapListJson.get(i);
 	            SupplierProduct product = productMapper.getProductById((Integer)obj.get("productId"));
@@ -58,6 +66,7 @@ public class MsOrderServiceImpl implements MsOrderService{
 	        msOrder.setFinalCost(finalCost);
 	        msOrder.setGainsMoney(totalMoney - finalCost);
 	        msOrder.setProductList(json);
+	        msOrder.setSupplierId(supplierId);
 	        redisCache.sset(InfoConstant.MS_ORDER+"_"+userId, JSON.toJSONString(msOrder));
 			return "SUCCESS";
 		}catch(Exception e){
@@ -66,22 +75,16 @@ public class MsOrderServiceImpl implements MsOrderService{
 		return "保存信息失败";
 		
 	}
-	public String addMsOrder(MsOrder msOrder,int addressId,User user) {
+	public String addMsOrder(MsOrder msOrder,User user) {
 		try{
-			System.out.println(addressId);
-			Address address = addressMapper.getAddressById(addressId);
-			if(address == null){
-				return "未找的地址";
-			}
-			if(address != null){
 			
-				msOrder.setmAddress(address.getAddress());
-				msOrder.setmDetailAddress(address.getDetail());
-				msOrder.setmName(address.getName());
-				msOrder.setmAvatar(user.getAvatar());
-				msOrder.setMerchantId(user.getUserId());
-			}
-			int key = msOrderMapper.addMsOrder(msOrder);
+			msOrder.setmAddress(user.getAddress());
+			msOrder.setmDetailAddress(user.getDetailAddress());
+			msOrder.setmName(user.getRealName());
+			msOrder.setmAvatar(user.getAvatar());
+			msOrder.setMerchantId(user.getUserId());
+			msOrder.setmPhone(user.getPhone());
+			Integer key = msOrderMapper.addMsOrder(msOrder);
 			if(key>0){
 				return "SUCCESS";
 			}
@@ -92,9 +95,20 @@ public class MsOrderServiceImpl implements MsOrderService{
 		}
 		return "添加失败";
 	}
+	public String supplierSendGoods(Integer orderId,String orderNumber,String courier){
+		System.out.println(orderId);
+		
+		Integer key = msOrderMapper.supplierSendGoods(orderId,"WAIT_REVEIVE",orderNumber,courier);
+		System.out.println(key);
+		if(key >0){
+		  return "SUCCESS";
+		}
+		return "未找到此订单";
+		
+		
+	};
 
 	public List<MsOrder> getMerchantOrder(String merchantId) {
-		
 		try{
 			List<MsOrder> list = msOrderMapper.getMerchantOrder(merchantId);
 			return list;
@@ -115,7 +129,19 @@ public class MsOrderServiceImpl implements MsOrderService{
 		}
 		return null;
 	}
-	public int deleteMsOrder(int orderId,int type) {
+
+
+	public String updateMsOrder(Integer orderId,String status) {
+		if(status.equals("CONFIRM_RECEIVE")){
+			MsOrder msOrder = msOrderMapper.getMsOrderById(orderId);
+		}
+		Integer key = msOrderMapper.updateMsOrder(orderId,status);
+		if(key>0){
+		  return "SUCCESS";
+		}
+		return "更新失败";
+	}
+	public Integer deleteMsOrder(Integer orderId, Integer type) {
 		try{
 			msOrderMapper.deleteMsOrder(orderId, type);
 			return orderId;
@@ -123,16 +149,7 @@ public class MsOrderServiceImpl implements MsOrderService{
 			
 		}
 		return 0;
-	}
 
-	public int updateMsOrder(String status,int orderId) {
-		try{
-			msOrderMapper.updateMsOrder(status, orderId);
-			return 1;
-		}catch(Exception e){
-			System.out.println(e);
-		}
-		return 0;
 	}
 	
 

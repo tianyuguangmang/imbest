@@ -11,8 +11,9 @@ public interface MsOrderMapper {
 	int addMsOrder(MsOrder msOrder);
 	List<MsOrder> getMerchantOrder(@Param("merchantId") String merchantId);
 	List<MsOrder> getSupplierOrder(@Param("supplierId") String supplierId);
-	/*int deleteMerchantOrder(@Param("orderId") int orderId);
-	int deleteSupplierOrder(@Param("orderId") int orderId);*/
+	MsOrder getMsOrderById(@Param("orderId") Integer orderId);
 	int deleteMsOrder(@Param("orderId") int orderId,@Param("type") int type);
-	int updateMsOrder(@Param("status") String status,@Param("orderId") int orderId);
+	int updateMsOrder(@Param("orderId") Integer orderId,@Param("status") String status);
+	Integer supplierSendGoods(@Param("orderId") Integer orderId,@Param("status") String status,
+			@Param("orderNumber") String orderNumber,@Param("courier") String courier);
 }
