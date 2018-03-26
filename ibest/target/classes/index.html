@@ -5,7 +5,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<div>1</div>
+	<div>1223</div>
 	<!-- <form method="post" action="register">
 	
 </form> -->
@@ -40,58 +40,46 @@ $(document).ready(function() {
     	 console.log("123");
      }});  
 }); 
-/* wAjax("address/add","JSON_POST",{name:"xmw",
-	phone:18754800737,detail:"无窗我额我饿我饿",address:"我的符文"},function(res){
-	console.log(res);
-}) */
 
-var param = {
+
+ var param = {
 	mainImage:"msg",
 	name:"一个傻瓜",
 	originPrice:10,
 	cateId:1,
 	stock:10
 }
-/* wAjax("merchant/product/add","JSON_POST",param,function(res){
-	console.log(res);
-})
-  wAjax("merchant/register","POST",{valid:123,phone:18754800745,userId:2},function(res){
-	console.log(res);
- })  */
  wAjax("user/wxcode","POST",{wxcode:12345},function(res){
-	 wAjax("merchant/update","JSON_POST",{
-		 phone:"18112341234",
-		 realName:"xiaohe",
-		 address:"山东是地址",
-		 detailAddress:"智慧路58号"
+	 wAjax("merchant/register","POST",{
+		 phone:"18112341256",
+		 validCode:"123"
 	 },function(res){
+		 wAjax("merchant/update","JSON_POST",{
+			 phone:"18112341256",
+			 realName:"xiaowang",
+			 address:"山东",
+			 detailAddress:"小镇"
+		 },function(res){
+			 var param = {
+						list:JSON.stringify([{
+							productId:5,
+							count:10
+						}]),
+						supplierId:24
+					}
+			
+				 wAjax("msorder/save","POST",param,function(res){
+					 
+					 wAjax("msorder/info","GET",null,function(res){
+						
+					 })
+				 }) 
+			 
+		 })
 		 
 	 })
-	 var param = {
-			list:JSON.stringify([{
-				productId:5,
-				count:10
-			}]),
-			supplierId:19
-		}
-/* 	 wAjax("address/add","JSON_POST",{name:"小王",phone:"13412345611",detail:"我飞蛾违法未范围",address:"山东省喊饿阁微观"},function(res){
-			
-	 })	 */
-	 wAjax("msorder/save","POST",param,function(res){
-		 
-		 wAjax("msorder/info","GET",null,function(res){
-			 wAjax("msorder/add","POST",{addressId:29},function(res){
-					
-			 })	
-		 })
-	}) 
-	/*  wAjax("msorder/send","POST",{orderNumber:"123153324",orderId:117,courier:"小新"},function(res){
-			
-	 })	
-	 wAjax("msorder/update","POST",{orderNumber:"123153324",orderId:18,status:"CONFIRM_RECEIVE"},function(res){
-			
-	 })	 */
-}) 
+ })
+	 
 
 
 

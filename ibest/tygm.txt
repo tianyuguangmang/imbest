@@ -1,3 +1,5 @@
+linux数据库安装//https://www.linuxidc.com/Linux/2016-09/134940.htm
+
 | address | CREATE TABLE `address` (
   `address_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(20) DEFAULT NULL,
