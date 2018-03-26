@@ -25,9 +25,12 @@
 	</bean>
 	<!-- jedis 配置 -->
 	 <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig"> 
+	 
 		<property name="maxIdle" value="200" /> 
-		<property name="minIdle" value="8" /> <property name="maxWaitMillis" value="100000" /> <property name="testOnBorrow" 
-		value="true" /> </bean> 
+		<property name="minIdle" value="8" />
+		<property name="maxWaitMillis" value="100000" />
+		<property name="testOnBorrow" value="true" />
+	</bean> 
 	<!-- redis服务器中心 -->
 	<bean id="connectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"> 
 		<property name="poolConfig" ref="poolConfig" />

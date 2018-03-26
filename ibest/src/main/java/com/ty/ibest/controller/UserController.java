@@ -52,6 +52,7 @@ public class UserController extends BaseController{
 		User user = null;
 		String backMsg = null;
 		try{
+			System.out.println(phone);
 			user = userService.queryUserByPhone(phone);
 			if(user != null){
 				return failResult(555,"手机号已经注册");
@@ -62,6 +63,7 @@ public class UserController extends BaseController{
 			user.setType("SUPPLIER");
 			backMsg = userService.toRegister(user);
 			if(backMsg.equals("SUCCESS")){
+				session.setAttribute(InfoConstant.USER_INFO, user);
 				return successResult(user);
 			}
 		}catch(Exception e){
@@ -96,6 +98,7 @@ public class UserController extends BaseController{
 			user.setType("MERCHANT");
 			backMsg = userService.toRegister(user);
 			if(backMsg.equals("SUCCESS")){
+				session.setAttribute(InfoConstant.USER_INFO, user);
 				return successResult(user);
 			}
 			
@@ -115,10 +118,13 @@ public class UserController extends BaseController{
 			if(user == null||!user.getType().equals("MERCHANT")){
 				return failResult(555,"用户信息获取失败");
 			}
-			merchant.setUserId(user.getUserId());
-			backMsg = userService.updateMerchant(merchant);
+			user.setAddress(merchant.getAddress());
+			user.setDetailAddress(user.getDetailAddress());
+			user.setRealName(merchant.getRealName());
+			backMsg = userService.updateMerchant(user);
 			if(backMsg.equals("SUCCESS")){
-				return successResult(merchant);
+				session.setAttribute(InfoConstant.USER_INFO, user);
+				return successResult(user);
 			}
 		}catch(Exception e){
 			

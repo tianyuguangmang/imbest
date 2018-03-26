@@ -110,16 +110,20 @@ public class UserServiceImpl implements UserService{
 	}
 	public String toRegister(User user){
 		try{
+			System.out.println(user.getPhone());
 			if(!reg.validPhone(user.getPhone())){
-				return "�ֻ��Ų���ȷ";
+				return "手机号不正确";
 			}
+			System.out.println(user.getPhone());
 			int key = userMapper.toRegister(user);
+			System.out.println(user.getPhone());
 			if(key>0)
 			return "SUCCESS";
 		}catch(Exception e){
+			System.out.println(e);
 			
 		}
-		return "ע��ʧ��";
+		return "注册失败";
 		
 	}
 	public User isLogin(String phone,String password){
