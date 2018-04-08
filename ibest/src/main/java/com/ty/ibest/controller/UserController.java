@@ -131,40 +131,32 @@ public class UserController extends BaseController{
 		}
 		return failResult(555,backMsg);
 	}
-	
-	@RequestMapping(value="/merchant/list",method = RequestMethod.GET)
+	@RequestMapping(value="/admin/login",method =RequestMethod.POST)
 	@ResponseBody
-	public Results<PageInfo<User>> getMerchant(@RequestParam int current,@RequestParam int size,HttpSession session){
+	public Results<User> adminLogin(String phone,String password,HttpSession session){
+		String openId = null;
+		User user = null;
+		user = userService.queryAdmin(phone,password);
+		if(user == null||!user.getType().equals("ADMIN")){
+			return failResult(555,"账户或密码错误");
+		}
+		session.setAttribute(InfoConstant.USER_INFO, user);
+		return successResult(user);
+	}
+	@RequestMapping(value="/user/list",method = RequestMethod.GET)
+	@ResponseBody
+	public Results<PageInfo<User>> getUserListByType(int current,int size,String type,HttpSession session){
 		try{
-			/*Admin admin = (Admin)session.getAttribute("adminInfo");
-			System.out.println(admin.getPhone());*/
-			//if(admin!=null){
-			/*if(merchant.getName()!= null){
-				JSONArray json = JSONArray.fromObject(merchant.getName());//userStr是json字符串
-				for(int i=0;i<json.size();i++){
-					System.out.println(json.get(i));
-					Map<String,Object> map = (Map) json.get(i);
-					for(String s:map.keySet()){
-						System.out.println(map.get(s));
-					}
-					
-				}
-			}*/
-			System.out.println(current);
-			PageInfo<User> pageInfo = userService.getMerchant(current,size);
+			User user =(User) session.getAttribute(InfoConstant.USER_INFO);
+			if(user == null||!user.getType().equals("ADMIN")){
+				return failResult(555,"您还不是管理员");
+			}
+			PageInfo<User> pageInfo = userService.getUserListByType(current,size,type);
 			return successResult(pageInfo);
-			//}else{
-			//	return failResult(555,"未登录");
-			//}
-			
-			
 		}catch(Exception e){
 			
 		}
 		return failResult(555,"获取失败");
-		
-		
-		
 	}
 
 }

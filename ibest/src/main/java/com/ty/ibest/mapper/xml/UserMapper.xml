@@ -25,10 +25,10 @@
 	
 
 	</resultMap>
-	<select id="getMerchant" resultMap="BaseResult">
+	<select id="getUserListByType" resultMap="BaseResult">
 		SELECT *
 		FROM
-		m_merchant
+		user where type = #{type}
 
 	</select>
 
@@ -50,6 +50,12 @@
 		SELECT *
 		FROM
 		user WHERE open_id = #{openId}
+
+	</select>
+	<select id="queryAdmin" resultMap="BaseResult">
+		SELECT *
+		FROM
+		user WHERE phone = #{phone} AND password = #{password}
 
 	</select>
 	<select id="queryUserByUserId" resultMap="BaseResult">

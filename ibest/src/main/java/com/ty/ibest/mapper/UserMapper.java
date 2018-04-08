@@ -12,8 +12,8 @@ public interface UserMapper {
 	User queryUserByUserId(@Param("userId") Integer userId);
 	User queryUserByPhone(@Param("phone") String phone);
 	
-	
-	List<User> getMerchant();
+	User queryAdmin(@Param("phone") String phone,@Param("password") String password);
+	List<User> getUserListByType(@Param("type") String type);
 	int deleteMerchant(@Param("merchantId") int merchantId);
 	Integer updateMerchant(User merchant);
 	int toRegister(User user);

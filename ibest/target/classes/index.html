@@ -41,8 +41,12 @@ $(document).ready(function() {
      }});  
 }); 
 
-
- var param = {
+wAjax("admin/login","POST",{phone:'admin',password:123},function(res){
+	wAjax("user/list","GET",{current:1,size:123,type:"SUPPLIER"},function(res){	
+		
+	})	
+})
+/*  var param = {
 	mainImage:"msg",
 	name:"一个傻瓜",
 	originPrice:10,
@@ -78,7 +82,7 @@ $(document).ready(function() {
 		 })
 		 
 	 })
- })
+ }) */
 	 
 
 

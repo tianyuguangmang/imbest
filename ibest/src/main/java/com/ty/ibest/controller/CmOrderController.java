@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ty.ibest.constant.InfoConstant;
 import com.ty.ibest.entity.CmOrder;
-import com.ty.ibest.entity.MsOrder;
 import com.ty.ibest.entity.User;
 import com.ty.ibest.service.CmOrderService;
 import com.ty.ibest.utils.RedisCacheUtil;

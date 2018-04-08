@@ -16,10 +16,6 @@ public class UploadController {
 	
 	public String imgUp(@RequestParam MultipartFile img){
 		try{
-			/*String file = request.getParameter("img");
-			System.out.println(file);*/
-		
-			System.out.println("文件长度: " + img.getSize());
 			FileUtils.copyInputStreamToFile(img.getInputStream(),
 					new File(PATH, img.getOriginalFilename()));
 		}catch(Exception e){
@@ -40,7 +36,7 @@ public class UploadController {
 		try{
 			/*String file = request.getParameter("img");
 			System.out.println(file);*/
-			System.out.println("文件长度: " + x);
+			System.out.println("锟侥硷拷锟斤拷锟斤拷: " + x);
 			
 		}catch(Exception e){
 			
