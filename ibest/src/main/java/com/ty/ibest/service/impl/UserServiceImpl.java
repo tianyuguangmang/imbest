@@ -62,11 +62,17 @@ public class UserServiceImpl implements UserService{
 		
 		
 	}
-	public PageInfo<User> getMerchant(int current,int size) {
+	public User queryAdmin(String phone,String password){
+		User user = userMapper.queryAdmin(phone,password);
+		return user;
+		
+	}
+	public PageInfo<User> getUserListByType(int current,int size,String type) {
 		
 		// TODO Auto-generated method stub
 		PageHelper.startPage(current, size);
-        List<User> list = userMapper.getMerchant();
+		
+        List<User> list = userMapper.getUserListByType(type);
         PageInfo<User> pageInfo = new PageInfo<User>(list);
         return pageInfo;
 		//return merchantMapper.getMerchant(start,size);

@@ -40,7 +40,6 @@ public class CmOrderServiceImpl implements CmOrderService{
 			List<Map<String,Object>> mapListJson = (List<Map<String,Object>>)jsonArray;
 			List<MerchantProduct> productList = new ArrayList<MerchantProduct>();
 			CmOrder msOrder = new CmOrder();
-			
 			float totalMoney = 0;
 			float finalCost = 0;
 			User user = userMapper.queryUserByUserId(merchantId);
