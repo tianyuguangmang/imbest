@@ -41,10 +41,7 @@ public class UserServiceImpl implements UserService{
 	}
 	public User queryUserByOpenId(String openId) {
 		try{
-			
 			User user = userMapper.queryUserByOpenId(openId);
-		
-			
 			if(user!=null)
 			return user ;
 		}catch(Exception e){

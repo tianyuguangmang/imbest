@@ -9,23 +9,37 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 import com.ty.ibest.constant.InfoConstant;
 import com.ty.ibest.entity.User;
 import com.ty.ibest.service.UserService;
+import com.ty.ibest.utils.HttpRequestUtil;
+import com.ty.ibest.utils.RedisCacheUtil;
 import com.ty.ibest.utils.Results;
+
+import net.sf.json.JSONObject;
 @Controller
 public class UserController extends BaseController{
-	final String USER_INFO = "USER_INFO";
 	@Autowired
 	UserService userService;
-
-	@RequestMapping(value="/user/wxcode",method =RequestMethod.POST)
+	@Autowired
+	private RedisCacheUtil redisCache;
+	@RequestMapping(value="/user/wxcode",method =RequestMethod.GET)
 	@ResponseBody
 	public Results<User> userWxcode(String wxcode,HttpSession session){
 		String openId = null;
 		User user = null;
-		openId = wxcode;
+		String appid = "wx005cb93df28521fb";
+		String scret = "465753b453f9736d54f3017c34671a78";
+		String url = "https://api.weixin.qq.com/sns/jscode2session";
+		String params = "appid="+appid+"&secret="+scret+"&js_code="+wxcode;
+		String xm = HttpRequestUtil.sendGet(url,params);
+		JSONObject jsonObj = JSONObject.fromObject(xm);
+		if(jsonObj.get("openid") == null){
+			return failResult(555,"没有获取到用户信息");
+		}
+		openId = (String) jsonObj.get("openid");
 		user = userService.queryUserByOpenId(openId);
 		if(user == null){
 			user = new User();
@@ -46,27 +60,27 @@ public class UserController extends BaseController{
 	 * @param userId
 	 * @return
 	 */
-	@RequestMapping(value="/supplier/register",method =RequestMethod.POST)
+	@RequestMapping(value="/supplier/register",method =RequestMethod.GET)
 	@ResponseBody
-	public Results<User> supplierRegister(String phone,String validCode,String userId,HttpSession session){
+	public Results<User> supplierRegister(String phone,String validCode,String openId,HttpSession session){
 		User user = null;
 		String backMsg = null;
 		try{
 			System.out.println(phone);
-			user = userService.queryUserByPhone(phone);
-			if(user != null){
-				return failResult(555,"手机号已经注册");
+			user = userService.queryUserByOpenId(openId);
+			if(user == null){
+				return failResult(555,"没找到您的信息");
 			}
 			//进行支付
-			user = (User)session.getAttribute(InfoConstant.USER_INFO);
 			user.setPhone(phone);
 			user.setType("SUPPLIER");
 			backMsg = userService.toRegister(user);
 			if(backMsg.equals("SUCCESS")){
-				session.setAttribute(InfoConstant.USER_INFO, user);
+				redisCache.sset(openId, JSON.toJSONString(user));
 				return successResult(user);
 			}
 		}catch(Exception e){
+		
 			
 		}
 		return failResult(555,backMsg);
@@ -84,13 +98,13 @@ public class UserController extends BaseController{
 	 */
 	@RequestMapping(value="/merchant/register",method =RequestMethod.POST)
 	@ResponseBody
-	public Results<User> merchantRegister(String phone,String validCode,String userId,HttpSession session){
+	public Results<User> merchantRegister(String phone,String validCode,String openId,HttpSession session){
 		User user = null;
 		String backMsg = null;
 		try{
-			user = userService.queryUserByPhone(phone);
-			if(user != null){
-				return failResult(555,"手机号已被注册");
+			user = userService.queryUserByOpenId(openId);
+			if(user == null){
+				return failResult(555,"没找到您的信息");
 			}
 			//进行支付
 			user = (User)session.getAttribute(InfoConstant.USER_INFO);

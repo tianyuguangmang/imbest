@@ -114,17 +114,22 @@ function ajax(options){
 	if(options.type === 'GET'){
 		var timestamp= new Date().getTime();
 		xhr.open('GET', options.url+"?"+params+"&t="+timestamp, true);
+		xhr.setRequestHeader("openId","obZUP0SLAQi9oAk7EdGORntuHBIc");
 		xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
 		xhr.send(JSON.stringify(options.data));
 	}else if(options.type === 'POST'){
 		xhr.open('POST', options.url, true);
 		xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+		xhr.setRequestHeader("OpenId","obZUP0SLAQi9oAk7EdGORntuHBIc");
 		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded;charset=UTF-8');
 		xhr.send(params);
 	}else if(options.type === 'JSON_POST'){
+		xhr.setRequestHeader("OpenId","obZUP0SLAQi9oAk7EdGORntuHBIc");
+		
 		xhr.open('POST', options.url, true);
-		xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+		//xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+		xhr.setRequestHeader("OpenId","obZUP0SLAQi9oAk7EdGORntuHBIc");
 		xhr.setRequestHeader('Content-Type', 'application/json');
 		xhr.send(JSON.stringify(options.data));
 	}else if(options.type === 'FILE'){

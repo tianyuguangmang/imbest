@@ -1,5 +1,7 @@
 package com.ty.ibest.utils;
 
+import java.util.concurrent.TimeUnit;
+
 import javax.annotation.Resource;
 
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -11,8 +13,8 @@ public class RedisCacheUtil {
     @Resource
     private StringRedisTemplate  redisTemplate;
     public void sset(String key,String value){
-    	System.out.println(key);
-    	redisTemplate.opsForValue().set(key, value);
+    
+    	redisTemplate.opsForValue().set(key, value,2*3600, TimeUnit.SECONDS);
     }
     public String sget(String key){
     	
