@@ -40,11 +40,25 @@ $(document).ready(function() {
     	 console.log("123");
      }});  
 }); 
+$.ajax({
+    type: "GET",
+    url: "supplier/register",
+    headers:{"openId":"obZUP0SLAQi9oAk7EdGORntuHBIc","Content-Type":"application/json"},
+    data: {
+    	phone:18754800737,
+    	validCode:23,
+    	openId:123
+    },
+    dataType: "json",
+    success: function(data){
+              
+             }
+}); 
  $.ajax({
     type: "POST",
     url: "supplier/product/add",
     headers:{"openId":"obZUP0SLAQi9oAk7EdGORntuHBIc","Content-Type":"application/json"},
-    data: JSON.stringify({name:"xm",originPrice:12,resetPrice:13,cateId:1,mainImage:"sms"}),
+    data: JSON.stringify({name:"xm",originPrice:12,resetPrice:13,cateId:1,mainImage:"sms",stock:10}),
     dataType: "json",
     success: function(data){
               

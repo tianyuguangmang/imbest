@@ -16,8 +16,12 @@ public class CateServiceImpl implements CateService{
 		// TODO Auto-generated method stub
 		try{
 			int m = cateMapper.addCate(title);
-			return m;
+			if(m>0){
+				return m;
+			}
+			
 		}catch(Exception e){
+			System.out.println(e);
 		}
 		return 0;
 	}

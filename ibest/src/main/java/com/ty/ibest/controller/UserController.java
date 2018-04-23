@@ -1,4 +1,5 @@
 package com.ty.ibest.controller;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +13,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 import com.ty.ibest.constant.InfoConstant;
+import com.ty.ibest.entity.MsOrder;
 import com.ty.ibest.entity.User;
 import com.ty.ibest.service.UserService;
 import com.ty.ibest.utils.HttpRequestUtil;
+import com.ty.ibest.utils.MsgFomcat;
 import com.ty.ibest.utils.RedisCacheUtil;
 import com.ty.ibest.utils.Results;
 
@@ -22,24 +25,35 @@ import net.sf.json.JSONObject;
 @Controller
 public class UserController extends BaseController{
 	@Autowired
+	MsgFomcat msgFomcat;
+	@Autowired
 	UserService userService;
 	@Autowired
 	private RedisCacheUtil redisCache;
+	/**
+	 * 用户的登录，通过code换取openid并查询是否已经存在这个用户，
+	 * 如果存在则返回，并做缓存
+	 * 不存在则做保存到数据库
+	 * @param wxcode
+	 * @param session
+	 * @return
+	 */
 	@RequestMapping(value="/user/wxcode",method =RequestMethod.GET)
 	@ResponseBody
-	public Results<User> userWxcode(String wxcode,HttpSession session){
+	public Results<User> userWxcode(String wxcode){
 		String openId = null;
 		User user = null;
-		String appid = "wx005cb93df28521fb";
+		/*String appid = "wx005cb93df28521fb";
 		String scret = "465753b453f9736d54f3017c34671a78";
 		String url = "https://api.weixin.qq.com/sns/jscode2session";
 		String params = "appid="+appid+"&secret="+scret+"&js_code="+wxcode;
+		//获取微信的返回结果
 		String xm = HttpRequestUtil.sendGet(url,params);
 		JSONObject jsonObj = JSONObject.fromObject(xm);
 		if(jsonObj.get("openid") == null){
 			return failResult(555,"没有获取到用户信息");
-		}
-		openId = (String) jsonObj.get("openid");
+		}*/
+		openId = "obZUP0SLAQi9oAk7EdGORntuHBIc";
 		user = userService.queryUserByOpenId(openId);
 		if(user == null){
 			user = new User();
@@ -49,7 +63,7 @@ public class UserController extends BaseController{
 			  return failResult(555,"添加失败");
 			}
 		}
-		session.setAttribute(InfoConstant.USER_INFO, user);
+		redisCache.sset(openId, JSON.toJSONString(user));
 		return successResult(user);
 	}
 	/**
@@ -62,12 +76,14 @@ public class UserController extends BaseController{
 	 */
 	@RequestMapping(value="/supplier/register",method =RequestMethod.GET)
 	@ResponseBody
-	public Results<User> supplierRegister(String phone,String validCode,String openId,HttpSession session){
+	public Results<User> supplierRegister(String phone,String validCode,HttpServletRequest httpRequest){
+		
 		User user = null;
 		String backMsg = null;
+		
 		try{
-			System.out.println(phone);
-			user = userService.queryUserByOpenId(openId);
+			String openId = httpRequest.getHeader("openId");
+			user = msgFomcat.userMsg(openId, User.class);
 			if(user == null){
 				return failResult(555,"没找到您的信息");
 			}
@@ -98,46 +114,51 @@ public class UserController extends BaseController{
 	 */
 	@RequestMapping(value="/merchant/register",method =RequestMethod.POST)
 	@ResponseBody
-	public Results<User> merchantRegister(String phone,String validCode,String openId,HttpSession session){
+	public Results<User> merchantRegister(String phone,String validCode,HttpServletRequest httpRequest){
 		User user = null;
 		String backMsg = null;
 		try{
-			user = userService.queryUserByOpenId(openId);
+			String openId = httpRequest.getHeader("openId");
+			user = msgFomcat.userMsg(openId, User.class);
 			if(user == null){
 				return failResult(555,"没找到您的信息");
 			}
 			//进行支付
-			user = (User)session.getAttribute(InfoConstant.USER_INFO);
 			user.setPhone(phone);
 			user.setType("MERCHANT");
 			backMsg = userService.toRegister(user);
 			if(backMsg.equals("SUCCESS")){
-				session.setAttribute(InfoConstant.USER_INFO, user);
+				redisCache.sset(openId, JSON.toJSONString(user));
 				return successResult(user);
 			}
-			
-			
 		}catch(Exception e){
 			
 		}
 		return failResult(555,backMsg);
 	}
-
+	/**
+	 * 商家信息更新
+	 * @param merchant
+	 * @param httpRequest
+	 * @return
+	 */
 	@RequestMapping(value="/merchant/update",method =RequestMethod.POST,consumes="application/json")
 	@ResponseBody
-	public Results<User> updateMerchant(@RequestBody User merchant,HttpSession session){
+	public Results<User> updateMerchant(@RequestBody User merchant,HttpServletRequest httpRequest){
 		String backMsg = null;
+		User user = null;
 		try{
-			User user =(User) session.getAttribute(InfoConstant.USER_INFO);
-			if(user == null||!user.getType().equals("MERCHANT")){
-				return failResult(555,"用户信息获取失败");
+			String openId = httpRequest.getHeader("openId");
+			user = msgFomcat.userMsg(openId, User.class);
+			if(user == null){
+				return failResult(555,"没找到您的信息");
 			}
 			user.setAddress(merchant.getAddress());
 			user.setDetailAddress(user.getDetailAddress());
 			user.setRealName(merchant.getRealName());
 			backMsg = userService.updateMerchant(user);
 			if(backMsg.equals("SUCCESS")){
-				session.setAttribute(InfoConstant.USER_INFO, user);
+				redisCache.sset(openId, JSON.toJSONString(user));
 				return successResult(user);
 			}
 		}catch(Exception e){
@@ -145,7 +166,14 @@ public class UserController extends BaseController{
 		}
 		return failResult(555,backMsg);
 	}
-	@RequestMapping(value="/admin/login",method =RequestMethod.POST)
+	/**
+	 * 管理员登录
+	 * @param phone
+	 * @param password
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping(value="/admin/login",method =RequestMethod.GET)
 	@ResponseBody
 	public Results<User> adminLogin(String phone,String password,HttpSession session){
 		String openId = null;
@@ -157,6 +185,14 @@ public class UserController extends BaseController{
 		session.setAttribute(InfoConstant.USER_INFO, user);
 		return successResult(user);
 	}
+	/**
+	 * 所有的用户列表
+	 * @param current
+	 * @param size
+	 * @param type
+	 * @param session
+	 * @return
+	 */
 	@RequestMapping(value="/user/list",method = RequestMethod.GET)
 	@ResponseBody
 	public Results<PageInfo<User>> getUserListByType(int current,int size,String type,HttpSession session){

@@ -12,9 +12,8 @@
 		FROM
 		cate
 	</select>
-	<insert id="addCate" parameterType="String" useGeneratedKeys="true"
-		keyProperty="id">
+	<insert id="addCate" parameterType="String">
 		INSERT INTO cate (title)
-		VALUES(#{titles})
+		VALUES(#{title})
 	</insert>
 </mapper>

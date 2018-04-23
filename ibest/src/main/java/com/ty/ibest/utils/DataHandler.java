@@ -3,6 +3,7 @@ package com.ty.ibest.utils;
 import java.security.MessageDigest;
 
 public class DataHandler {
+	
 	public static String MD5(String s) {
 	    try {
 	        MessageDigest md = MessageDigest.getInstance("MD5");

@@ -19,6 +19,7 @@ import com.ty.ibest.entity.MsOrder;
 import com.ty.ibest.entity.SupplierProduct;
 import com.ty.ibest.entity.User;
 import com.ty.ibest.service.SupplierProductService;
+import com.ty.ibest.utils.MsgFomcat;
 import com.ty.ibest.utils.RedisCacheUtil;
 import com.ty.ibest.utils.Results;
 
@@ -26,6 +27,8 @@ import net.sf.json.JSONObject;
 
 @Controller
 public class SupplierProductController extends BaseController{
+	@Autowired
+	MsgFomcat msgFomcat;
 	@Autowired
 	RedisCacheUtil redisCache;
 	@Autowired
@@ -37,18 +40,11 @@ public class SupplierProductController extends BaseController{
 		String openId = null;
 		User user = null;
 		try{
-			
 			openId = httpRequest.getHeader("openId");
-			System.out.println(openId);
-			String str = redisCache.sget(openId);
-			System.out.println("sm,"+str.toString());
-			JSONObject jsonObj=JSONObject.fromObject(redisCache.sget(openId));
-			if(jsonObj != null){
-				user = (User) JSONObject.toBean(jsonObj,User.class);
-			}else{
+			user = msgFomcat.userMsg(openId, User.class);
+			if(user == null){
 				return failResult(555,"用户信息获取失败");
 			}
-			System.out.println(jsonObj);
 			if(!user.getType().equals("SUPPLIER")){
 				return failResult(555,"您还不是供应商");
 			}
