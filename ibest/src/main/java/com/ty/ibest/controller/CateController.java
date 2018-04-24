@@ -22,7 +22,7 @@ import com.ty.ibest.utils.Results;
 public class CateController extends BaseController{
 	@Autowired
 	CateService cateService;
-	@RequestMapping(value = "/cate/add", method = RequestMethod.GET)
+	@RequestMapping(value = "/cate/add", method = RequestMethod.POST)
 	@ResponseBody
 	public Results<Boolean> addCate(String title,HttpSession session){
 		try{

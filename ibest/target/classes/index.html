@@ -64,6 +64,17 @@ $.ajax({
               
              }
 }); 
+ $.ajax({
+	    type: "POST",
+	    url: "cate/add",
+	    data: {
+	    	title:"日航"
+	    },
+	    dataType: "json",
+	    success: function(data){
+	              
+	             }
+	}); 
 /* 
  wAjax("supplier/product/add","JSON_POST",{name:"xm",originPrice:12,resetPrice:13,cateId:1,mainImage:"sms"},function(res){
 	 

@@ -2,6 +2,7 @@ package com.ty.ibest.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,21 +17,25 @@ import com.ty.ibest.constant.InfoConstant;
 import com.ty.ibest.entity.Address;
 import com.ty.ibest.entity.User;
 import com.ty.ibest.service.AddressService;
+import com.ty.ibest.utils.MsgFomcat;
 import com.ty.ibest.utils.Results;
 
 @Controller
 public class AddressController extends BaseController{
 	@Autowired
+	MsgFomcat msgFomcat;
+	@Autowired
 	AddressService addressService;
 	@RequestMapping(value="/address/add",method = RequestMethod.POST,consumes="application/json")
 	@ResponseBody
-	public Results<Address> addAddress(@RequestBody Address address,HttpSession session){
+	public Results<Address> addAddress(@RequestBody Address address,HttpServletRequest httpRequest){
 		String backMsg = "";
-		
+		User user = null;
 		try{
-			User user = (User)session.getAttribute(InfoConstant.USER_INFO);
+			String openId = httpRequest.getHeader("openId");
+			user = msgFomcat.userMsg(openId, User.class);
 			if(user == null){
-				return failResult(555,"用户信息获取失败");
+				return failResult(555,"没找到您的信息");
 			}
 			address.setConsumerId(user.getUserId());
 			backMsg = addressService.addAddress(address);
@@ -42,11 +47,17 @@ public class AddressController extends BaseController{
 		}
 		return failResult(555,backMsg);
 	}
-	@RequestMapping(value="/address/list",method = RequestMethod.POST)
+	@RequestMapping(value="/address/list",method = RequestMethod.GET)
 	@ResponseBody
-	public Results<List<Address>> getAddress(@RequestParam int consumerId){
+	public Results<List<Address>> getAddress(HttpServletRequest httpRequest){
+		User user = null;
 		try{
-			List<Address> list = addressService.getAddress(consumerId);
+			String openId = httpRequest.getHeader("openId");
+			user = msgFomcat.userMsg(openId, User.class);
+			if(user == null){
+				return failResult(555,"没找到您的信息");
+			}
+			List<Address> list = addressService.getAddress(user.getUserId());
 			return successResult(list);
 			
 		}catch(Exception e){
