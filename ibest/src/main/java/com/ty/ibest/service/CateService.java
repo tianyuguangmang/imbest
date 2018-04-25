@@ -6,7 +6,7 @@ import com.ty.ibest.entity.Cate;
 
 
 public interface CateService {
-	int addCate(String title);
+	String addCate(String title);
 	List<Cate> queryProductCate();
 	
 	Boolean deleteCate(int id);

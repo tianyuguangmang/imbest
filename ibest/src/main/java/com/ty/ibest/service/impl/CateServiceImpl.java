@@ -12,18 +12,18 @@ import com.ty.ibest.service.CateService;
 public class CateServiceImpl implements CateService{
 	@Autowired
 	CateMapper cateMapper;
-	public int addCate(String title) {
+	public String addCate(String title) {
 		// TODO Auto-generated method stub
 		try{
-			int m = cateMapper.addCate(title);
+			Integer m = cateMapper.addCate(title);
 			if(m>0){
-				return m;
+				return "SUCCESS";
 			}
 			
 		}catch(Exception e){
 			System.out.println(e);
 		}
-		return 0;
+		return "添加失败";
 	}
 
 	public List<Cate> queryProductCate() {

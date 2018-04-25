@@ -25,21 +25,21 @@ public class CateController extends BaseController{
 	@RequestMapping(value = "/cate/add", method = RequestMethod.POST)
 	@ResponseBody
 	public Results<Boolean> addCate(String title,HttpSession session){
+		String backMsg = "";
 		try{
 			User user =(User) session.getAttribute(InfoConstant.USER_INFO);
 			if(user == null||!user.getType().equals("ADMIN")){
 				return failResult(555,"您还不是管理员");
 			}
 			System.out.println(title);
-			int keyId = cateService.addCate(title);
-			
-			
-			if(keyId>0)
-			return successResult(null);
+			backMsg = cateService.addCate(title);
+			if(backMsg.equals("SUCCESS")){
+				return successResult(null);
+			}
 		}catch(Exception e){
 			
 		}
-		return failResult(555,"添加失败");
+		return failResult(555,backMsg);
 	}
 	@RequestMapping(value = "/cate/list", method = RequestMethod.GET)
 	@ResponseBody

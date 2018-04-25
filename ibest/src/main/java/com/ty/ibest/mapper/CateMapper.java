@@ -9,7 +9,7 @@ import com.ty.ibest.entity.Cate;
 
 
 public interface CateMapper {
-	int addCate(@Param("title") String title);
+	Integer addCate(@Param("title") String title);
 	List<Cate> queryProductCate();
 	
 	Boolean deleteCate(@Param("cateId") int cateId);
