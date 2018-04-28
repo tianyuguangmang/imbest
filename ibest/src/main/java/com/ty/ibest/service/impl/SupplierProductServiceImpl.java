@@ -5,6 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.ty.ibest.entity.MerchantProduct;
 import com.ty.ibest.entity.SupplierProduct;
 import com.ty.ibest.mapper.SupplierProductMapper;
 import com.ty.ibest.service.SupplierProductService;
@@ -33,12 +36,15 @@ public class SupplierProductServiceImpl implements SupplierProductService{
 		return "添加失败";
 	}
 
-	public List<SupplierProduct> getProduct(String supplierId) {
-		
+	public PageInfo<SupplierProduct> getProduct(Integer supplierId,Integer cateId,Integer current,Integer size) {
+		PageInfo<SupplierProduct> pageInfo = null;
 		try{
-			List<SupplierProduct> list = sproductMapper.getProduct(supplierId);
-			return list;
+			PageHelper.startPage(current, size);
+	        List<SupplierProduct> list = sproductMapper.getProduct(supplierId,cateId);
+	        pageInfo = new PageInfo<SupplierProduct>(list);
+			return pageInfo;
 		}catch(Exception e){
+			System.out.println(e);
 			
 		}
 		return null;
@@ -46,14 +52,18 @@ public class SupplierProductServiceImpl implements SupplierProductService{
 		
 	}
 
-	public int deleteProduct(int productId) {
+	public String deleteProduct(int productId) {
+		
 		try{
-			sproductMapper.deleteProduct(productId);
-			return productId;
+			int key = sproductMapper.deleteProduct(productId);
+			if(key>0){
+				return "SUCCESS";
+			}
+			
 		}catch(Exception e){
 			
 		}
-		return 0;
+		return "删除失败";
 	}
 
 	public int updateProduct(SupplierProduct sproduct) {

@@ -6,6 +6,13 @@
 </head>
 <body>
 	<div>1223</div>
+	<form method="post" action="http://upload.qiniup.com/"
+	 enctype="multipart/form-data">
+	  <input name="key" type="hidden" value="img1">
+	  <input name="token" type="hidden" id="token" value="">
+	  <input name="file" type="file" />
+	  <input type="submit" value = "提交"/>
+	</form>
 	<!-- <form method="post" action="register">
 	
 </form> -->
@@ -39,6 +46,19 @@ $(document).ready(function() {
      $("input").uploadPreview({ width: 90, height: 110, imgDiv: "#imgDiv",callback:function(){
     	 console.log("123");
      }});  
+}); 
+$.ajax({
+    type: "GET",
+    url: "qiniu/token",
+    headers:{"openId":"obZUP0SLAQi9oAk7EdGORntuHBIc"},
+   
+    dataType: "json",
+    success: function(data){
+    	var _token = data.result;
+    	console.log(_token);
+    	$("#token").val(_token);
+     
+    }
 }); 
 $.ajax({
     type: "GET",

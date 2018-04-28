@@ -18,8 +18,15 @@
 	<select id="getProduct" resultMap="BaseResult">
 		SELECT *
 		FROM
-		s_product WHERE
-		supplier_id = #{supplierId}
+		s_product 
+		 <where>
+		 	<if test="supplierId != null and supplierId != 0">
+				 AND supplier_id = #{supplierId}
+			</if>
+		 	<if test="cateId != null and cateId != 0">
+				AND cate_id = #{cateId}
+			</if>
+		 </where>
 	</select>
 	<select id="getProductById" resultMap="BaseResult" parameterType="int">
 		SELECT *
