@@ -60,6 +60,14 @@ public class MsOrderController extends BaseController{
 		}
 		return failResult(555,"获取信息失败");
 	}
+	/**
+	 * 供应商确认发货
+	 * @param orderId 订单的id
+	 * @param orderNumber 订单编号
+	 * @param courier 快递公司名称
+	 * @param session
+	 * @return
+	 */
 	@RequestMapping(value="/msorder/send",method = RequestMethod.POST)
 	@ResponseBody
 	public Results<MsOrder> supplierSendGoods(Integer orderId,String orderNumber,String courier,HttpSession session){
