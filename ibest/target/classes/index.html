@@ -47,7 +47,7 @@ $(document).ready(function() {
     	 console.log("123");
      }});  
 }); 
-$.ajax({
+/* $.ajax({
     type: "GET",
     url: "qiniu/token",
     headers:{"openId":"obZUP0SLAQi9oAk7EdGORntuHBIc"},
@@ -73,28 +73,35 @@ $.ajax({
     success: function(data){
               
              }
-}); 
+});  */
  $.ajax({
     type: "POST",
     url: "supplier/product/add",
     headers:{"openId":"obZUP0SLAQi9oAk7EdGORntuHBIc","Content-Type":"application/json"},
-    data: JSON.stringify({name:"xm",originPrice:12,resetPrice:13,cateId:1,mainImage:"sms",stock:10}),
+    data: JSON.stringify({name:"一件大衣2",originPrice:12,resetPrice:13,cateId:1,mainImage:"sms",stock:10}),
     dataType: "json",
     success: function(data){
               
              }
 }); 
- $.ajax({
-	    type: "POST",
-	    url: "cate/add",
-	    data: {
-	    	title:"日航"
-	    },
-	    dataType: "json",
-	    success: function(data){
-	              
-	             }
-	}); 
+$.ajax({
+    type: "POST",
+    url: "msorder/save",
+    headers:{"openId":"obZUP0SLAQi9oAk7EdGORntuHBIc"},
+    data: {list:JSON.stringify([{productId:1,count:10,supplierId:5},{productId:8,count:10,supplierId:4}])},
+    dataType: "json",
+    success: function(data){
+    }
+}); 
+$.ajax({
+    type: "GET",
+    url: "msorder/info",
+    headers:{"openId":"obZUP0SLAQi9oAk7EdGORntuHBIc"},
+    data: {},
+    dataType: "json",
+    success: function(data){
+    }
+}); 
 /* 
  wAjax("supplier/product/add","JSON_POST",{name:"xm",originPrice:12,resetPrice:13,cateId:1,mainImage:"sms"},function(res){
 	 

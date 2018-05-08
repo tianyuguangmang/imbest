@@ -36,7 +36,7 @@ public class MsOrderServiceImpl implements MsOrderService{
 	SupplierProductMapper productMapper;
 	@Autowired
 	UserMapper userMapper;
-	public String saveMsOrder(String list,Integer supplierId,Integer userId) {
+	public String saveMsOrder(String list,Integer userId) {
 		try{
 			
 			JSONArray jsonArray = JSONArray.fromObject(list);
@@ -45,16 +45,12 @@ public class MsOrderServiceImpl implements MsOrderService{
 			MsOrder msOrder = new MsOrder();
 			float totalMoney = 0;
 			float finalCost = 0;
-			User user = userMapper.queryUserByUserId(supplierId);
-			if(user == null||!user.getType().equals("SUPPLIER")){
-				return "没有商家信息";
-			}
-				
 	        for (int i = 0; i < mapListJson.size(); i++) {
 	            Map<String,Object> obj=mapListJson.get(i);
 	            SupplierProduct product = productMapper.getProductById((Integer)obj.get("productId"));
 	            System.out.println("product"+product);
-	            if(product == null){
+	            
+	            if(product == null||(product.getSupplierId() != (Integer)obj.get("supplierId"))){
 	            	return "未找到商品";
 	            }
 	            totalMoney += (Integer)obj.get("count")*product.getResetPrice();
@@ -66,7 +62,6 @@ public class MsOrderServiceImpl implements MsOrderService{
 	        msOrder.setFinalCost(finalCost);
 	        msOrder.setGainsMoney(totalMoney - finalCost);
 	        msOrder.setProductList(json);
-	        msOrder.setSupplierId(supplierId);
 	        redisCache.sset(InfoConstant.MS_ORDER+"_"+userId, JSON.toJSONString(msOrder));
 			return "SUCCESS";
 		}catch(Exception e){

@@ -2,6 +2,7 @@ package com.ty.ibest.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import com.ty.ibest.constant.InfoConstant;
 import com.ty.ibest.entity.MsOrder;
 import com.ty.ibest.entity.User;
 import com.ty.ibest.service.MsOrderService;
+import com.ty.ibest.utils.MsgFomcat;
 import com.ty.ibest.utils.RedisCacheUtil;
 import com.ty.ibest.utils.Results;
 
@@ -25,16 +27,32 @@ public class MsOrderController extends BaseController{
 	private RedisCacheUtil redisCache;
 	@Autowired
 	MsOrderService msOrderService;
+	@Autowired
+	MsgFomcat msgFomcat;
+	/**
+	 * 订单信息缓存
+	 * @param list 商品列表 
+	 * {
+	 * 		productId:1,//商品id
+	 * 		count:1,//商品购买数量
+	 * 		supplierId:1//商品的供应商id
+	 * }
+	 * @param supplierId
+	 * @param httpRequest
+	 * @return
+	 */
 	@RequestMapping(value="/msorder/save",method = RequestMethod.POST)
 	@ResponseBody
-	public Results<MsOrder> saveMsOrder(String list,Integer supplierId,HttpSession session){
+	public Results<MsOrder> saveMsOrder(String list,HttpServletRequest httpRequest){
 		String backMsg = null;
+		User user = null;
 		try{
-			User user = (User)session.getAttribute(InfoConstant.USER_INFO);
+			String openId = httpRequest.getHeader("openId");
+			user = msgFomcat.userMsg(openId, User.class);
 			if(user == null){
 				return failResult(555,"用户信息获取失败");
 			}
-			backMsg = msOrderService.saveMsOrder(list,supplierId,user.getUserId());
+			backMsg = msOrderService.saveMsOrder(list,user.getUserId());
 			if(backMsg.equals("SUCCESS"))
 			return successResult(null);
 		}catch(Exception e){
@@ -44,9 +62,11 @@ public class MsOrderController extends BaseController{
 	}
 	@RequestMapping(value="/msorder/info",method = RequestMethod.GET)
 	@ResponseBody
-	public Results<MsOrder> infoMsOrder(HttpSession session){
+	public Results<MsOrder> infoMsOrder(HttpServletRequest httpRequest){
+		User user = null;
 		try{
-			User user = (User)session.getAttribute(InfoConstant.USER_INFO);
+			String openId = httpRequest.getHeader("openId");
+			user = msgFomcat.userMsg(openId, User.class);
 			if(user == null){
 				return failResult(555,"用户信息获取失败");
 			}
@@ -88,11 +108,13 @@ public class MsOrderController extends BaseController{
 	}
 	@RequestMapping(value="/msorder/add",method = RequestMethod.POST)
 	@ResponseBody
-	public Results<MsOrder> addMsOrder(HttpSession session){
+	public Results<MsOrder> addMsOrder(HttpServletRequest httpRequest){
 		String backMsg = null;
+		User user = null;
 		try{
-			User user =(User) session.getAttribute(InfoConstant.USER_INFO);
-			if(user == null||!user.getType().equals("MERCHANT")){
+			String openId = httpRequest.getHeader("openId");
+			user = msgFomcat.userMsg(openId, User.class);
+			if(user == null){
 				return failResult(555,"用户信息获取失败");
 			}
 			if(user.getAddress() == null||user.getPhone() == null){
