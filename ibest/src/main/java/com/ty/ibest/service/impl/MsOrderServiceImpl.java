@@ -1,6 +1,8 @@
 package com.ty.ibest.service.impl;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +25,7 @@ import com.ty.ibest.service.MsOrderService;
 import com.ty.ibest.utils.RedisCacheUtil;
 
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @Service
 public class MsOrderServiceImpl implements MsOrderService{
@@ -36,9 +39,50 @@ public class MsOrderServiceImpl implements MsOrderService{
 	SupplierProductMapper productMapper;
 	@Autowired
 	UserMapper userMapper;
-	public String saveMsOrder(String list,Integer userId) {
+	public String saveMsOrder2(String cartInfo,Integer userId){
 		try{
 			
+			JSONObject jsonObject=JSONObject.fromObject(cartInfo);
+	        Iterator<String> iterator =jsonObject.keys();
+	        while(iterator.hasNext()){
+	            String key = iterator.next();
+	            String value = jsonObject.getString(key);
+	            List<SupplierProduct> productList = new ArrayList();
+	            float totalMoney = 0;
+				float finalCost = 0;
+	            System.out.println(value);
+	            JSONArray jsonArray = JSONArray.fromObject(value);
+				List<Map<String,Object>> mapListJson  = (List)jsonArray;
+				for (int i = 0; i < mapListJson.size(); i++) {
+		            Map<String,Object> obj=mapListJson.get(i);
+		            SupplierProduct product = productMapper.getProductById((Integer)obj.get("productId"));
+		            System.out.println("product"+product);
+		            
+		            if(product == null||(product.getSupplierId() != (Integer)obj.get("supplierId"))){
+		            	return "未找到商品";
+		            }
+		            totalMoney += (Integer)obj.get("count")*product.getResetPrice();
+		            finalCost += (Integer)obj.get("count")*product.getOriginPrice();
+		            productList.add(product);
+		        }
+	           
+	           /* JSONObject jsonObject2=JSONObject.fromObject(value1);
+	            Iterator<String> iterator2 =jsonObject2.keys();
+	            while(iterator2.hasNext()){
+	                String key2 = iterator2.next();
+	                String value2 = jsonObject2.getString(key2);
+	                System.out.println(" - "+key2);
+	                System.out.println(" -- "+value2);
+	            }*/
+	        }
+		}catch(Exception e){
+			
+		}
+		
+		return "1";
+	}
+	public String saveMsOrder(String list,Integer userId) {
+		try{
 			JSONArray jsonArray = JSONArray.fromObject(list);
 			List<Map<String,Object>> mapListJson  = (List)jsonArray;
 			List<SupplierProduct> productList = new ArrayList();
@@ -48,16 +92,24 @@ public class MsOrderServiceImpl implements MsOrderService{
 	        for (int i = 0; i < mapListJson.size(); i++) {
 	            Map<String,Object> obj=mapListJson.get(i);
 	            SupplierProduct product = productMapper.getProductById((Integer)obj.get("productId"));
-	            System.out.println("product"+product);
-	            
+	            System.out.println("product"+product);  
 	            if(product == null||(product.getSupplierId() != (Integer)obj.get("supplierId"))){
 	            	return "未找到商品";
 	            }
+	            
 	            totalMoney += (Integer)obj.get("count")*product.getResetPrice();
 	            finalCost += (Integer)obj.get("count")*product.getOriginPrice();
+	            Field[] field = product.getClass().getDeclaredFields();  
+	            for(int j=0; j<field.length; j++){  
+	                Field f = field[j];  
+	                f.setAccessible(true);  
+	                obj.put(f.getName(), f.get(product));
+	                System.out.println("属性名:" + f.getName() + " 属性值:" + f.get(product));  
+	            }   
 	            productList.add(product);
 	        }
 	        String json = JSON.toJSONString(productList);
+	        System.out.println(json);
 	        msOrder.setTotalMoney(totalMoney);
 	        msOrder.setFinalCost(finalCost);
 	        msOrder.setGainsMoney(totalMoney - finalCost);

@@ -123,7 +123,7 @@ public class MsOrderController extends BaseController{
 			JSONObject jsonObj=JSONObject.fromObject(redisCache.sget(InfoConstant.MS_ORDER+"_"+user.getUserId()));
 			MsOrder msOrder = (MsOrder) JSONObject.toBean(jsonObj,MsOrder.class);
 			//发起支付：支付成功 status
-			msOrder.setStatus("WAIT_PAY");
+			//msOrder.setStatus("WAIT_PAY");
 		    backMsg = msOrderService.addMsOrder(msOrder,user);
 			if(backMsg.equals("SUCCESS"))
 			return successResult(msOrder);
