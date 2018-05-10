@@ -84,7 +84,7 @@ $.ajax({
               
              }
 });  */
-$.ajax({
+/* $.ajax({
     type: "POST",
     url: "msorder/save",
     headers:{"openId":"obZUP0SLAQi9oAk7EdGORntuHBIc"},
@@ -93,15 +93,28 @@ $.ajax({
     success: function(data){
     }
 }); 
-/* $.ajax({
+ $.ajax({
     type: "GET",
     url: "msorder/info",
     headers:{"openId":"obZUP0SLAQi9oAk7EdGORntuHBIc"},
     data: {},
     dataType: "json",
     success: function(data){
+    	console.log(data);
+    	var _list = JSON.parse(data.result.productList);
+    	console.log(_list);
     }
 });  */
+ $.ajax({
+	    type: "POST",
+	    url: "msorder/add",
+	    headers:{"openId":"obZUP0SLAQi9oAk7EdGORntuHBIc"},
+	    data: {},
+	    dataType: "json",
+	    success: function(data){
+	    	
+	    }
+	}); 
 /* 
  wAjax("supplier/product/add","JSON_POST",{name:"xm",originPrice:12,resetPrice:13,cateId:1,mainImage:"sms"},function(res){
 	 

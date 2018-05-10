@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 import com.ty.ibest.constant.InfoConstant;
 import com.ty.ibest.entity.Address;
+import com.ty.ibest.entity.SubMsOrder;
 import com.ty.ibest.entity.CmOrder;
 import com.ty.ibest.entity.MerchantProduct;
 import com.ty.ibest.entity.MsOrder;
@@ -85,30 +86,43 @@ public class MsOrderServiceImpl implements MsOrderService{
 		try{
 			JSONArray jsonArray = JSONArray.fromObject(list);
 			List<Map<String,Object>> mapListJson  = (List)jsonArray;
-			List<SupplierProduct> productList = new ArrayList();
+			List<SubMsOrder> subMsOrderList = new ArrayList();
 			MsOrder msOrder = new MsOrder();
 			float totalMoney = 0;
 			float finalCost = 0;
+			//某个商品卖出的总价
+			float amount = 0;
+			//某个商品卖出的总成本
+			float amount2 = 0;
 	        for (int i = 0; i < mapListJson.size(); i++) {
-	            Map<String,Object> obj=mapListJson.get(i);
+	            Map<String,Object> obj=mapListJson.get(i);	            
 	            SupplierProduct product = productMapper.getProductById((Integer)obj.get("productId"));
 	            System.out.println("product"+product);  
 	            if(product == null||(product.getSupplierId() != (Integer)obj.get("supplierId"))){
 	            	return "未找到商品";
 	            }
-	            
-	            totalMoney += (Integer)obj.get("count")*product.getResetPrice();
-	            finalCost += (Integer)obj.get("count")*product.getOriginPrice();
-	            Field[] field = product.getClass().getDeclaredFields();  
+	            SubMsOrder subMsOrder = new SubMsOrder();
+	            subMsOrder.setSupplierProduct(JSON.toJSONString(product));
+	            subMsOrder.setCount((Integer)obj.get("count"));
+	            subMsOrder.setCount((Integer)obj.get("count"));
+	            amount = (Integer)obj.get("count")*product.getResetPrice();
+	            amount2 = (Integer)obj.get("count")*product.getOriginPrice();
+	            totalMoney += amount;
+	            finalCost += amount2;
+	            subMsOrder.setTotalMoney(amount);
+	            subMsOrder.setFinalCost(amount2);
+	            subMsOrder.setSupplierId(product.getSupplierId());
+	            subMsOrder.setMerchantId(userId);
+	            /*Field[] field = product.getClass().getDeclaredFields();  
 	            for(int j=0; j<field.length; j++){  
 	                Field f = field[j];  
 	                f.setAccessible(true);  
 	                obj.put(f.getName(), f.get(product));
 	                System.out.println("属性名:" + f.getName() + " 属性值:" + f.get(product));  
-	            }   
-	            productList.add(product);
+	            }   */
+	            subMsOrderList.add(subMsOrder);
 	        }
-	        String json = JSON.toJSONString(productList);
+	        String json = JSON.toJSONString(subMsOrderList);
 	        System.out.println(json);
 	        msOrder.setTotalMoney(totalMoney);
 	        msOrder.setFinalCost(finalCost);
@@ -124,7 +138,11 @@ public class MsOrderServiceImpl implements MsOrderService{
 	}
 	public String addMsOrder(MsOrder msOrder,User user) {
 		try{
-			
+			String productStr = msOrder.getProductList();
+			/*JSONArray jsonArray = JSONArray.fromObject(productStr);
+			List<Map<String,Object>> mapListJson  = (List)jsonArray;*/
+			List<SubMsOrder> subMsOrderList = JSONArray.fromObject(productStr);
+			System.out.println("size,"+subMsOrderList.size());
 			msOrder.setmAddress(user.getAddress());
 			msOrder.setmDetailAddress(user.getDetailAddress());
 			msOrder.setmName(user.getRealName());
@@ -132,6 +150,10 @@ public class MsOrderServiceImpl implements MsOrderService{
 			msOrder.setMerchantId(user.getUserId());
 			msOrder.setmPhone(user.getPhone());
 			Integer key = msOrderMapper.addMsOrder(msOrder);
+			for(int i = 0;i<subMsOrderList.size();i++){
+				subMsOrderList.get(i).setMsOorderId(msOrder.getOrderId());
+			}
+			
 			if(key>0){
 				return "SUCCESS";
 			}

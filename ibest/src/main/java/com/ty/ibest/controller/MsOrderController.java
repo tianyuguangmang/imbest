@@ -117,9 +117,9 @@ public class MsOrderController extends BaseController{
 			if(user == null){
 				return failResult(555,"用户信息获取失败");
 			}
-			if(user.getAddress() == null||user.getPhone() == null){
+			/*if(user.getAddress() == null||user.getPhone() == null){
 				return failResult(555,"请编辑个人信息");
-			}
+			}*/
 			JSONObject jsonObj=JSONObject.fromObject(redisCache.sget(InfoConstant.MS_ORDER+"_"+user.getUserId()));
 			MsOrder msOrder = (MsOrder) JSONObject.toBean(jsonObj,MsOrder.class);
 			//发起支付：支付成功 status
