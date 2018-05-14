@@ -123,20 +123,25 @@ IMESTAMP,
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 |
 
-
-| sub_ms_order | CREATE TABLE `sub_ms_order` (
-  `order_id` int(11) NOT NULL AUTO_INCREMENT,
-  `create_time` varchar(13) DEFAULT NULL,
-  `status` varchar(30) DEFAULT NULL,
-  `merchant_id` int(11) DEFAULT NULL,
-  `supplier_id` int(11) DEFAULT NULL,
-  `order_number` varchar(50) DEFAULT NULL,
-  `m_delete` tinyint(1) DEFAULT NULL,
-  `s_delete` tinyint(1) DEFAULT NULL,
-  `product_msg` text,
-  `final_cost` float DEFAULT '0',
-  `total_money` float DEFAULT '0',
-  `gains_money` float DEFAULT '0',
-  `count` int(11) DEFAULT NULL,
-  PRIMARY KEY (`order_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 
+ sub_ms_order | CREATE TABLE `sub_ms_order` (
+ `order_id` int(11) NOT NULL AUTO_INCREMENT,
+ `create_time` varchar(13) DEFAULT NULL,
+ `status` varchar(30) DEFAULT NULL,
+ `merchant_id` int(11) DEFAULT NULL,
+ `supplier_id` int(11) DEFAULT NULL,
+ `order_number` varchar(50) DEFAULT NULL,
+ `m_delete` tinyint(1) DEFAULT NULL,
+ `s_delete` tinyint(1) DEFAULT NULL,
+ `supplier_product` text,
+ `final_cost` float DEFAULT '0',
+ `total_money` float DEFAULT '0',
+ `gains_money` float DEFAULT '0',
+ `count` int(11) DEFAULT NULL,
+ `ms_order_id` int(11) DEFAULT NULL,
+ `m_name` varchar(20) DEFAULT NULL,
+ `m_phone` varchar(11) DEFAULT NULL,
+ `m_address` varchar(50) DEFAULT NULL,
+ `m_detail_address` varchar(100) DEFAULT NULL,
+ `m_nick_name` varchar(20) DEFAULT NULL,
+ `m_avatar` varchar(100) DEFAULT NULL,
+ PRIMARY KEY (`order_id`)
