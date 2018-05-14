@@ -35,6 +35,7 @@ public class SupplierProductController extends BaseController{
 	RedisCacheUtil redisCache;
 	@Autowired
 	SupplierProductService product;
+	
 	@RequestMapping(value="/supplier/product/add",method = RequestMethod.POST,consumes="application/json")
 	@ResponseBody
 	public Results<SupplierProduct> addProduct(@RequestBody SupplierProduct sproduct,HttpServletRequest httpRequest){

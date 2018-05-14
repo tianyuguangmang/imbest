@@ -4,7 +4,7 @@
 <mapper namespace="com.ty.ibest.mapper.SubMsOrderMapper">
 	<resultMap id="BaseResult" type="com.ty.ibest.entity.SubMsOrder">
 		<id column="order_id" property="orderId"></id>
-		<result column="product_list" property="productList"></result>
+		<result column="supplier_product" property="supplierProduct"></result>
 		<result column="create_time" property="createTime"></result>
 		<result column="status" property="status"></result>
 		<result column="merchant_id" property="merchantId"></result>
@@ -22,28 +22,7 @@
 		<result column="m_delete" property="mDelete"></result>
 		<result column="s_delete" property="sDelete"></result>
 	</resultMap>
-	<select id="getMerchantOrder" resultMap="BaseResult">
-		SELECT *
-		FROM
-		ms_order
-		WHERE
-		merchant_id = #{merchantId}
-	</select>
-	<select id="getMsOrderById" resultMap="BaseResult">
-		SELECT *
-		FROM
-		ms_order
-		WHERE
-		order_id = #{orderId}
-	</select>
-	<select id="getSupplierOrder" resultMap="BaseResult">
-		SELECT *
-		FROM
-		ms_order
-		WHERE
-		supplier_id = #{supplierId}
-	</select>
-	<insert id="addMsOrder" parameterType="MsOrder"
+<!-- 	<insert id="addMsOrder" parameterType="MsOrder"
 		useGeneratedKeys="true" keyProperty="orderId">
 		INSERT INTO ms_order
 		(product_list,create_time,
@@ -61,9 +40,9 @@
 		#{supplierId},#{orderNumber},
 		#{totalMoney},#{gainsMoney},#{finalCost},
 		#{mDelete},#{sDelete})
-	</insert>
-	<insert id="addSubMsOrders" parameterType="subMsOrder">
-		INSERT INTO sub_ms_order(product_msg,count)
+	</insert> -->
+	<insert id="addSubMsOrders" parameterType="java.util.List" >
+		INSERT INTO sub_ms_order(supplier_product,count)
 		values
 		<foreach  collection="subMsOrders"   item="subOrder"  open= "("  close= ")"  separator=",">
 			(#{subOrder.supplierProduct}, #{subOrder.count})
@@ -88,21 +67,21 @@
 		#{totalMoney},#{gainsMoney},#{finalCost},
 		#{mDelete},#{sDelete})
 	</insert> -->
-	<update id="updateMsOrder">
+<!-- 	<update id="updateMsOrder">
 		UPDATE ms_order
 		SET
 		status = #{status}
-		<!-- main_image=#{mainImage}, name = #{name}, origin_price = #{originPrice}, 
+		main_image=#{mainImage}, name = #{name}, origin_price = #{originPrice}, 
 			reset_price = #{resetPrice}, create_time = #{createTime}, merchant_id = #{merchantId}, 
 			m_name = #{mName}, m_address = #{mAddress}, m_detail_address = #{mDetailAddress}, 
 			m_nick_name = #{mNickName}, m_avatar = #{mAvatar}, supplier_id = #{supplierId}, 
 			order_number = #{orderNumber}, m_delete = #{mDelete}, s_delete = #{sDelete}, 
-			cate_id = #{cateId} -->
+			cate_id = #{cateId}
 		WHERE
 		order_id =
 		#{orderId}
-	</update>
-	<update id="supplierSendGoods">
+	</update> -->
+<!-- 	<update id="supplierSendGoods">
 		UPDATE ms_order
 		SET
 		status = #{status},
@@ -126,5 +105,5 @@
 		order_id =
 		#{orderId}
 	</update>
-
+ -->
 </mapper>

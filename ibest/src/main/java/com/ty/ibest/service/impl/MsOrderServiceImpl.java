@@ -20,6 +20,7 @@ import com.ty.ibest.entity.SupplierProduct;
 import com.ty.ibest.entity.User;
 import com.ty.ibest.mapper.AddressMapper;
 import com.ty.ibest.mapper.MsOrderMapper;
+import com.ty.ibest.mapper.SubMsOrderMapper;
 import com.ty.ibest.mapper.SupplierProductMapper;
 import com.ty.ibest.mapper.UserMapper;
 import com.ty.ibest.service.MsOrderService;
@@ -40,6 +41,8 @@ public class MsOrderServiceImpl implements MsOrderService{
 	SupplierProductMapper productMapper;
 	@Autowired
 	UserMapper userMapper;
+	@Autowired
+	SubMsOrderMapper subMsOrderMapper;
 	public String saveMsOrder2(String cartInfo,Integer userId){
 		try{
 			
@@ -104,7 +107,6 @@ public class MsOrderServiceImpl implements MsOrderService{
 	            SubMsOrder subMsOrder = new SubMsOrder();
 	            subMsOrder.setSupplierProduct(JSON.toJSONString(product));
 	            subMsOrder.setCount((Integer)obj.get("count"));
-	            subMsOrder.setCount((Integer)obj.get("count"));
 	            amount = (Integer)obj.get("count")*product.getResetPrice();
 	            amount2 = (Integer)obj.get("count")*product.getOriginPrice();
 	            totalMoney += amount;
@@ -139,19 +141,41 @@ public class MsOrderServiceImpl implements MsOrderService{
 	public String addMsOrder(MsOrder msOrder,User user) {
 		try{
 			String productStr = msOrder.getProductList();
+			
 			/*JSONArray jsonArray = JSONArray.fromObject(productStr);
 			List<Map<String,Object>> mapListJson  = (List)jsonArray;*/
-			List<SubMsOrder> subMsOrderList = JSONArray.fromObject(productStr);
-			System.out.println("size,"+subMsOrderList.size());
+			JSONArray arr = JSONArray.fromObject(productStr);
+			
+			List<SubMsOrder> subMsOrderList = new ArrayList();
+			System.out.println("size,"+arr.size());
+			for(int i = 0;i<arr.size();i++){
+
+                JSONObject object =(JSONObject)arr.get(i);  
+  
+                SubMsOrder subMsOrder =(SubMsOrder)JSONObject.toBean(object,  
+                		SubMsOrder.class);//此处是com.alibaba.fastjson  
+				System.out.println(subMsOrder.getFinalCost());
+				subMsOrderList.add(subMsOrder);
+				
+			}
+			
+			
+			
 			msOrder.setmAddress(user.getAddress());
+			
 			msOrder.setmDetailAddress(user.getDetailAddress());
 			msOrder.setmName(user.getRealName());
 			msOrder.setmAvatar(user.getAvatar());
 			msOrder.setMerchantId(user.getUserId());
 			msOrder.setmPhone(user.getPhone());
 			Integer key = msOrderMapper.addMsOrder(msOrder);
-			for(int i = 0;i<subMsOrderList.size();i++){
-				subMsOrderList.get(i).setMsOorderId(msOrder.getOrderId());
+			
+			System.out.println(subMsOrderList.size());
+			Integer id = subMsOrderMapper.addSubMsOrders(subMsOrderList);
+			
+			
+			if(id == 0||id == null){
+				return "有错误";
 			}
 			
 			if(key>0){
