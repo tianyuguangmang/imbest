@@ -4,10 +4,10 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.ty.ibest.entity.MsOrder;
 import com.ty.ibest.entity.SubMsOrder;
 
 public interface SubMsOrderMapper {
+	
 	
 	
 	int addSubMsOrders(@Param("subMsOrders") List<SubMsOrder> subMsOrders);

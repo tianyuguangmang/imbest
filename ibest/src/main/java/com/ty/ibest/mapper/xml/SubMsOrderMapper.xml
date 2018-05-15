@@ -44,7 +44,7 @@
 	<insert id="addSubMsOrders" parameterType="java.util.List" >
 		INSERT INTO sub_ms_order(supplier_product,count)
 		values
-		<foreach  collection="subMsOrders"   item="subOrder"  open= "("  close= ")"  separator=",">
+		<foreach  collection="subMsOrders"   item="subOrder"   separator=",">
 			(#{subOrder.supplierProduct}, #{subOrder.count})
 		</foreach>
 	</insert>

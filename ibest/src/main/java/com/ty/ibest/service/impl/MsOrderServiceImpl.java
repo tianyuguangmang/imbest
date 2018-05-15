@@ -141,9 +141,10 @@ public class MsOrderServiceImpl implements MsOrderService{
 	public String addMsOrder(MsOrder msOrder,User user) {
 		try{
 			String productStr = msOrder.getProductList();
-			
+			System.out.println("productStr,"+productStr);
 			/*JSONArray jsonArray = JSONArray.fromObject(productStr);
 			List<Map<String,Object>> mapListJson  = (List)jsonArray;*/
+			
 			JSONArray arr = JSONArray.fromObject(productStr);
 			
 			List<SubMsOrder> subMsOrderList = new ArrayList();
@@ -153,13 +154,11 @@ public class MsOrderServiceImpl implements MsOrderService{
                 JSONObject object =(JSONObject)arr.get(i);  
   
                 SubMsOrder subMsOrder =(SubMsOrder)JSONObject.toBean(object,  
-                		SubMsOrder.class);//此处是com.alibaba.fastjson  
-				System.out.println(subMsOrder.getFinalCost());
+                		SubMsOrder.class);
+				System.out.println("sub"+subMsOrder.getSupplierProduct());
 				subMsOrderList.add(subMsOrder);
 				
 			}
-			
-			
 			
 			msOrder.setmAddress(user.getAddress());
 			
@@ -172,6 +171,7 @@ public class MsOrderServiceImpl implements MsOrderService{
 			
 			System.out.println(subMsOrderList.size());
 			Integer id = subMsOrderMapper.addSubMsOrders(subMsOrderList);
+			System.out.println("id"+id);
 			
 			
 			if(id == 0||id == null){
