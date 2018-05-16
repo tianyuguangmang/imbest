@@ -105,7 +105,7 @@ public class MsOrderServiceImpl implements MsOrderService{
 	            	return "未找到商品";
 	            }
 	            SubMsOrder subMsOrder = new SubMsOrder();
-	            subMsOrder.setSupplierProduct(JSON.toJSONString(product));
+	            subMsOrder.setSupplierProduct(JSONObject.fromObject(product).toString());
 	            subMsOrder.setCount((Integer)obj.get("count"));
 	            amount = (Integer)obj.get("count")*product.getResetPrice();
 	            amount2 = (Integer)obj.get("count")*product.getOriginPrice();
@@ -141,7 +141,7 @@ public class MsOrderServiceImpl implements MsOrderService{
 	public String addMsOrder(MsOrder msOrder,User user) {
 		try{
 			String productStr = msOrder.getProductList();
-			System.out.println("productStr,"+productStr);
+			
 			/*JSONArray jsonArray = JSONArray.fromObject(productStr);
 			List<Map<String,Object>> mapListJson  = (List)jsonArray;*/
 			
@@ -151,10 +151,15 @@ public class MsOrderServiceImpl implements MsOrderService{
 			System.out.println("size,"+arr.size());
 			for(int i = 0;i<arr.size();i++){
 
-                JSONObject object =(JSONObject)arr.get(i);  
-  
+                JSONObject object =(JSONObject)arr.get(i);
+                System.out.println(object.get("supplierProduct") instanceof String);
+                System.out.println(object.get("supplierProduct") instanceof Object);
+                object.put("supplierProduct", JSONObject.fromObject(object.get("supplierProduct")).toString());
+                System.out.println(object.get("supplierProduct") instanceof String);
+                System.out.println(object.get("supplierProduct") instanceof Object);
                 SubMsOrder subMsOrder =(SubMsOrder)JSONObject.toBean(object,  
                 		SubMsOrder.class);
+                subMsOrder.setSupplierProduct(JSONObject.fromObject(object.get("supplierProduct")).toString());
 				System.out.println("sub"+subMsOrder.getSupplierProduct());
 				subMsOrderList.add(subMsOrder);
 				
