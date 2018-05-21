@@ -22,10 +22,21 @@
 		<result column="m_delete" property="mDelete"></result>
 		<result column="s_delete" property="sDelete"></result>
 	</resultMap>
+	<select id="getSubMerchantOrder" resultMap="BaseResult">
+		SELECT *
+		FROM
+		sub_ms_order
+		WHERE
+		merchant_id = #{merchantId}
+		<if test="status != null">
+			AND status = #{status}
+		</if>
+	</select>
 <!-- 	<insert id="addMsOrder" parameterType="MsOrder"
 		useGeneratedKeys="true" keyProperty="orderId">
 		INSERT INTO ms_order
-		(product_list,create_time,
+		(product_list,
+		create_time,
 		status,merchant_id,m_phone,
 		m_name,m_address,m_detail_address,
 		m_nick_name,m_avatar,
@@ -33,7 +44,8 @@
 		total_money,gains_money,final_cost,
 		m_delete,s_delete)
 		VALUES
-		(#{productList},#{createTime},
+		(#{productList},
+		#{createTime},
 		#{status},#{merchantId},#{mPhone},
 		#{mName},#{mAddress},#{mDetailAddress},
 		#{mNickName},#{mAvatar},
@@ -42,31 +54,29 @@
 		#{mDelete},#{sDelete})
 	</insert> -->
 	<insert id="addSubMsOrders" parameterType="java.util.List" >
-		INSERT INTO sub_ms_order(supplier_product,count)
-		values
-		<foreach  collection="subMsOrders"   item="subOrder"   separator=",">
-			(#{subOrder.supplierProduct}, #{subOrder.count})
-		</foreach>
-	</insert>
-	<!-- <insert id="addSubMsOrderBatch" parameterType=SubMsOrder
-		useGeneratedKeys="true" keyProperty="orderId">
-		INSERT INTO ms_order
-		(product_list,create_time,
+		INSERT INTO sub_ms_order(supplier_product,count,
+		create_time,
 		status,merchant_id,m_phone,
 		m_name,m_address,m_detail_address,
 		m_nick_name,m_avatar,
 		supplier_id,order_number,
 		total_money,gains_money,final_cost,
-		m_delete,s_delete)
-		VALUES
-		(#{productList},#{createTime},
-		#{status},#{merchantId},#{mPhone},
-		#{mName},#{mAddress},#{mDetailAddress},
-		#{mNickName},#{mAvatar},
-		#{supplierId},#{orderNumber},
-		#{totalMoney},#{gainsMoney},#{finalCost},
-		#{mDelete},#{sDelete})
-	</insert> -->
+		m_delete,s_delete
+		)
+		values
+		<foreach  collection="subMsOrders"   item="subOrder"   separator=",">
+			(#{subOrder.supplierProduct}, #{subOrder.count},
+			#{subOrder.createTime},
+			#{subOrder.status},#{subOrder.merchantId},#{subOrder.mPhone},
+			#{subOrder.mName},#{subOrder.mAddress},#{subOrder.mDetailAddress},
+			#{subOrder.mNickName},#{subOrder.mAvatar},
+			#{subOrder.supplierId},#{subOrder.orderNumber},
+			#{subOrder.totalMoney},#{subOrder.gainsMoney},#{subOrder.finalCost},
+			#{subOrder.mDelete},#{subOrder.sDelete})
+		</foreach>
+	</insert>
+	
+	
 <!-- 	<update id="updateMsOrder">
 		UPDATE ms_order
 		SET

@@ -11,6 +11,7 @@ public interface SubMsOrderMapper {
 	
 	
 	int addSubMsOrders(@Param("subMsOrders") List<SubMsOrder> subMsOrders);
+	List<SubMsOrder> getSubMerchantOrder(@Param("merchantId") String merchantId,@Param("status") String status);
 	/*int addMsOrder(MsOrder msOrder);
 	List<MsOrder> getMerchantOrder(@Param("merchantId") String merchantId);
 	List<MsOrder> getSupplierOrder(@Param("supplierId") String supplierId);

@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.ty.ibest.constant.InfoConstant;
 import com.ty.ibest.entity.Address;
 import com.ty.ibest.entity.SubMsOrder;
@@ -43,48 +45,6 @@ public class MsOrderServiceImpl implements MsOrderService{
 	UserMapper userMapper;
 	@Autowired
 	SubMsOrderMapper subMsOrderMapper;
-	public String saveMsOrder2(String cartInfo,Integer userId){
-		try{
-			
-			JSONObject jsonObject=JSONObject.fromObject(cartInfo);
-	        Iterator<String> iterator =jsonObject.keys();
-	        while(iterator.hasNext()){
-	            String key = iterator.next();
-	            String value = jsonObject.getString(key);
-	            List<SupplierProduct> productList = new ArrayList();
-	            float totalMoney = 0;
-				float finalCost = 0;
-	            System.out.println(value);
-	            JSONArray jsonArray = JSONArray.fromObject(value);
-				List<Map<String,Object>> mapListJson  = (List)jsonArray;
-				for (int i = 0; i < mapListJson.size(); i++) {
-		            Map<String,Object> obj=mapListJson.get(i);
-		            SupplierProduct product = productMapper.getProductById((Integer)obj.get("productId"));
-		            System.out.println("product"+product);
-		            
-		            if(product == null||(product.getSupplierId() != (Integer)obj.get("supplierId"))){
-		            	return "未找到商品";
-		            }
-		            totalMoney += (Integer)obj.get("count")*product.getResetPrice();
-		            finalCost += (Integer)obj.get("count")*product.getOriginPrice();
-		            productList.add(product);
-		        }
-	           
-	           /* JSONObject jsonObject2=JSONObject.fromObject(value1);
-	            Iterator<String> iterator2 =jsonObject2.keys();
-	            while(iterator2.hasNext()){
-	                String key2 = iterator2.next();
-	                String value2 = jsonObject2.getString(key2);
-	                System.out.println(" - "+key2);
-	                System.out.println(" -- "+value2);
-	            }*/
-	        }
-		}catch(Exception e){
-			
-		}
-		
-		return "1";
-	}
 	public String saveMsOrder(String list,Integer userId) {
 		try{
 			JSONArray jsonArray = JSONArray.fromObject(list);
@@ -99,11 +59,11 @@ public class MsOrderServiceImpl implements MsOrderService{
 			float amount2 = 0;
 	        for (int i = 0; i < mapListJson.size(); i++) {
 	            Map<String,Object> obj=mapListJson.get(i);	            
-	            SupplierProduct product = productMapper.getProductById((Integer)obj.get("productId"));
-	            System.out.println("product"+product);  
+	            SupplierProduct product = productMapper.getProductById((Integer)obj.get("productId")); 
 	            if(product == null||(product.getSupplierId() != (Integer)obj.get("supplierId"))){
 	            	return "未找到商品";
 	            }
+
 	            SubMsOrder subMsOrder = new SubMsOrder();
 	            subMsOrder.setSupplierProduct(JSON.toJSONString(product));
 	            subMsOrder.setCount((Integer)obj.get("count"));
@@ -125,8 +85,6 @@ public class MsOrderServiceImpl implements MsOrderService{
 	            subMsOrderList.add(subMsOrder);
 	        }	
 	        String json = JSONArray.fromObject(subMsOrderList).toString();
-	
-	        System.out.println(json);
 	        msOrder.setTotalMoney(totalMoney);
 	        msOrder.setFinalCost(finalCost);
 	        msOrder.setGainsMoney(totalMoney - finalCost);
@@ -145,59 +103,32 @@ public class MsOrderServiceImpl implements MsOrderService{
 			
 			/*JSONArray jsonArray = JSONArray.fromObject(productStr);
 			List<Map<String,Object>> mapListJson  = (List)jsonArray;*/
-			
+			System.out.println("productStr,"+productStr);
 			//JSONArray arr = JSONArray.fromObject(productStr);
 			JSONArray arr = JSONArray.fromObject(productStr);
-			SubMsOrder subMsOrder = null;
-			 System.out.println("breamk");
+			SubMsOrder subMsOrder = null;	
+			List<SubMsOrder> subMsOrderList = new ArrayList<SubMsOrder>();
 			for(int i = 0;i<arr.size();i++){
-				JSONObject object =(JSONObject)arr.get(i);
-                subMsOrder = (SubMsOrder)JSONObject.toBean(object,  
-                		SubMsOrder.class);
-                System.out.println("var"+subMsOrder.getSupplierProduct());
-                System.out.println("count"+subMsOrder.getCount());
-                
-				
-				
-				
-			}
-			
-			
-			/*List<SubMsOrder> subMsOrderList = new ArrayList();
-			System.out.println("size,"+arr.size());
-			SubMsOrder subMsOrder = null;
-			for(int i = 0;i<arr.size();i++){
-
                 JSONObject object =(JSONObject)arr.get(i);
-                subMsOrder = (SubMsOrder)JSONObject.toBean(object,  
-                		SubMsOrder.class);
+                subMsOrder = (SubMsOrder)JSONObject.toBean(object,SubMsOrder.class);
+                subMsOrder.setStatus("WAIT_PAY");
                 subMsOrder.setSupplierProduct(JSON.toJSONString(object.get("supplierProduct")));
-           
-                System.out.println("wm"+subMsOrder.getCount());
 				subMsOrderList.add(subMsOrder);
-				
-			}*/
-			
+			}
 			msOrder.setmAddress(user.getAddress());
-			
 			msOrder.setmDetailAddress(user.getDetailAddress());
 			msOrder.setmName(user.getRealName());
 			msOrder.setmAvatar(user.getAvatar());
 			msOrder.setMerchantId(user.getUserId());
 			msOrder.setmPhone(user.getPhone());
 			Integer key = msOrderMapper.addMsOrder(msOrder);
-			/*Integer id = subMsOrderMapper.addSubMsOrders(sublist);
-			System.out.println("id"+id);
-			
-			
+			Integer id = subMsOrderMapper.addSubMsOrders(subMsOrderList);
 			if(id == 0||id == null){
 				return "有错误";
 			}
-			*/
 			if(key>0){
 				return "SUCCESS";
 			}
-			
 		}catch(Exception e){
 			System.out.println(e);	
 			
@@ -213,10 +144,11 @@ public class MsOrderServiceImpl implements MsOrderService{
 		  return "SUCCESS";
 		}
 		return "未找到此订单";
-		
-		
 	};
-
+	/**
+	 * 主订单列表
+	 * @param merchantId 兼职商家id
+	 */
 	public List<MsOrder> getMerchantOrder(String merchantId) {
 		try{
 			List<MsOrder> list = msOrderMapper.getMerchantOrder(merchantId);
@@ -225,8 +157,21 @@ public class MsOrderServiceImpl implements MsOrderService{
 			
 		}
 		return null;
-		
-		
+	}
+	/**
+	 * 子订单列表
+	 * @param merchantId 兼职商家id
+	 */
+	public PageInfo<SubMsOrder> getSubMerchantOrder(String merchantId,String status,int current,int size) {
+		PageInfo<SubMsOrder> pageInfo = null;
+		try{
+			PageHelper.startPage(current, size);
+	        List<SubMsOrder> list = subMsOrderMapper.getSubMerchantOrder(merchantId,status);
+	        pageInfo = new PageInfo<SubMsOrder>(list);
+		}catch(Exception e){
+			
+		}
+		return pageInfo;
 	}
 	public List<MsOrder> getSupplierOrder(String supplierId) {
 		
