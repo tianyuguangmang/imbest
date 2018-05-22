@@ -26,11 +26,17 @@
 		SELECT *
 		FROM
 		sub_ms_order
-		WHERE
-		merchant_id = #{merchantId}
-		<if test="status != null">
-			AND status = #{status}
-		</if>
+		 <where>
+		 	<if test="supplierId != null and supplierId != 0">
+				AND supplier_id = #{supplierId}
+			</if>
+		 	<if test="merchantId != null and merchantId != 0">
+				 AND merchant_id = #{merchantId}
+			</if>
+		 	<if test="status != null and status != 0">
+				AND status = #{status}
+			</if>
+		 </where>
 	</select>
 <!-- 	<insert id="addMsOrder" parameterType="MsOrder"
 		useGeneratedKeys="true" keyProperty="orderId">

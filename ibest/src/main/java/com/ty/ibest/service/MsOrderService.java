@@ -10,7 +10,7 @@ public interface MsOrderService {
 	String saveMsOrder(String list,Integer userId);
 	String supplierSendGoods(Integer orderId,String orderNumber,String courier);
 	String addMsOrder(MsOrder msOrder,User user);
-	PageInfo<SubMsOrder> getSubMerchantOrder(String merchantId,String status,int current,int size);
+	PageInfo<SubMsOrder> getSubOrder(Integer merchantId,Integer supplierId,String status,int current,int size);
 	List<MsOrder> getMerchantOrder(String merchantId);
 	List<MsOrder> getSupplierOrder(String supplierId);
 	Integer deleteMsOrder(Integer orderId,Integer type);

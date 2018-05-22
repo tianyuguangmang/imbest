@@ -12,8 +12,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.github.pagehelper.PageInfo;
 import com.ty.ibest.constant.InfoConstant;
 import com.ty.ibest.entity.MsOrder;
+import com.ty.ibest.entity.SubMsOrder;
+import com.ty.ibest.entity.SupplierProduct;
 import com.ty.ibest.entity.User;
 import com.ty.ibest.service.MsOrderService;
 import com.ty.ibest.utils.MsgFomcat;
@@ -27,6 +30,7 @@ public class MsOrderController extends BaseController{
 	private RedisCacheUtil redisCache;
 	@Autowired
 	MsOrderService msOrderService;
+	
 	@Autowired
 	MsgFomcat msgFomcat;
 	/**
@@ -134,7 +138,31 @@ public class MsOrderController extends BaseController{
 		}
 		return failResult(555,backMsg);
 	}
+	/**
+	 * 子订单的列表 --兼职商家
+	 * @param merchantId 商家id
+	 * @param status 订单状态
+	 * @param current 第几页
+	 * @param size 每页的数据量
+	 * @return
+	 */
 	
+	@RequestMapping(value="/submsorder/list",method = RequestMethod.GET)
+	@ResponseBody
+	
+	public Results<PageInfo<SubMsOrder>> getSubMerchantOrder(Integer merchantId,Integer supplierId,String status,Integer current,Integer size){
+		PageInfo<SubMsOrder> pageInfo = null;
+		try{
+			pageInfo = msOrderService.getSubOrder(merchantId,supplierId,status, current, size);
+			if(pageInfo != null)
+			return successResult(pageInfo);
+		}catch(Exception e){
+			
+		}
+		
+		
+		return failResult(555,"订单列表失败");
+	}
 	@RequestMapping(value="/merchant/msorder/list",method = RequestMethod.GET)
 	@ResponseBody
 	public Results<List<MsOrder>> getMerchantOrder(@RequestParam String merchantId){

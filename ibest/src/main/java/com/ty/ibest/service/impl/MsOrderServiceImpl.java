@@ -162,11 +162,12 @@ public class MsOrderServiceImpl implements MsOrderService{
 	 * 子订单列表
 	 * @param merchantId 兼职商家id
 	 */
-	public PageInfo<SubMsOrder> getSubMerchantOrder(String merchantId,String status,int current,int size) {
+	public PageInfo<SubMsOrder> getSubOrder(Integer merchantId,Integer supplierId,String status,int current,int size) {
 		PageInfo<SubMsOrder> pageInfo = null;
 		try{
 			PageHelper.startPage(current, size);
-	        List<SubMsOrder> list = subMsOrderMapper.getSubMerchantOrder(merchantId,status);
+			System.out.println(current);
+	        List<SubMsOrder> list = subMsOrderMapper.getSubOrder(merchantId,supplierId,status);
 	        pageInfo = new PageInfo<SubMsOrder>(list);
 		}catch(Exception e){
 			
