@@ -75,13 +75,6 @@ public class MsOrderServiceImpl implements MsOrderService{
 	            subMsOrder.setFinalCost(amount2);
 	            subMsOrder.setSupplierId(product.getSupplierId());
 	            subMsOrder.setMerchantId(userId);
-	            /*Field[] field = product.getClass().getDeclaredFields();  
-	            for(int j=0; j<field.length; j++){  
-	                Field f = field[j];  
-	                f.setAccessible(true);  
-	                obj.put(f.getName(), f.get(product));
-	                System.out.println("属性名:" + f.getName() + " 属性值:" + f.get(product));  
-	            }   */
 	            subMsOrderList.add(subMsOrder);
 	        }	
 	        String json = JSONArray.fromObject(subMsOrderList).toString();
@@ -122,11 +115,8 @@ public class MsOrderServiceImpl implements MsOrderService{
 			msOrder.setMerchantId(user.getUserId());
 			msOrder.setmPhone(user.getPhone());
 			Integer key = msOrderMapper.addMsOrder(msOrder);
-			Integer id = subMsOrderMapper.addSubMsOrders(subMsOrderList);
-			if(id == 0||id == null){
-				return "有错误";
-			}
-			if(key>0){
+			Integer keys = subMsOrderMapper.addSubMsOrders(subMsOrderList);
+			if(key>0&&keys == subMsOrderList.size()){
 				return "SUCCESS";
 			}
 		}catch(Exception e){
