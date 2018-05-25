@@ -25,6 +25,13 @@
 			AND cate_id = #{cateId}
 		</if>
 	</select>
+	<select id="getProductOnce" resultMap="BaseResult">
+		SELECT *
+		FROM
+		m_product WHERE
+		merchant_id = #{merchantId} 
+		AND origin_id = #{originId}
+	</select>
 	<select id="getProductById" resultMap="BaseResult" parameterType="int">
 		SELECT *
 		FROM

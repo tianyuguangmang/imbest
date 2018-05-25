@@ -4,6 +4,7 @@
 <mapper namespace="com.ty.ibest.mapper.SubMsOrderMapper">
 	<resultMap id="BaseResult" type="com.ty.ibest.entity.SubMsOrder">
 		<id column="order_id" property="orderId"></id>
+		<result column="product_id" property="productId"></result>
 		<result column="supplier_product" property="supplierProduct"></result>
 		<result column="create_time" property="createTime"></result>
 		<result column="status" property="status"></result>
@@ -22,21 +23,28 @@
 		<result column="m_delete" property="mDelete"></result>
 		<result column="s_delete" property="sDelete"></result>
 	</resultMap>
-	<select id="getSubMerchantOrder" resultMap="BaseResult">
+	<select id="getSubOrder" resultMap="BaseResult">
 		SELECT *
 		FROM
 		sub_ms_order
 		 <where>
-		 	<if test="supplierId != null and supplierId != 0">
-				AND supplier_id = #{supplierId}
-			</if>
 		 	<if test="merchantId != null and merchantId != 0">
 				 AND merchant_id = #{merchantId}
 			</if>
+		 	<if test="supplierId != null and supplierId != 0">
+				AND supplier_id = #{supplierId}
+			</if>
+		 	
 		 	<if test="status != null and status != 0">
 				AND status = #{status}
 			</if>
 		 </where>
+	</select>
+	<select id="getSubOrderById" resultMap="BaseResult">
+		SELECT *
+		FROM
+		sub_ms_order where
+		order_id = #{orderId}
 	</select>
 <!-- 	<insert id="addMsOrder" parameterType="MsOrder"
 		useGeneratedKeys="true" keyProperty="orderId">
@@ -60,7 +68,7 @@
 		#{mDelete},#{sDelete})
 	</insert> -->
 	<insert id="addSubMsOrders" parameterType="java.util.List" >
-		INSERT INTO sub_ms_order(supplier_product,count,
+		INSERT INTO sub_ms_order(product_id,supplier_product,count,
 		create_time,
 		status,merchant_id,m_phone,
 		m_name,m_address,m_detail_address,
@@ -71,7 +79,7 @@
 		)
 		values
 		<foreach  collection="subMsOrders"   item="subOrder"   separator=",">
-			(#{subOrder.supplierProduct}, #{subOrder.count},
+			(#{subOrder.productId},#{subOrder.supplierProduct}, #{subOrder.count},
 			#{subOrder.createTime},
 			#{subOrder.status},#{subOrder.merchantId},#{subOrder.mPhone},
 			#{subOrder.mName},#{subOrder.mAddress},#{subOrder.mDetailAddress},
@@ -81,7 +89,14 @@
 			#{subOrder.mDelete},#{subOrder.sDelete})
 		</foreach>
 	</insert>
-	
+	<update id="updateSubMsOrder">
+		UPDATE sub_ms_order
+		SET
+		status = #{status}
+		WHERE
+		order_id =
+		#{orderId}
+	</update>
 	
 <!-- 	<update id="updateMsOrder">
 		UPDATE ms_order

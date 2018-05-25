@@ -149,7 +149,6 @@ public class MsOrderController extends BaseController{
 	
 	@RequestMapping(value="/submsorder/list",method = RequestMethod.GET)
 	@ResponseBody
-	
 	public Results<PageInfo<SubMsOrder>> getSubMerchantOrder(Integer merchantId,Integer supplierId,String status,Integer current,Integer size){
 		PageInfo<SubMsOrder> pageInfo = null;
 		try{
@@ -159,10 +158,23 @@ public class MsOrderController extends BaseController{
 		}catch(Exception e){
 			
 		}
-		
-		
 		return failResult(555,"订单列表失败");
 	}
+	@RequestMapping(value="/submsorder/status",method = RequestMethod.GET)
+	@ResponseBody
+	public Results<String> subMsOrderStatus(Integer orderId,String status){
+		String backMsg = null;
+		try{
+			backMsg = msOrderService.updateSubMsOrder(orderId, status);
+			if(backMsg.equals("SUCCESS")){
+				return successResult(null);
+			}
+		}catch(Exception e){
+			
+		}
+		return failResult(555,backMsg);
+	}
+	
 	@RequestMapping(value="/merchant/msorder/list",method = RequestMethod.GET)
 	@ResponseBody
 	public Results<List<MsOrder>> getMerchantOrder(@RequestParam String merchantId){

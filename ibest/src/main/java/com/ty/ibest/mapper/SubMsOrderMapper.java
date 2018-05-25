@@ -7,11 +7,10 @@ import org.apache.ibatis.annotations.Param;
 import com.ty.ibest.entity.SubMsOrder;
 
 public interface SubMsOrderMapper {
-	
-	
-	
 	int addSubMsOrders(@Param("subMsOrders") List<SubMsOrder> subMsOrders);
 	List<SubMsOrder> getSubOrder(@Param("merchantId") Integer merchantId,@Param("supplierId") Integer supplierId,@Param("status") String status);
+	Integer updateSubMsOrder(@Param("orderId") Integer orderId,@Param("status") String status);
+	SubMsOrder getSubOrderById(@Param("orderId") Integer orderId);
 	/*int addMsOrder(MsOrder msOrder);
 	List<MsOrder> getMerchantOrder(@Param("merchantId") String merchantId);
 	List<MsOrder> getSupplierOrder(@Param("supplierId") String supplierId);

@@ -21,6 +21,7 @@ import com.ty.ibest.entity.MsOrder;
 import com.ty.ibest.entity.SupplierProduct;
 import com.ty.ibest.entity.User;
 import com.ty.ibest.mapper.AddressMapper;
+import com.ty.ibest.mapper.MerchantProductMapper;
 import com.ty.ibest.mapper.MsOrderMapper;
 import com.ty.ibest.mapper.SubMsOrderMapper;
 import com.ty.ibest.mapper.SupplierProductMapper;
@@ -45,6 +46,8 @@ public class MsOrderServiceImpl implements MsOrderService{
 	UserMapper userMapper;
 	@Autowired
 	SubMsOrderMapper subMsOrderMapper;
+	@Autowired
+	MerchantProductMapper mProductMapper;
 	public String saveMsOrder(String list,Integer userId) {
 		try{
 			JSONArray jsonArray = JSONArray.fromObject(list);
@@ -75,6 +78,7 @@ public class MsOrderServiceImpl implements MsOrderService{
 	            subMsOrder.setFinalCost(amount2);
 	            subMsOrder.setSupplierId(product.getSupplierId());
 	            subMsOrder.setMerchantId(userId);
+	            subMsOrder.setProductId(product.getProductId());
 	            subMsOrderList.add(subMsOrder);
 	        }	
 	        String json = JSONArray.fromObject(subMsOrderList).toString();
@@ -160,9 +164,51 @@ public class MsOrderServiceImpl implements MsOrderService{
 	        List<SubMsOrder> list = subMsOrderMapper.getSubOrder(merchantId,supplierId,status);
 	        pageInfo = new PageInfo<SubMsOrder>(list);
 		}catch(Exception e){
+			System.out.println(e);
 			
 		}
 		return pageInfo;
+	}
+	public String updateSubMsOrder(Integer orderId,String status){
+		SubMsOrder subMsOrder = null;
+		MerchantProduct product = null;
+		
+		try{
+			System.out.println(orderId);
+			subMsOrder = subMsOrderMapper.getSubOrderById(orderId);
+			if(subMsOrder == null){
+				return "该订单不存在";
+			}
+			String productStr = subMsOrder.getSupplierProduct();
+			JSONObject jsonObject = JSONObject.fromObject(productStr); 
+			SupplierProduct sproduct = (SupplierProduct)JSONObject.toBean(jsonObject,SupplierProduct.class);
+			
+			product = mProductMapper.getProductOnce(subMsOrder.getProductId(), subMsOrder.getMerchantId());
+			if(product == null){
+				product = new MerchantProduct();
+				product.setName(sproduct.getName());
+				product.setMainImage(sproduct.getMainImage());
+				product.setMerchantId(subMsOrder.getMerchantId());
+				product.setOriginId(sproduct.getProductId());
+			}
+			Integer key = subMsOrderMapper.updateSubMsOrder(orderId, status);
+			
+			if(key>0&&status.equals("CONFIRM_RECEIVE")){
+				Integer key2 = mProductMapper.addProduct(product);	
+				if(key2>0){
+					return "SUCCESS";
+				}
+			}else{
+				if(key>0){
+					return "SUCCESS";
+				}
+			}
+			
+		}catch(Exception e){
+			System.out.println(e);
+		}
+		
+		return "修改失败";
 	}
 	public List<MsOrder> getSupplierOrder(String supplierId) {
 		

@@ -10,6 +10,7 @@ public class SubMsOrder {
 	private String supplierProduct;
 	private Integer msOrderId;
 	private Integer count;
+	private Integer productId;
 	
 	private String mName;
 	private String mAddress;
@@ -31,6 +32,19 @@ public class SubMsOrder {
 	private float gainsMoney;
 	private Integer mDelete;
 	private Integer sDelete;
+	
+	/**
+	 * @return the productId
+	 */
+	public Integer getProductId() {
+		return productId;
+	}
+	/**
+	 * @param productId the productId to set
+	 */
+	public void setProductId(Integer productId) {
+		this.productId = productId;
+	}
 	/**
 	 * @return the orderId
 	 */
