@@ -182,28 +182,33 @@ public class MsOrderServiceImpl implements MsOrderService{
 			String productStr = subMsOrder.getSupplierProduct();
 			JSONObject jsonObject = JSONObject.fromObject(productStr); 
 			SupplierProduct sproduct = (SupplierProduct)JSONObject.toBean(jsonObject,SupplierProduct.class);
-			
-			product = mProductMapper.getProductOnce(subMsOrder.getProductId(), subMsOrder.getMerchantId());
+			product = mProductMapper.getProductOnce(sproduct.getProductId(), subMsOrder.getMerchantId());
+			Integer key = subMsOrderMapper.updateSubMsOrder(orderId, status);
+			Integer key2 = null;
 			if(product == null){
 				product = new MerchantProduct();
+			
 				product.setName(sproduct.getName());
 				product.setMainImage(sproduct.getMainImage());
-				product.setMerchantId(subMsOrder.getMerchantId());
 				product.setOriginId(sproduct.getProductId());
-			}
-			Integer key = subMsOrderMapper.updateSubMsOrder(orderId, status);
-			
-			if(key>0&&status.equals("CONFIRM_RECEIVE")){
-				Integer key2 = mProductMapper.addProduct(product);	
-				if(key2>0){
-					return "SUCCESS";
+				
+				product.setMerchantId(subMsOrder.getMerchantId());
+				product.setStock(subMsOrder.getCount());
+				if(key>0&&status.equals("CONFIRM_RECEIVE")){
+					key2 = mProductMapper.addProduct(product);	
 				}
 			}else{
-				if(key>0){
-					return "SUCCESS";
+				System.out.println(product.getStock()+subMsOrder.getCount());
+				product.setStock(product.getStock()+subMsOrder.getCount());
+				if(key>0&&status.equals("CONFIRM_RECEIVE")){
+					
+					key2 = mProductMapper.updateProduct(product);
 				}
+					
 			}
-			
+			if(key2 != null){
+				return "SUCCESS";
+			}
 		}catch(Exception e){
 			System.out.println(e);
 		}

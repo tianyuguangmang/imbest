@@ -44,9 +44,11 @@ public class MerchantProductController extends BaseController{
 	}
 	@RequestMapping(value="/merchant/product/list",method = RequestMethod.GET)
 	@ResponseBody
-	public Results<PageInfo<MerchantProduct>> getProduct(String merchantId,int cateId,int current,int size){
+	public Results<PageInfo<MerchantProduct>> getProduct(String merchantId,Integer onSell,Integer cateId,Integer current,Integer size){
+		PageInfo<MerchantProduct> pageInfo = null;
 		try{
-			PageInfo<MerchantProduct> pageInfo = product.getProduct(merchantId,cateId,current,size);
+			pageInfo = product.getProduct(merchantId,onSell,cateId,current,size);
+			if(pageInfo != null)
 			return successResult(pageInfo);
 		}catch(Exception e){
 		}
@@ -62,6 +64,23 @@ public class MerchantProductController extends BaseController{
 			
 		}
 		return failResult(555,"删除失败");
+	}
+	@RequestMapping(value="/merchant/product/sell",method = RequestMethod.GET)
+	@ResponseBody
+	public Results<MerchantProduct> productOnSell(Integer productId,Integer onSell){ 
+		System.out.println(productId);
+		String backMsg = null;
+		try{
+			backMsg = product.productOnSell(productId, onSell);
+			if(backMsg.equals("SUCCESS")){
+				return successResult(null);
+			}
+		}catch(Exception e){
+			System.out.println(e);
+			
+		}
+		
+		return failResult(555,backMsg);
 	}
 	@RequestMapping(value="/merchant/product/update",method = RequestMethod.POST,consumes="application/json")
 	@ResponseBody

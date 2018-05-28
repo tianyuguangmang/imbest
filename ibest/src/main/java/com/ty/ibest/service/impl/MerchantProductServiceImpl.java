@@ -33,11 +33,11 @@ public class MerchantProductServiceImpl implements MerchantProductService{
 		return "添加失败";
 	}
 
-	public PageInfo<MerchantProduct> getProduct(String merchantId,int cateId,int current,int size) {
+	public PageInfo<MerchantProduct> getProduct(String merchantId,Integer onSell,Integer cateId,Integer current,Integer size) {
 		PageInfo<MerchantProduct> pageInfo = null;
 		try{
 			PageHelper.startPage(current, size);
-	        List<MerchantProduct> list = mproductMapper.getProduct(merchantId,cateId);
+	        List<MerchantProduct> list = mproductMapper.getProduct(merchantId,onSell,cateId);
 	        pageInfo = new PageInfo<MerchantProduct>(list);
 		}catch(Exception e){
 			
@@ -65,6 +65,20 @@ public class MerchantProductServiceImpl implements MerchantProductService{
 			System.out.println(e);
 		}
 		return 0;
+	}
+	public String productOnSell(Integer productId,Integer onSell){
+		try{
+			Integer key = mproductMapper.productOnSell(productId, onSell);
+			if(key>0){
+				return "SUCCESS";
+			}
+		}catch(Exception e){
+			System.out.println(e);
+			
+		}
+		return "修改失败2";
+		
+		
 	}
 	
 
