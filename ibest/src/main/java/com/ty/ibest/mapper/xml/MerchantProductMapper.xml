@@ -15,15 +15,30 @@
 		<result column="status" property="status"></result>
 		<result column="merchant_id" property="merchantId"></result>
 		<result column="cate_id" property="cateId"></result>
+		<result column="on_sell" property="onSell"></result>
 	</resultMap>
 	<select id="getProduct" resultMap="BaseResult">
 		SELECT *
 		FROM
+		m_product
+		<where>
+		 	<if test="merchantId != null and merchantId != 0">
+				 AND merchant_id = #{merchantId}
+			</if>
+		 	<if test="onSell!=null">
+				AND on_sell = #{onSell}
+			</if>
+			<if test="cateId!=null and cateId != 0">
+				AND cate_id = #{cateId}
+			</if>
+		 </where>
+	</select>
+	<select id="getProductOnce" resultMap="BaseResult">
+		SELECT *
+		FROM
 		m_product WHERE
 		merchant_id = #{merchantId} 
-		<if test="cateId != 0">
-			AND cate_id = #{cateId}
-		</if>
+		AND origin_id = #{originId}
 	</select>
 	<select id="getProductById" resultMap="BaseResult" parameterType="int">
 		SELECT *
@@ -57,9 +72,16 @@
 		#{soldNumber},
 		sku = #{sku},
 		status = #{status},
-		supplier_id =
-		#{supplierId},
+		
 		cate_id = #{cateId}
+		WHERE
+		product_id =
+		#{productId}
+	</update>
+	<update id="productOnSell">
+		UPDATE m_product
+		SET		
+		on_sell = #{onSell}
 		WHERE
 		product_id =
 		#{productId}

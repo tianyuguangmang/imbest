@@ -17,6 +17,7 @@ public class MsgFomcat {
 				return res;
 			}
 		}catch(Exception e){
+			System.out.println(e);
 		
 		}
 

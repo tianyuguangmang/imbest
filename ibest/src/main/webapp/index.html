@@ -6,6 +6,13 @@
 </head>
 <body>
 	<div>1223</div>
+	<form method="post" action="http://upload.qiniup.com/"
+	 enctype="multipart/form-data">
+	  <input name="key" type="hidden" value="img1">
+	  <input name="token" type="hidden" id="token" value="">
+	  <input name="file" type="file" />
+	  <input type="submit" value = "提交"/>
+	</form>
 	<!-- <form method="post" action="register">
 	
 </form> -->
@@ -40,6 +47,19 @@ $(document).ready(function() {
     	 console.log("123");
      }});  
 }); 
+/* $.ajax({
+    type: "GET",
+    url: "qiniu/token",
+    headers:{"openId":"obZUP0SLAQi9oAk7EdGORntuHBIc"},
+   
+    dataType: "json",
+    success: function(data){
+    	var _token = data.result;
+    	console.log(_token);
+    	$("#token").val(_token);
+     
+    }
+}); 
 $.ajax({
     type: "GET",
     url: "supplier/register",
@@ -53,27 +73,47 @@ $.ajax({
     success: function(data){
               
              }
-}); 
- $.ajax({
+});  */
+/*  $.ajax({
     type: "POST",
     url: "supplier/product/add",
     headers:{"openId":"obZUP0SLAQi9oAk7EdGORntuHBIc","Content-Type":"application/json"},
-    data: JSON.stringify({name:"xm",originPrice:12,resetPrice:13,cateId:1,mainImage:"sms",stock:10}),
+    data: JSON.stringify({name:"一件大衣2",originPrice:12,resetPrice:13,cateId:1,mainImage:"sms",stock:10}),
     dataType: "json",
     success: function(data){
               
              }
+});  */
+ $.ajax({
+    type: "POST",
+    url: "msorder/save",
+    headers:{"openId":"obZUP0SLAQi9oAk7EdGORntuHBIc"},
+    data: {list:JSON.stringify([{productId:1,count:10,supplierId:5},{productId:8,count:10,supplierId:4}])},
+    dataType: "json",
+    success: function(data){
+    }
+}); 
+ $.ajax({
+    type: "GET",
+    url: "msorder/info",
+    headers:{"openId":"obZUP0SLAQi9oAk7EdGORntuHBIc"},
+    data: {},
+    dataType: "json",
+    success: function(data){
+    	console.log(data);
+    	var _list = JSON.parse(data.result.productList);
+    	console.log(_list);
+    }
 }); 
  $.ajax({
 	    type: "POST",
-	    url: "cate/add",
-	    data: {
-	    	title:"日航"
-	    },
+	    url: "msorder/add",
+	    headers:{"openId":"obZUP0SLAQi9oAk7EdGORntuHBIc"},
+	    data: {},
 	    dataType: "json",
 	    success: function(data){
-	              
-	             }
+	    	
+	    }
 	}); 
 /* 
  wAjax("supplier/product/add","JSON_POST",{name:"xm",originPrice:12,resetPrice:13,cateId:1,mainImage:"sms"},function(res){

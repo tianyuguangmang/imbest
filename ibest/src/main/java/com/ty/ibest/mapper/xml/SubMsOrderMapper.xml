@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ty.ibest.mapper.SubMsOrderMapper">
+	<resultMap id="BaseResult" type="com.ty.ibest.entity.SubMsOrder">
+		<id column="order_id" property="orderId"></id>
+		<result column="product_id" property="productId"></result>
+		<result column="supplier_product" property="supplierProduct"></result>
+		<result column="create_time" property="createTime"></result>
+		<result column="status" property="status"></result>
+		<result column="merchant_id" property="merchantId"></result>
+		<result column="m_name" property="mName"></result>
+		<result column="m_phone" property="mPhone"></result>
+		<result column="m_address" property="mAddress"></result>
+		<result column="m_detail_address" property="mDetailAddress"></result>
+		<result column="m_nick_name" property="mNickName"></result>
+		<result column="m_avatar" property="mAvatar"></result>
+		<result column="supplier_id" property="supplierId"></result>
+		<result column="order_number" property="orderNumber"></result>
+		<result column="total_money" property="totalMoney"></result>
+		<result column="final_cost" property="finalCost"></result>
+		<result column="gains_money" property="gainsMoney"></result>
+		<result column="m_delete" property="mDelete"></result>
+		<result column="s_delete" property="sDelete"></result>
+	</resultMap>
+	<select id="getSubOrder" resultMap="BaseResult">
+		SELECT *
+		FROM
+		sub_ms_order
+		 <where>
+		 	<if test="merchantId != null and merchantId != 0">
+				 AND merchant_id = #{merchantId}
+			</if>
+		 	<if test="supplierId != null and supplierId != 0">
+				AND supplier_id = #{supplierId}
+			</if>
+		 	
+		 	<if test="status != null and status != 0">
+				AND status = #{status}
+			</if>
+		 </where>
+	</select>
+	<select id="getSubOrderById" resultMap="BaseResult">
+		SELECT *
+		FROM
+		sub_ms_order where
+		order_id = #{orderId}
+	</select>
+<!-- 	<insert id="addMsOrder" parameterType="MsOrder"
+		useGeneratedKeys="true" keyProperty="orderId">
+		INSERT INTO ms_order
+		(product_list,
+		create_time,
+		status,merchant_id,m_phone,
+		m_name,m_address,m_detail_address,
+		m_nick_name,m_avatar,
+		supplier_id,order_number,
+		total_money,gains_money,final_cost,
+		m_delete,s_delete)
+		VALUES
+		(#{productList},
+		#{createTime},
+		#{status},#{merchantId},#{mPhone},
+		#{mName},#{mAddress},#{mDetailAddress},
+		#{mNickName},#{mAvatar},
+		#{supplierId},#{orderNumber},
+		#{totalMoney},#{gainsMoney},#{finalCost},
+		#{mDelete},#{sDelete})
+	</insert> -->
+	<insert id="addSubMsOrders" parameterType="java.util.List" >
+		INSERT INTO sub_ms_order(product_id,supplier_product,count,
+		create_time,
+		status,merchant_id,m_phone,
+		m_name,m_address,m_detail_address,
+		m_nick_name,m_avatar,
+		supplier_id,order_number,
+		total_money,gains_money,final_cost,
+		m_delete,s_delete
+		)
+		values
+		<foreach  collection="subMsOrders"   item="subOrder"   separator=",">
+			(#{subOrder.productId},#{subOrder.supplierProduct}, #{subOrder.count},
+			#{subOrder.createTime},
+			#{subOrder.status},#{subOrder.merchantId},#{subOrder.mPhone},
+			#{subOrder.mName},#{subOrder.mAddress},#{subOrder.mDetailAddress},
+			#{subOrder.mNickName},#{subOrder.mAvatar},
+			#{subOrder.supplierId},#{subOrder.orderNumber},
+			#{subOrder.totalMoney},#{subOrder.gainsMoney},#{subOrder.finalCost},
+			#{subOrder.mDelete},#{subOrder.sDelete})
+		</foreach>
+	</insert>
+	<update id="updateSubMsOrder">
+		UPDATE sub_ms_order
+		SET
+		status = #{status}
+		WHERE
+		order_id =
+		#{orderId}
+	</update>
+	
+<!-- 	<update id="updateMsOrder">
+		UPDATE ms_order
+		SET
+		status = #{status}
+		main_image=#{mainImage}, name = #{name}, origin_price = #{originPrice}, 
+			reset_price = #{resetPrice}, create_time = #{createTime}, merchant_id = #{merchantId}, 
+			m_name = #{mName}, m_address = #{mAddress}, m_detail_address = #{mDetailAddress}, 
+			m_nick_name = #{mNickName}, m_avatar = #{mAvatar}, supplier_id = #{supplierId}, 
+			order_number = #{orderNumber}, m_delete = #{mDelete}, s_delete = #{sDelete}, 
+			cate_id = #{cateId}
+		WHERE
+		order_id =
+		#{orderId}
+	</update> -->
+<!-- 	<update id="supplierSendGoods">
+		UPDATE ms_order
+		SET
+		status = #{status},
+		order_number = #{orderNumber},
+		courier = #{courier}
+		WHERE
+		order_id =
+		#{orderId}
+	</update>
+	<update id="deleteMsOrder">
+		UPDATE ms_order
+		<set>
+			<if test="type == 1">
+				m_delete = 1
+			</if>
+			<if test="type == 2">
+				s_delete = 1
+			</if>
+		</set>
+		WHERE
+		order_id =
+		#{orderId}
+	</update>
+ -->
+</mapper>

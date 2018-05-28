@@ -15,6 +15,22 @@ public class MerchantProduct {
 	private String status;
 	private int merchantId;
 	private int cateId;
+	private Integer onSell;
+	
+	/**
+	 * @return the onSell
+	 */
+	public Integer getOnSell() {
+		return onSell;
+	}
+
+	/**
+	 * @param onSell the onSell to set
+	 */
+	public void setOnSell(Integer onSell) {
+		this.onSell = onSell;
+	}
+
 	public int getProductId() {
 		return productId;
 	}

@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.github.pagehelper.PageInfo;
 import com.ty.ibest.constant.InfoConstant;
+import com.ty.ibest.entity.MerchantProduct;
 import com.ty.ibest.entity.MsOrder;
 import com.ty.ibest.entity.SupplierProduct;
 import com.ty.ibest.entity.User;
@@ -33,6 +35,7 @@ public class SupplierProductController extends BaseController{
 	RedisCacheUtil redisCache;
 	@Autowired
 	SupplierProductService product;
+	
 	@RequestMapping(value="/supplier/product/add",method = RequestMethod.POST,consumes="application/json")
 	@ResponseBody
 	public Results<SupplierProduct> addProduct(@RequestBody SupplierProduct sproduct,HttpServletRequest httpRequest){
@@ -61,29 +64,47 @@ public class SupplierProductController extends BaseController{
 	}
 	@RequestMapping(value="/supplier/product/list",method = RequestMethod.GET)
 	@ResponseBody
-	public Results<List<SupplierProduct>> getProduct(@RequestParam String supplierId){
+	public Results<PageInfo<SupplierProduct>> getProduct(Integer supplierId,Integer cateId,Integer size,Integer current){
+		
 		try{
-			List<SupplierProduct> list = product.getProduct(supplierId);
-			return successResult(list);
+			System.out.println(supplierId);
+			size=size==null?10:size;
+			current=current==null?1:current;
+			PageInfo<SupplierProduct> pageInfo = product.getProduct(supplierId,cateId,current,size);
+			return successResult(pageInfo);
 		}catch(Exception e){
+			System.out.println(e);
+			
 		}
-		return failResult(555,"获取失败");
+		return failResult(555,"参数有误");
+		
 	}
-	@RequestMapping(value="/supplier/product/delete",method = RequestMethod.POST)
+	@RequestMapping(value="/supplier/product/delete",method = RequestMethod.GET)
 	@ResponseBody
-	public Results<SupplierProduct> deleteProduct(@RequestParam int productId){ 
+	public Results<String> deleteProduct(Integer productId,HttpServletRequest httpRequest){ 
+		String backMsg = "";
+		User user = null;
+		String openId = "";
 		try{
-			product.deleteProduct(productId);
-			return successResult(null);
+			openId = httpRequest.getHeader("openId");
+			user = msgFomcat.userMsg(openId, User.class);
+			if(user == null){
+				return failResult(555,"用户信息获取失败");
+			}
+			backMsg = product.deleteProduct(productId);
+			if(backMsg.equals("SUCCESS")){
+				return successResult("删除成功");
+			}
 		}catch(Exception e){
 			
 		}
-		return failResult(555,"删除失败");
+		return failResult(555,backMsg);
 	}
 	@RequestMapping(value="/supplier/product/update",method = RequestMethod.POST,consumes="application/json")
 	@ResponseBody
 	public Results<SupplierProduct> updateProduct(@RequestBody SupplierProduct sproduct){ 
 		try{
+			
 			product.updateProduct(sproduct);
 			return successResult(sproduct);
 		}catch(Exception e){
