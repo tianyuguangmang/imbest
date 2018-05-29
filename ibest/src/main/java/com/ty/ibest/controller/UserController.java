@@ -43,7 +43,7 @@ public class UserController extends BaseController{
 	public Results<User> userWxcode(String wxcode){
 		String openId = null;
 		User user = null;
-		/*String appid = "wx005cb93df28521fb";
+		String appid = "wx005cb93df28521fb";
 		String scret = "465753b453f9736d54f3017c34671a78";
 		String url = "https://api.weixin.qq.com/sns/jscode2session";
 		String params = "appid="+appid+"&secret="+scret+"&js_code="+wxcode;
@@ -52,8 +52,9 @@ public class UserController extends BaseController{
 		JSONObject jsonObj = JSONObject.fromObject(xm);
 		if(jsonObj.get("openid") == null){
 			return failResult(555,"没有获取到用户信息");
-		}*/
-		openId = "obZUP0SLAQi9oAk7EdGORntuHBIc";
+		}
+		openId = (String)jsonObj.get("openid");
+		//openId = "obZUP0SLAQi9oAk7EdGORntuHBIc";
 		user = userService.queryUserByOpenId(openId);
 		if(user == null){
 			user = new User();
