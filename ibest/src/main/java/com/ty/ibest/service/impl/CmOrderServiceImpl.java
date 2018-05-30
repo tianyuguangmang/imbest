@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.ty.ibest.constant.InfoConstant;
 import com.ty.ibest.entity.Address;
 import com.ty.ibest.entity.CmOrder;
@@ -95,17 +97,17 @@ public class CmOrderServiceImpl implements CmOrderService{
 		
 	}
 
-	public List<CmOrder> getMerchantOrder(String merchantId) {
-		
+	public PageInfo<CmOrder> getCmOrder(Integer merchantId,Integer consumerId,String status,Integer current,Integer size) {
+		PageInfo<CmOrder> pageInfo = null;
 		try{
-			List<CmOrder> list = cmOrderMapper.getMerchantOrder(merchantId);
-			return list;
+			PageHelper.startPage(current, size);
+			List<CmOrder> list = cmOrderMapper.getMerchantOrder(merchantId,consumerId,status);
+			pageInfo = new PageInfo<CmOrder>(list);
+			return pageInfo;
 		}catch(Exception e){
 			
 		}
 		return null;
-		
-		
 	}
 	public List<CmOrder> getConsumerOrder(String consumerId) {
 		
