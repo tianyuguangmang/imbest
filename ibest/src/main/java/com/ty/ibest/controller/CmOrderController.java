@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.github.pagehelper.PageInfo;
 import com.ty.ibest.constant.InfoConstant;
 import com.ty.ibest.entity.CmOrder;
+import com.ty.ibest.entity.MerchantProduct;
 import com.ty.ibest.entity.User;
 import com.ty.ibest.service.CmOrderService;
 import com.ty.ibest.utils.RedisCacheUtil;
@@ -87,6 +89,7 @@ public class CmOrderController extends BaseController{
 	@RequestMapping(value="/merchant/cmorder/list",method = RequestMethod.GET)
 	@ResponseBody
 	public Results<List<CmOrder>> getMerchantOrder(String merchantId){
+		PageInfo<CmOrder> pageInfo = null;
 		try{
 			List<CmOrder> list = cmOrderService.getMerchantOrder(merchantId);
 			return successResult(list);
