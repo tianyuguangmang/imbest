@@ -101,7 +101,7 @@ public class CmOrderServiceImpl implements CmOrderService{
 		PageInfo<CmOrder> pageInfo = null;
 		try{
 			PageHelper.startPage(current, size);
-			List<CmOrder> list = cmOrderMapper.getMerchantOrder(merchantId,consumerId,status);
+			List<CmOrder> list = cmOrderMapper.getCmOrder(merchantId,consumerId,status);
 			pageInfo = new PageInfo<CmOrder>(list);
 			return pageInfo;
 		}catch(Exception e){

@@ -9,7 +9,7 @@ import com.ty.ibest.entity.CmOrder;
 public interface CmOrderMapper {
 	
 	int addCmOrder(CmOrder cmOrder);
-	List<CmOrder> getMerchantOrder(@Param("merchantId") Integer merchantId,@Param("consumerId") Integer consumerId,@Param("status") String status);
+	List<CmOrder> getCmOrder(@Param("merchantId") Integer merchantId,@Param("consumerId") Integer consumerId,@Param("status") String status);
 	List<CmOrder> getSupplierOrder(@Param("consumerId") String consumerId);
 	/*int deleteMerchantOrder(@Param("orderId") int orderId);
 	int deleteSupplierOrder(@Param("orderId") int orderId);*/

@@ -86,16 +86,16 @@ public class CmOrderController extends BaseController{
 		}
 		return failResult(555,backMsg);
 	}
-	@RequestMapping(value="/merchant/cmorder/list",method = RequestMethod.GET)
+	@RequestMapping(value="/cmorder/list",method = RequestMethod.GET)
 	@ResponseBody
-	public Results<List<CmOrder>> getMerchantOrder(String merchantId){
+	public Results<PageInfo<CmOrder>> getMerchantOrder(Integer merchantId,Integer consumerId,String status,Integer current,Integer size){
 		PageInfo<CmOrder> pageInfo = null;
 		try{
-			List<CmOrder> list = cmOrderService.getMerchantOrder(merchantId);
-			return successResult(list);
+			pageInfo = cmOrderService.getCmOrder(merchantId, consumerId, status, current, size);
+			return successResult(pageInfo);
 		}catch(Exception e){
 		}
-		return failResult(555,"获取列表失败");
+		return failResult(555,"获取信息失败");
 	}
 	@RequestMapping(value="/consumer/cmorder/list",method = RequestMethod.GET)
 	@ResponseBody

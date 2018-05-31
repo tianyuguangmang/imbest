@@ -23,12 +23,21 @@
 		<result column="m_delete" property="mDelete"></result>
 		<result column="c_delete" property="cDelete"></result>
 	</resultMap>
-	<select id="getMerchantOrder" resultMap="BaseResult">
+	<select id="getCmOrder" resultMap="BaseResult">
 		SELECT *
 		FROM
 		cm_order
-		WHERE
-		merchant_id = #{merchantId}
+		<where>
+		 	<if test="merchantId != null and merchantId != 0">
+				 AND merchant_id = #{merchantId}
+			</if>
+		 	<if test="status != null">
+				AND status = #{status}
+			</if>
+			<if test="consumerId != null and consumerId != 0">
+				AND consumer_id = #{consumerId}
+			</if>
+		</where>
 	</select>
 	<select id="getConsumerOrder" resultMap="BaseResult">
 		SELECT *

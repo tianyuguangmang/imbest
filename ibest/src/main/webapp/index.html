@@ -5,14 +5,14 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<div>1223</div>
-	<form method="post" action="http://upload.qiniup.com/"
+	<div class="M-box3"></div>
+	<!-- <form method="post" action="http://upload.qiniup.com/"
 	 enctype="multipart/form-data">
 	  <input name="key" type="hidden" value="img1">
 	  <input name="token" type="hidden" id="token" value="">
 	  <input name="file" type="file" />
 	  <input type="submit" value = "提交"/>
-	</form>
+	</form> -->
 	<!-- <form method="post" action="register">
 	
 </form> -->
@@ -32,48 +32,104 @@
 
 </body>
 <script src="js/jquery1.js"></script>
+<script src="js/jquery.pagination.js"></script>
 <script src="js/imgUpload.js"></script>
 
 <!-- <script src="js/juqery.Jcrop.js"></script>
 <script src="js/jquery-form.js"></script> -->
 <script src="js/wAjax.js"></script>
 <script>
+/* $.ajax({
+    type: "GET",
+    url: "supplier/product/list",
+    headers:{"openId":"obZUP0SLAQi9oAk7EdGORntuHBIc"},
+    data: {current:1,size:5},
+    dataType: "json",
+    success: function(data){
+    	console.log("res",data);
+    	
+    }
+});  */
+/* $('.M-box3').pagination({
+    pageCount: data.pages,
+    jump: true,
+    coping: true,
+    homePage: '首页',
+    endPage: '末页',
+    prevContent: '上页',
+    nextContent: '下页',
+    callback: function (api) {
+        console.log(api.getCurrent())
+    }
+}); */
+function getdata(current){
+	$.ajax({
+	    type: "GET",
+	    url: "supplier/product/list",
+	    headers:{"openId":"obZUP0SLAQi9oAk7EdGORntuHBIc"},
+	    data: {current:current,size:1},
+	    dataType: "json",
+	    success: function(data){
+	    	console.log("res",data);
+	    	if(current == 1){
+	    		console.log(data.result.pages);
+	    		$('.M-box3').pagination({
+	    		    pageCount: data.result.pages,
+	    		    jump: true,
+	    		    coping: true,
+	    		    homePage: '首页',
+	    		    endPage: '末页',
+	    		    prevContent: '上页',
+	    		    nextContent: '下页',
+	    		    callback: function (api) {
+	    		    	var cu = api.getCurrent();
+	    		        console.log("xm",cu)
+	    		        getdata(cu);
+	    		    }
+	    		});
+	    	}
+	    	
+	    	
+	    }
+	}); 
+}
+getdata(1);
+$('.M-box3').pagination({
+    pageCount: 50,
+    jump: true,
+    coping: true,
+    homePage: '首页',
+    endPage: '末页',
+    prevContent: '上页',
+    nextContent: '下页',
+    callback: function (api) {
+    	var cu = api.getCurrent();
+        console.log("xm",cu)
+        getdata(cu);
+    }
+});
+/* $('.M-box3').pagination({
+    pageCount: 50,
+    jump: true,
+    coping: true,
+    homePage: '首页',
+    endPage: '末页',
+    prevContent: '上页',
+    nextContent: '下页',
+    callback: function (api) {
+        console.log(api.getCurrent())
+    }
+}); */
 /* wAjax("merchant/add","JSON_POST",{name:"xmw",
 	phone:18754800737},function(res){
 	console.log(res);
 })  */
-$(document).ready(function() {    
+/* $(document).ready(function() {    
      $("input").uploadPreview({ width: 90, height: 110, imgDiv: "#imgDiv",callback:function(){
     	 console.log("123");
      }});  
-}); 
-/* $.ajax({
-    type: "GET",
-    url: "qiniu/token",
-    headers:{"openId":"obZUP0SLAQi9oAk7EdGORntuHBIc"},
-   
-    dataType: "json",
-    success: function(data){
-    	var _token = data.result;
-    	console.log(_token);
-    	$("#token").val(_token);
-     
-    }
-}); 
-$.ajax({
-    type: "GET",
-    url: "supplier/register",
-    headers:{"openId":"obZUP0SLAQi9oAk7EdGORntuHBIc","Content-Type":"application/json"},
-    data: {
-    	phone:18754800737,
-    	validCode:23,
-    	openId:123
-    },
-    dataType: "json",
-    success: function(data){
-              
-             }
 });  */
+
  $.ajax({
     type: "POST",
     url: "supplier/product/add",
