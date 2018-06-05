@@ -19,6 +19,7 @@ import com.ty.ibest.entity.SubMsOrder;
 import com.ty.ibest.entity.SupplierProduct;
 import com.ty.ibest.entity.User;
 import com.ty.ibest.service.MsOrderService;
+import com.ty.ibest.utils.LoggerUtil;
 import com.ty.ibest.utils.MsgFomcat;
 import com.ty.ibest.utils.RedisCacheUtil;
 import com.ty.ibest.utils.Results;
@@ -60,6 +61,7 @@ public class MsOrderController extends BaseController{
 			if(backMsg.equals("SUCCESS"))
 			return successResult(null);
 		}catch(Exception e){
+			LoggerUtil.logger.error(e.getMessage());
 			System.out.println(e);
 		}
 		return failResult(555,backMsg);
