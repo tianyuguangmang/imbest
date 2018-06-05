@@ -11,6 +11,7 @@ import com.ty.ibest.entity.MerchantProduct;
 import com.ty.ibest.entity.SupplierProduct;
 import com.ty.ibest.mapper.SupplierProductMapper;
 import com.ty.ibest.service.SupplierProductService;
+import com.ty.ibest.utils.LoggerUtil;
 @Service
 public class SupplierProductServiceImpl implements SupplierProductService{
 	@Autowired
@@ -31,7 +32,7 @@ public class SupplierProductServiceImpl implements SupplierProductService{
 			return "SUCCESS";
 			
 		}catch(Exception e){
-			System.out.println(e);	
+			LoggerUtil.logger.error(e.getMessage());
 		}
 		return "添加失败";
 	}

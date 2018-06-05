@@ -27,6 +27,7 @@ import com.ty.ibest.mapper.SubMsOrderMapper;
 import com.ty.ibest.mapper.SupplierProductMapper;
 import com.ty.ibest.mapper.UserMapper;
 import com.ty.ibest.service.MsOrderService;
+import com.ty.ibest.utils.LoggerUtil;
 import com.ty.ibest.utils.RedisCacheUtil;
 
 import net.sf.json.JSONArray;
@@ -89,6 +90,7 @@ public class MsOrderServiceImpl implements MsOrderService{
 	        redisCache.sset(InfoConstant.MS_ORDER+"_"+userId, JSON.toJSONString(msOrder));
 			return "SUCCESS";
 		}catch(Exception e){
+			
 			System.out.println(e);				
 		}
 		return "保存信息失败";
