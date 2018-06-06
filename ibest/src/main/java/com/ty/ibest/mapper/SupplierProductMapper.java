@@ -8,9 +8,10 @@ import com.ty.ibest.entity.SupplierProduct;
 
 public interface SupplierProductMapper {
 	int addProduct(SupplierProduct sproduct);
-	List<SupplierProduct> getProduct(@Param("supplierId") Integer supplierId,@Param("cateId") Integer cateId);
+	List<SupplierProduct> getProduct(@Param("supplierId") Integer supplierId,@Param("cateId") Integer cateId,@Param("onSell") Integer onSell);
 	SupplierProduct getProductById(@Param("productId") int productId);
 	List<SupplierProduct> getProductByIdList(@Param("idList") List<Integer> idList);
 	int deleteProduct(@Param("productId") int productId);
 	int updateProduct(SupplierProduct sproduct);
+	Integer productOnSell(@Param("productId") Integer productId,@Param("onSell") Integer onSell);
 }

@@ -37,11 +37,11 @@ public class SupplierProductServiceImpl implements SupplierProductService{
 		return "添加失败";
 	}
 
-	public PageInfo<SupplierProduct> getProduct(Integer supplierId,Integer cateId,Integer current,Integer size) {
+	public PageInfo<SupplierProduct> getProduct(Integer supplierId,Integer cateId,Integer onSell,Integer current,Integer size) {
 		PageInfo<SupplierProduct> pageInfo = null;
 		try{
 			PageHelper.startPage(current, size);
-	        List<SupplierProduct> list = sproductMapper.getProduct(supplierId,cateId);
+	        List<SupplierProduct> list = sproductMapper.getProduct(supplierId,cateId,onSell);
 	        pageInfo = new PageInfo<SupplierProduct>(list);
 			return pageInfo;
 		}catch(Exception e){
@@ -52,7 +52,20 @@ public class SupplierProductServiceImpl implements SupplierProductService{
 		
 		
 	}
-
+	public String productOnSell(Integer productId,Integer onSell){
+		try{
+			Integer key = sproductMapper.productOnSell(productId, onSell);
+			if(key>0){
+				return "SUCCESS";
+			}
+		}catch(Exception e){
+			System.out.println(e);
+			
+		}
+		return "修改失败";
+		
+		
+	}
 	public String deleteProduct(int productId) {
 		
 		try{

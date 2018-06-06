@@ -26,6 +26,9 @@
 		 	<if test="cateId != null and cateId != 0">
 				AND cate_id = #{cateId}
 			</if>
+			<if test="onSell!=null">
+				AND on_sell = #{onSell}
+			</if>
 		 </where>
 	</select>
 	<select id="getProductById" resultMap="BaseResult" parameterType="int">
@@ -67,7 +70,14 @@
 		#{productId}
 	</update>
 
-
+	<update id="productOnSell">
+		UPDATE s_product
+		SET		
+		on_sell = #{onSell}
+		WHERE
+		product_id =
+		#{productId}
+	</update>
 	<delete id="deleteProduct" parameterType="int">
 		DELETE FROM s_product
 		WHERE product_id = #{productId}

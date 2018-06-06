@@ -212,7 +212,8 @@ public class MsOrderServiceImpl implements MsOrderService{
 				return "SUCCESS";
 			}
 		}catch(Exception e){
-			System.out.println(e);
+			
+			LoggerUtil.logger.error(e.getMessage());
 		}
 		
 		return "修改失败";

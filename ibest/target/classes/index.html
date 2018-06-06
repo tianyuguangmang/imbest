@@ -5,6 +5,7 @@
 <title>Insert title here</title>
 </head>
 <body>
+	<div>2</div>
 	<div class="M-box3"></div>
 	<!-- <form method="post" action="http://upload.qiniup.com/"
 	 enctype="multipart/form-data">
@@ -137,10 +138,23 @@ var url = ""
     data: JSON.stringify({name:"一件大衣2",originPrice:12,resetPrice:13,cateId:1,mainImage:"sms",stock:10}),
     dataType: "json",
     success: function(data){
-              
-             }
+    }
 }); 
- $.ajax({
+$.ajax({
+    type: "POST",
+    url: "address/add",
+    headers:{"openId":"obZUP0SLAQi9oAk7EdGORntuHBIc","Content-Type":"application/json"},
+    data: JSON.stringify({
+		name:"tygm",
+		phone:"18765400123",
+		address:"山东省费县",
+		detail:"田村小区12号"
+	}),
+    dataType: "json",
+    success: function(data){
+    }
+}); 
+/*  $.ajax({
     type: "POST",
     url: "msorder/save",
     headers:{"openId":"obZUP0SLAQi9oAk7EdGORntuHBIc"},
@@ -170,7 +184,7 @@ var url = ""
 	    success: function(data){
 	    	
 	    }
-	}); 
+	});  */
 
 /*  wAjax("supplier/product/add","JSON_POST",{name:"xm",originPrice:12,resetPrice:13,cateId:1,mainImage:"sms"},function(res){
 	 

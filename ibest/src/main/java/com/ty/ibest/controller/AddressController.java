@@ -17,6 +17,7 @@ import com.ty.ibest.constant.InfoConstant;
 import com.ty.ibest.entity.Address;
 import com.ty.ibest.entity.User;
 import com.ty.ibest.service.AddressService;
+import com.ty.ibest.utils.LoggerUtil;
 import com.ty.ibest.utils.MsgFomcat;
 import com.ty.ibest.utils.Results;
 
@@ -43,6 +44,7 @@ public class AddressController extends BaseController{
 				return successResult(address);
 			}
 		}catch(Exception e){
+			LoggerUtil.logger.error(e.getMessage());
 			
 		}
 		return failResult(555,backMsg);

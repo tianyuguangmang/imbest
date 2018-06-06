@@ -16,7 +16,7 @@ public class AddressServiceImpl implements AddressService{
 	@Autowired
 	RegValid reg;
 
-	public String addAddress(Address address) {
+	public String addAddress(Address address) throws Exception{
 		try{
 			if(!reg.validPhone(address.getPhone())||!(reg.limitMore5(address.getDetail()))||address.getAddress()==null){
 				return "地址信息错误";
@@ -26,8 +26,9 @@ public class AddressServiceImpl implements AddressService{
 				return "SUCCESS";
 			}
 		}catch(Exception e){
-			System.out.println(e);
 			
+			System.out.println(e);
+			throw e;
 		}
 		return "添加失败";
 	}

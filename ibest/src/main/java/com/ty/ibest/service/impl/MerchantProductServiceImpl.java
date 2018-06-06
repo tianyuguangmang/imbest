@@ -76,7 +76,7 @@ public class MerchantProductServiceImpl implements MerchantProductService{
 			System.out.println(e);
 			
 		}
-		return "修改失败2";
+		return "修改失败";
 		
 		
 	}

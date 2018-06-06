@@ -62,15 +62,31 @@ public class SupplierProductController extends BaseController{
 		}
 		return failResult(555,backMsg);
 	}
+	@RequestMapping(value="/supplier/product/sell",method = RequestMethod.GET)
+	@ResponseBody
+	public Results<SupplierProduct> productOnSell(Integer productId,Integer onSell){ 
+		String backMsg = null;
+		try{
+			backMsg = product.productOnSell(productId, onSell);
+			if(backMsg.equals("SUCCESS")){
+				return successResult(null);
+			}
+		}catch(Exception e){
+			System.out.println(e);
+			
+		}
+		
+		return failResult(555,backMsg);
+	}
 	@RequestMapping(value="/supplier/product/list",method = RequestMethod.GET)
 	@ResponseBody
-	public Results<PageInfo<SupplierProduct>> getProduct(Integer supplierId,Integer cateId,Integer size,Integer current){
+	public Results<PageInfo<SupplierProduct>> getProduct(Integer supplierId,Integer cateId,Integer onSell,Integer size,Integer current){
 		
 		try{
 			System.out.println(supplierId);
 			size=size==null?10:size;
 			current=current==null?1:current;
-			PageInfo<SupplierProduct> pageInfo = product.getProduct(supplierId,cateId,current,size);
+			PageInfo<SupplierProduct> pageInfo = product.getProduct(supplierId,cateId,onSell,current,size);
 			return successResult(pageInfo);
 		}catch(Exception e){
 			System.out.println(e);
