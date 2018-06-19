@@ -9,8 +9,8 @@ import com.ty.ibest.entity.MsOrder;
 public interface MsOrderMapper {
 	
 	int addMsOrder(MsOrder msOrder);
-	List<MsOrder> getMerchantOrder(@Param("merchantId") String merchantId);
-	List<MsOrder> getSupplierOrder(@Param("supplierId") String supplierId);
+	List<MsOrder> getMerchantOrder(@Param("merchantId") Integer merchantId,@Param("status") String status);
+	List<MsOrder> getSupplierOrder(@Param("supplierId") Integer supplierId,@Param("status") String status);
 	MsOrder getMsOrderById(@Param("orderId") Integer orderId);
 	int deleteMsOrder(@Param("orderId") int orderId,@Param("type") int type);
 	int updateMsOrder(@Param("orderId") Integer orderId,@Param("status") String status);

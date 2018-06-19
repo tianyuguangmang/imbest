@@ -8,14 +8,13 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.ty.ibest.constant.InfoConstant;
-import com.ty.ibest.entity.Address;
 import com.ty.ibest.entity.SubMsOrder;
-import com.ty.ibest.entity.CmOrder;
 import com.ty.ibest.entity.MerchantProduct;
 import com.ty.ibest.entity.MsOrder;
 import com.ty.ibest.entity.SupplierProduct;
@@ -28,6 +27,7 @@ import com.ty.ibest.mapper.SupplierProductMapper;
 import com.ty.ibest.mapper.UserMapper;
 import com.ty.ibest.service.MsOrderService;
 import com.ty.ibest.utils.LoggerUtil;
+import com.ty.ibest.utils.MsgFomcat;
 import com.ty.ibest.utils.RedisCacheUtil;
 
 import net.sf.json.JSONArray;
@@ -49,8 +49,11 @@ public class MsOrderServiceImpl implements MsOrderService{
 	SubMsOrderMapper subMsOrderMapper;
 	@Autowired
 	MerchantProductMapper mProductMapper;
+	@Autowired
+	MsgFomcat msgFomcat;
 	public String saveMsOrder(String list,Integer userId) {
 		try{
+			System.out.println("user"+userId);
 			JSONArray jsonArray = JSONArray.fromObject(list);
 			List<Map<String,Object>> mapListJson  = (List)jsonArray;
 			List<SubMsOrder> subMsOrderList = new ArrayList();
@@ -82,11 +85,10 @@ public class MsOrderServiceImpl implements MsOrderService{
 	            subMsOrder.setProductId(product.getProductId());
 	            subMsOrderList.add(subMsOrder);
 	        }	
-	        String json = JSONArray.fromObject(subMsOrderList).toString();
 	        msOrder.setTotalMoney(totalMoney);
 	        msOrder.setFinalCost(finalCost);
 	        msOrder.setGainsMoney(totalMoney - finalCost);
-	        msOrder.setProductList(json);
+	        msOrder.setOrderList(subMsOrderList);
 	        redisCache.sset(InfoConstant.MS_ORDER+"_"+userId, JSON.toJSONString(msOrder));
 			return "SUCCESS";
 		}catch(Exception e){
@@ -96,38 +98,35 @@ public class MsOrderServiceImpl implements MsOrderService{
 		return "保存信息失败";
 		
 	}
+
+	@Transactional(rollbackFor=Exception.class)
 	public String addMsOrder(MsOrder msOrder,User user) {
-		try{
-			String productStr = msOrder.getProductList();
-			
-			/*JSONArray jsonArray = JSONArray.fromObject(productStr);
-			List<Map<String,Object>> mapListJson  = (List)jsonArray;*/
-			System.out.println("productStr,"+productStr);
-			//JSONArray arr = JSONArray.fromObject(productStr);
-			JSONArray arr = JSONArray.fromObject(productStr);
-			SubMsOrder subMsOrder = null;	
-			List<SubMsOrder> subMsOrderList = new ArrayList<SubMsOrder>();
-			for(int i = 0;i<arr.size();i++){
-                JSONObject object =(JSONObject)arr.get(i);
-                subMsOrder = (SubMsOrder)JSONObject.toBean(object,SubMsOrder.class);
-                subMsOrder.setStatus("WAIT_PAY");
-                subMsOrder.setSupplierProduct(JSON.toJSONString(object.get("supplierProduct")));
-				subMsOrderList.add(subMsOrder);
-			}
-			msOrder.setmAddress(user.getAddress());
-			msOrder.setmDetailAddress(user.getDetailAddress());
-			msOrder.setmName(user.getRealName());
-			msOrder.setmAvatar(user.getAvatar());
-			msOrder.setMerchantId(user.getUserId());
-			msOrder.setmPhone(user.getPhone());
-			Integer key = msOrderMapper.addMsOrder(msOrder);
-			Integer keys = subMsOrderMapper.addSubMsOrders(subMsOrderList);
-			if(key>0&&keys == subMsOrderList.size()){
-				return "SUCCESS";
-			}
-		}catch(Exception e){
-			System.out.println(e);	
-			
+		msOrder.setmAddress(user.getAddress());
+		msOrder.setmDetailAddress(user.getDetailAddress());
+		msOrder.setmName(user.getRealName());
+		msOrder.setmAvatar(user.getAvatar());
+		msOrder.setMerchantId(user.getUserId());
+		msOrder.setmPhone(user.getPhone());
+		Integer key = msOrderMapper.addMsOrder(msOrder);
+		List<SubMsOrder> orderList  = msOrder.getOrderList();
+		SubMsOrder subMsOrder = null;
+		for(int i = 0;i<orderList.size();i++){
+            Object object = orderList.get(i);
+            subMsOrder = msgFomcat.entryFomcat(object, SubMsOrder.class);
+            subMsOrder.setStatus("WAIT_PAY");
+            subMsOrder.setmAddress(user.getAddress());
+            subMsOrder.setmDetailAddress(user.getDetailAddress());
+            subMsOrder.setmName(user.getRealName());
+            subMsOrder.setmAvatar(user.getAvatar());
+            subMsOrder.setMerchantId(user.getUserId());
+            subMsOrder.setmPhone(user.getPhone());
+            subMsOrder.setMsOrderId(msOrder.getOrderId());
+            
+            orderList.set(i, subMsOrder);
+		}
+		Integer keys = subMsOrderMapper.addSubMsOrders(orderList);
+		if(key>0&&keys >0){
+			return "SUCCESS";
 		}
 		return "添加失败";
 	}
@@ -145,10 +144,26 @@ public class MsOrderServiceImpl implements MsOrderService{
 	 * 主订单列表
 	 * @param merchantId 兼职商家id
 	 */
-	public List<MsOrder> getMerchantOrder(String merchantId) {
+	public PageInfo<MsOrder> getMerchantOrder(Integer merchantId,String status,Integer current,Integer size) {
+		PageInfo<MsOrder> pageInfo = null;
 		try{
-			List<MsOrder> list = msOrderMapper.getMerchantOrder(merchantId);
-			return list;
+			PageHelper.startPage(current, size);
+			List<MsOrder> list = msOrderMapper.getMerchantOrder(merchantId,status);
+		    pageInfo = new PageInfo<MsOrder>(list);
+			return pageInfo;
+		}catch(Exception e){
+			
+			System.out.println(e);
+		}
+		return null;
+	}
+	public PageInfo<MsOrder> getSupplierOrder(Integer supplierId,String status,Integer current,Integer size) {
+		PageInfo<MsOrder> pageInfo = null;
+		try{
+			PageHelper.startPage(current, size);
+			List<MsOrder> list = msOrderMapper.getSupplierOrder(supplierId,status);
+			pageInfo = new PageInfo<MsOrder>(list);
+			return pageInfo;
 		}catch(Exception e){
 			
 		}
@@ -218,16 +233,7 @@ public class MsOrderServiceImpl implements MsOrderService{
 		
 		return "修改失败";
 	}
-	public List<MsOrder> getSupplierOrder(String supplierId) {
-		
-		try{
-			List<MsOrder> list = msOrderMapper.getSupplierOrder(supplierId);
-			return list;
-		}catch(Exception e){
-			
-		}
-		return null;
-	}
+	
 
 
 	public String updateMsOrder(Integer orderId,String status) {

@@ -1,9 +1,9 @@
 package com.ty.ibest.entity;
 
+import java.util.List;
 
 public class CmOrder {
 	private int orderId;
-	private String productList;
 	private String createTime;
 	private String status;
 	private int merchantId;
@@ -15,8 +15,15 @@ public class CmOrder {
 	private int consumerId;
 	private String orderNumber;
 	private String cPhone;
+	private List<SubCmOrder> subOrderList;
 	
 	
+	public List<SubCmOrder> getSubOrderList() {
+		return subOrderList;
+	}
+	public void setSubOrderList(List<SubCmOrder> subOrderList) {
+		this.subOrderList = subOrderList;
+	}
 	public String getcPhone() {
 		return cPhone;
 	}
@@ -24,15 +31,15 @@ public class CmOrder {
 		this.cPhone = cPhone;
 	}
 	/**
-	 * ¹©Ó¦ÉÌ³É±¾
+	 * ï¿½ï¿½Ó¦ï¿½Ì³É±ï¿½
 	 */
 	private float finalCost;
 	/**
-	 * ÉÌ»§×Ü¸¶¿î
+	 * ï¿½Ì»ï¿½ï¿½Ü¸ï¿½ï¿½ï¿½
 	 */
 	private float totalMoney;
 	/**
-	 * Æ½Ì¨Ó¯Àû½ð¶î
+	 * Æ½Ì¨Ó¯ï¿½ï¿½ï¿½ï¿½ï¿½
 	 */
 	private float gainsMoney;
 	private boolean mDelete;
@@ -42,12 +49,6 @@ public class CmOrder {
 	}
 	public void setOrderId(int orderId) {
 		this.orderId = orderId;
-	}
-	public String getProductList() {
-		return productList;
-	}
-	public void setProductList(String productList) {
-		this.productList = productList;
 	}
 	public String getCreateTime() {
 		return createTime;

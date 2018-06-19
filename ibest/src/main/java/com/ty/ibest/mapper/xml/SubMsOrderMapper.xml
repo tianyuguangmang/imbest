@@ -32,6 +32,7 @@
 				 AND merchant_id = #{merchantId}
 			</if>
 		 	<if test="supplierId != null and supplierId != 0">
+		 	
 				AND supplier_id = #{supplierId}
 			</if>
 		 	
@@ -68,7 +69,7 @@
 		#{mDelete},#{sDelete})
 	</insert> -->
 	<insert id="addSubMsOrders" parameterType="java.util.List" >
-		INSERT INTO sub_ms_order(product_id,supplier_product,count,
+		INSERT INTO sub_ms_order(product_id,supplier_product,count,ms_order_id,
 		create_time,
 		status,merchant_id,m_phone,
 		m_name,m_address,m_detail_address,
@@ -79,7 +80,7 @@
 		)
 		values
 		<foreach  collection="subMsOrders"   item="subOrder"   separator=",">
-			(#{subOrder.productId},#{subOrder.supplierProduct}, #{subOrder.count},
+			(#{subOrder.productId},#{subOrder.supplierProduct}, #{subOrder.count},#{subOrder.msOrderId},
 			#{subOrder.createTime},
 			#{subOrder.status},#{subOrder.merchantId},#{subOrder.mPhone},
 			#{subOrder.mName},#{subOrder.mAddress},#{subOrder.mDetailAddress},

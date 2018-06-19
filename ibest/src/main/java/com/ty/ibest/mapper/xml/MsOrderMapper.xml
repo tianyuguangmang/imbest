@@ -4,7 +4,6 @@
 <mapper namespace="com.ty.ibest.mapper.MsOrderMapper">
 	<resultMap id="BaseResult" type="com.ty.ibest.entity.MsOrder">
 		<id column="order_id" property="orderId"></id>
-		<result column="product_list" property="productList"></result>
 		<result column="create_time" property="createTime"></result>
 		<result column="status" property="status"></result>
 		<result column="merchant_id" property="merchantId"></result>
@@ -14,20 +13,30 @@
 		<result column="m_detail_address" property="mDetailAddress"></result>
 		<result column="m_nick_name" property="mNickName"></result>
 		<result column="m_avatar" property="mAvatar"></result>
-		<result column="supplier_id" property="supplierId"></result>
 		<result column="order_number" property="orderNumber"></result>
 		<result column="total_money" property="totalMoney"></result>
 		<result column="final_cost" property="finalCost"></result>
 		<result column="gains_money" property="gainsMoney"></result>
 		<result column="m_delete" property="mDelete"></result>
 		<result column="s_delete" property="sDelete"></result>
+		<collection property="orderList" ofType="com.ty.ibest.entity.SubMsOrder">
+            <id column="order_id" property="orderId"></id>
+        	<result column="count" property="count"></result>
+        </collection>
 	</resultMap>
 	<select id="getMerchantOrder" resultMap="BaseResult">
 		SELECT *
 		FROM
-		ms_order
-		WHERE
-		merchant_id = #{merchantId}
+		ms_order main left join sub_ms_order sub on main.order_id = sub.ms_order_id
+				<where>
+		 	<if test="merchantId != null and merchantId != 0">
+				 AND main.merchant_id = #{merchantId}
+			</if>
+		 	<if test="status != null">
+				AND main.status = #{status}
+			</if>
+			
+		</where>
 	</select>
 	<select id="getMsOrderById" resultMap="BaseResult">
 		SELECT *
@@ -46,7 +55,7 @@
 	<insert id="addMsOrder" parameterType="MsOrder"
 		useGeneratedKeys="true" keyProperty="orderId">
 		INSERT INTO ms_order
-		(product_list,create_time,
+		(create_time,
 		status,merchant_id,m_phone,
 		m_name,m_address,m_detail_address,
 		m_nick_name,m_avatar,
@@ -54,7 +63,7 @@
 		total_money,gains_money,final_cost,
 		m_delete,s_delete)
 		VALUES
-		(#{productList},#{createTime},
+		(#{createTime},
 		#{status},#{merchantId},#{mPhone},
 		#{mName},#{mAddress},#{mDetailAddress},
 		#{mNickName},#{mAvatar},

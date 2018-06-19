@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageInfo;
 import com.ty.ibest.constant.InfoConstant;
+import com.ty.ibest.entity.CmOrder;
 import com.ty.ibest.entity.MsOrder;
+import com.ty.ibest.entity.SubCmOrder;
 import com.ty.ibest.entity.SubMsOrder;
 import com.ty.ibest.entity.SupplierProduct;
 import com.ty.ibest.entity.User;
@@ -30,10 +32,10 @@ public class MsOrderController extends BaseController{
 	@Autowired
 	private RedisCacheUtil redisCache;
 	@Autowired
-	MsOrderService msOrderService;
+	public MsOrderService msOrderService;
 	
 	@Autowired
-	MsgFomcat msgFomcat;
+	public MsgFomcat msgFomcat;
 	/**
 	 * 订单信息缓存
 	 * @param list 商品列表 
@@ -77,10 +79,13 @@ public class MsOrderController extends BaseController{
 				return failResult(555,"用户信息获取失败");
 			}
 			JSONObject jsonObj=JSONObject.fromObject(redisCache.sget(InfoConstant.MS_ORDER+"_"+user.getUserId()));
-			if(jsonObj != null){
-				MsOrder msOrder = (MsOrder) JSONObject.toBean(jsonObj,MsOrder.class);
-				return successResult(msOrder);
+			MsOrder msOrder = (MsOrder) JSONObject.toBean(jsonObj,MsOrder.class);
+			for(int i=0;i<msOrder.getOrderList().size();i++) {
+				Object obj = msOrder.getOrderList().get(i);
+				SubMsOrder sub = msgFomcat.entryFomcat(obj, SubMsOrder.class);
+				msOrder.getOrderList().set(i, sub);
 			}
+			return successResult(msOrder);
 		}catch(Exception e){
 			System.out.println(e);
 		}
@@ -127,8 +132,6 @@ public class MsOrderController extends BaseController{
 				return failResult(555,"请编辑个人信息");
 			}*/
 			JSONObject jsonObj=JSONObject.fromObject(redisCache.sget(InfoConstant.MS_ORDER+"_"+user.getUserId()));
-			
-			
 			MsOrder msOrder = (MsOrder) JSONObject.toBean(jsonObj,MsOrder.class);
 			
 			//发起支付：支付成功 status
@@ -179,24 +182,16 @@ public class MsOrderController extends BaseController{
 	
 	@RequestMapping(value="/merchant/msorder/list",method = RequestMethod.GET)
 	@ResponseBody
-	public Results<List<MsOrder>> getMerchantOrder(@RequestParam String merchantId){
+	public Results<PageInfo> getMerchantOrder(Integer merchantId,String status,Integer current,Integer size){
+		PageInfo pageInfo = null;
 		try{
-			List<MsOrder> list = msOrderService.getMerchantOrder(merchantId);
-			return successResult(list);
+			pageInfo = msOrderService.getMerchantOrder(merchantId,status,current,size);
+			return successResult(pageInfo);
 		}catch(Exception e){
 		}
 		return failResult(555,"订单列表失败");
 	}
-	@RequestMapping(value="/supplier/msorder/list",method = RequestMethod.GET)
-	@ResponseBody
-	public Results<List<MsOrder>> getSupplierOrder(@RequestParam String supplierId){
-		try{
-			List<MsOrder> list = msOrderService.getSupplierOrder(supplierId);
-			return successResult(list);
-		}catch(Exception e){
-		}
-		return failResult(555,"订单列表失败");
-	}
+
 	@RequestMapping(value="/msorder/delete",method = RequestMethod.POST)
 	@ResponseBody
 	public Results<MsOrder> deleteMsOrder(int orderId,int type){ 

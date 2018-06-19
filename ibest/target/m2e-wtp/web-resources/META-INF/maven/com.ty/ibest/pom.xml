@@ -8,8 +8,7 @@
 	<name>ibest</name>
 	<url>http://maven.apache.org</url>
 	<properties>
-		<springVersion>4.3.1.RELEASE</springVersion>
-		<hibernateVersion>4.3.5.Final</hibernateVersion>
+		<springVersion>4.3.7.RELEASE</springVersion>
 		<jstlVersion>1.2</jstlVersion>
 		<taglibVersion>1.1.2</taglibVersion>
 		<servletVersion>3.0-alpha-1</servletVersion>
@@ -27,7 +26,28 @@
 		    <groupId>com.alibaba</groupId>  
 		    <artifactId>fastjson</artifactId>  
 		    <version>1.2.8</version>  
-		</dependency>   
+		</dependency>
+		<!-- <dependency>
+		    <groupId>cglib</groupId>
+		    <artifactId>cglib</artifactId>
+		    <version>2.2.2</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-aop</artifactId>
+		    <version>4.3.1.RELEASE</version>
+		</dependency> -->
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-asm -->
+		<!-- <dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-asm</artifactId>
+		    <version>3.1.0.RELEASE</version>
+		</dependency> -->
+		<dependency>   
+	      <groupId>dom4j</groupId>    
+	      <artifactId>dom4j</artifactId>    
+	      <version>1.6</version>   
+	    </dependency>      
 		<dependency>
 			<groupId>com.qiniu</groupId>
 			<artifactId>qiniu-java-sdk</artifactId>
@@ -44,12 +64,13 @@
           <artifactId>spring-data-redis</artifactId>  
           <version>1.8.1.RELEASE</version>  
         </dependency>
-        <dependency>
+       <!-- https://mvnrepository.com/artifact/javax.annotation/javax.annotation-api -->
+		<dependency>
 		    <groupId>javax.annotation</groupId>
-		    <artifactId>jsr250-api</artifactId>
-		    <version>1.0</version>
+		    <artifactId>javax.annotation-api</artifactId>
+		    <version>1.3.2</version>
 		</dependency>
-		
+
 		<dependency>
 		
 			<groupId>com.squareup.okhttp3</groupId>
@@ -73,13 +94,6 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -141,19 +155,6 @@
 			<version>${springVersion}</version>
 		</dependency>
 
-		<!-- hibernate配置 -->
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
-			<version>${hibernateVersion}</version>
-		</dependency>
-
-		<!-- hibernate 缓存, 视情况添加 -->
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-ehcache</artifactId>
-			<version>${hibernateVersion}</version>
-		</dependency>
 
 		<!-- jsp页面使用的jstl支持 -->
 		<dependency>
@@ -283,13 +284,7 @@
 			<version>0.1.4</version>
 			<scope>compile</scope>
 		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.12</version>
-			<scope>test</scope>
-		</dependency>
-
+	
 
 	</dependencies>
 	<build>

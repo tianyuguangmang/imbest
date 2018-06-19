@@ -2,6 +2,9 @@ package com.ty.ibest.service;
 
 import java.util.List;
 
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.github.pagehelper.PageInfo;
 import com.ty.ibest.entity.MsOrder;
 import com.ty.ibest.entity.SubMsOrder;
@@ -13,8 +16,8 @@ public interface MsOrderService {
 	PageInfo<SubMsOrder> getSubOrder(Integer merchantId,Integer supplierId,String status,int current,int size);
 	String updateSubMsOrder(Integer orderId,String status);
 	
-	List<MsOrder> getMerchantOrder(String merchantId);
-	List<MsOrder> getSupplierOrder(String supplierId);
+	PageInfo<MsOrder> getMerchantOrder(Integer merchantId,String status,Integer current,Integer size);
+	PageInfo<MsOrder> getSupplierOrder(Integer supplierId,String status,Integer current,Integer size);
 	Integer deleteMsOrder(Integer orderId,Integer type);
 	String updateMsOrder(Integer orderId,String status);
 	

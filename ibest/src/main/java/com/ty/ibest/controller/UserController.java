@@ -17,6 +17,7 @@ import com.ty.ibest.entity.MsOrder;
 import com.ty.ibest.entity.User;
 import com.ty.ibest.service.UserService;
 import com.ty.ibest.utils.HttpRequestUtil;
+import com.ty.ibest.utils.LoggerUtil;
 import com.ty.ibest.utils.MsgFomcat;
 import com.ty.ibest.utils.RedisCacheUtil;
 import com.ty.ibest.utils.Results;
@@ -43,29 +44,35 @@ public class UserController extends BaseController{
 	public Results<User> userWxcode(String wxcode){
 		String openId = null;
 		User user = null;
-		/*String appid = "wx005cb93df28521fb";
-		String scret = "72d8584a017efa509331d4b79d30141b";
-		String url = "https://api.weixin.qq.com/sns/jscode2session";
-		String params = "appid="+appid+"&secret="+scret+"&js_code="+wxcode;
-		//获取微信的返回结果
-		String xm = HttpRequestUtil.sendGet(url,params);
-		JSONObject jsonObj = JSONObject.fromObject(xm);
-		if(jsonObj.get("openid") == null){
-			return failResult(555,"没有获取到用户信息");
-		}
-		openId = (String)jsonObj.get("openid");*/
-		openId = "obZUP0SLAQi9oAk7EdGORntuHBIc";
-		user = userService.queryUserByOpenId(openId);
-		if(user == null){
-			user = new User();
-			user.setOpenId(openId);
-			int id = userService.addUser(user);	
-			if(id==0){
-			  return failResult(555,"添加失败");
+		try {
+			/*String appid = "wx005cb93df28521fb";
+			String scret = "72d8584a017efa509331d4b79d30141b";
+			String url = "https://api.weixin.qq.com/sns/jscode2session";
+			String params = "appid="+appid+"&secret="+scret+"&js_code="+wxcode;
+			//获取微信的返回结果
+			String xm = HttpRequestUtil.sendGet(url,params);
+			JSONObject jsonObj = JSONObject.fromObject(xm);
+			if(jsonObj.get("openid") == null){
+				return failResult(555,"没有获取到用户信息");
 			}
+			openId = (String)jsonObj.get("openid");*/
+			openId = "obZUP0SLAQi9oAk7EdGORntuHBIx";
+			user = userService.queryUserByOpenId(openId);
+			if(user == null){
+				user = new User();
+				user.setOpenId(openId);
+				int id = userService.addUser(user);	
+				if(id==0){
+				  return failResult(555,"添加失败");
+				}
+			}
+			redisCache.sset(openId, JSON.toJSONString(user));
+			return successResult(user);
+		}catch(Exception e) {
+			LoggerUtil.logger.error(e.getMessage());
+			return failResult(555,"服务器错误，请稍后再试");
+			
 		}
-		redisCache.sset(openId, JSON.toJSONString(user));
-		return successResult(user);
 	}
 	/**
 	 * 成为供应商

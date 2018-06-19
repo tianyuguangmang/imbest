@@ -4,12 +4,10 @@
 <mapper namespace="com.ty.ibest.mapper.CmOrderMapper">
 	<resultMap id="BaseResult" type="com.ty.ibest.entity.CmOrder">
 		<id column="order_id" property="orderId"></id>
-		<result column="product_list" property="productList"></result>
 		<result column="create_time" property="createTime"></result>
 		<result column="status" property="status"></result>
 		<result column="merchant_id" property="merchantId"></result>
 		<result column="c_name" property="cName"></result>
-		
 		<result column="c_phone" property="cPhone"></result>
 		<result column="c_address" property="cAddress"></result>
 		<result column="c_detail_address" property="cDetailAddress"></result>
@@ -22,11 +20,15 @@
 		<result column="gains_money" property="gainsMoney"></result>
 		<result column="m_delete" property="mDelete"></result>
 		<result column="c_delete" property="cDelete"></result>
+		<collection property="subOrderList" ofType="com.ty.ibest.entity.SubCmOrder">
+            <id column="sub_order_id" property="subOrderId"></id>
+        	<result column="count" property="count"></result>
+        </collection>
 	</resultMap>
 	<select id="getCmOrder" resultMap="BaseResult">
 		SELECT *
 		FROM
-		cm_order
+		cm_order main left join sub_cm_order sub on main.order_id = sub.order_id
 		<where>
 		 	<if test="merchantId != null and merchantId != 0">
 				 AND merchant_id = #{merchantId}
@@ -49,23 +51,20 @@
 	<insert id="addCmOrder" parameterType="CmOrder"
 		useGeneratedKeys="true" keyProperty="orderId">
 		INSERT INTO cm_order
-		(product_list,
-		status,merchant_id,
+		(status,merchant_id,
 		c_name,c_phone,c_address,c_detail_address,
 		c_nick_name,c_avatar,
 		consumer_id,order_number,
 		total_money,gains_money,final_cost,
 		m_delete,c_delete)
 		VALUES
-		(#{productList},
-		#{status},#{merchantId},
+		(#{status},#{merchantId},
 		#{cName},#{cPhone},#{cAddress},#{cDetailAddress},
 		#{cNickName},#{cAvatar},
 		#{consumerId},#{orderNumber},
 		#{totalMoney},#{gainsMoney},#{finalCost},
 		#{mDelete},#{cDelete})
 	</insert>
-
 	<update id="updateCmOrder">
 		UPDATE cm_order
 		SET

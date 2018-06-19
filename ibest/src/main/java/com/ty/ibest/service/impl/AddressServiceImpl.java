@@ -26,8 +26,6 @@ public class AddressServiceImpl implements AddressService{
 				return "SUCCESS";
 			}
 		}catch(Exception e){
-			
-			System.out.println(e);
 			throw e;
 		}
 		return "添加失败";

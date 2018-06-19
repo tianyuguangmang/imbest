@@ -1,21 +1,30 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context-4.1.xsd
         http://www.springframework.org/schema/mvc
-        http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd">
+        http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
+        http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop/spring-aop-4.1.xsd">
 
 	<!-- 自动扫描 -->
-	<!-- <context:component-scan base-package="com.ty。ibest"> 扫描时跳过 @Controller 
-		注解的JAVA类（控制器） <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" 
-		/> </context:component-scan> -->
-	<context:component-scan base-package="com.ty.ibest" />
+	<context:annotation-config />
+
+	<context:component-scan base-package="com.ty.ibest">
+		<context:exclude-filter type="annotation"
+		expression="org.springframework.stereotype.Controller" />
+		<!-- <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service" /> -->
+	</context:component-scan>
 	<!-- <context:property-placeholder location="classpath:redis.properties" 
 		/> -->
-	<context:annotation-config />
+
+	
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<property name="url"
@@ -23,6 +32,25 @@
 		<property name="username" value="root" />
 		<property name="password" value="123" />
 	</bean>
+	 <!-- (事务管理)transaction manager, use JtaTransactionManager for global tx -->  
+    <bean id="transactionManager"  
+        class="org.springframework.jdbc.datasource.DataSourceTransactionManager">  
+        <property name="dataSource" ref="dataSource" />  
+    </bean> 
+	<!-- 开启事务注解，标注@Transactional的类和方法将具有事务性 -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	<!-- 配置事务通知 -->
+	<!-- <tx:advice id="txAdvice" transaction-manager="transactionManager">
+	    <tx:attributes>
+	        <tx:method name="transfer*"/>
+	    </tx:attributes>
+	</tx:advice> -->
+	<!-- 配置切面 -->
+	<!-- <aop:config>
+	    <aop:pointcut expression="execution(* com.ty.ibest.service.impl.*(..))" id="pointCut1"/>
+	    <aop:advisor advice-ref="txAdvice" pointcut-ref="pointCut1"/>
+	</aop:config> -->
+   
 	<!-- jedis 配置 -->
 	 <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig"> 
 	 
@@ -66,6 +94,7 @@
 		<property name="maxIdle" value="${maxIdle}"></property> <property name="minIdle" 
 		value="${minIdle}"></property> <property name="maxWait" value="${maxWait}"></property> 
 		</bean> -->
+	
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource"></property>
 		<property name="configLocation" value="classpath:config/Configuration.xml"></property>

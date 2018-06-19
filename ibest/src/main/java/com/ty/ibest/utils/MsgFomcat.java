@@ -22,4 +22,32 @@ public class MsgFomcat {
 
 		return null;
 	}
+	public <T> T entryFomcat(String str,Class<T> cls){
+		try{
+			JSONObject jsonObj=JSONObject.fromObject(str);
+			if(jsonObj != null){
+				@SuppressWarnings("unchecked")
+				T res = (T) JSONObject.toBean(jsonObj,cls);
+				return res;
+			}
+		}catch(Exception e){
+			LoggerUtil.logger.error(e.getMessage());		
+		}
+
+		return null;
+	}
+	public <T> T entryFomcat(Object str,Class<T> cls){
+		try{
+			JSONObject jsonObj=JSONObject.fromObject(str);
+			if(jsonObj != null){
+				@SuppressWarnings("unchecked")
+				T res = (T) JSONObject.toBean(jsonObj,cls);
+				return res;
+			}
+		}catch(Exception e){
+			LoggerUtil.logger.error(e.getMessage());		
+		}
+
+		return null;
+	}
 }

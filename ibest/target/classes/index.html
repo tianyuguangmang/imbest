@@ -2,10 +2,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>to test</title>
 </head>
 <body>
-	<div>2</div>
+	<div>v0.0.1</div>
 	<div class="M-box3"></div>
 	<!-- <form method="post" action="http://upload.qiniup.com/"
 	 enctype="multipart/form-data">
@@ -94,7 +94,7 @@ function getdata(current){
 	    }
 	}); 
 }
-getdata(1);
+/* getdata(1); */
 $('.M-box3').pagination({
     pageCount: 50,
     jump: true,
@@ -130,61 +130,51 @@ $('.M-box3').pagination({
     	 console.log("123");
      }});  
 });  */
-var url = ""
- $.ajax({
-    type: "POST",
-    url: "supplier/product/add",
-    headers:{"openId":"obZUP0SLAQi9oAk7EdGORntuHBIc","Content-Type":"application/json"},
-    data: JSON.stringify({name:"一件大衣2",originPrice:12,resetPrice:13,cateId:1,mainImage:"sms",stock:10}),
-    dataType: "json",
+
+/*  $.ajax({
+    type: "GET",
+    url: "cmorder/infos",
+    headers:{"openId":"obZUP0SLAQi9oAk7EdGORntuHBIc"},
+    data: {userId:1},
     success: function(data){
     }
-}); 
-$.ajax({
+});  */
+/* $.ajax({
     type: "POST",
-    url: "address/add",
-    headers:{"openId":"obZUP0SLAQi9oAk7EdGORntuHBIc","Content-Type":"application/json"},
-    data: JSON.stringify({
-		name:"tygm",
-		phone:"18765400123",
-		address:"山东省费县",
-		detail:"田村小区12号"
-	}),
-    dataType: "json",
+    url: "cmorder/add",
+    headers:{"openId":"obZUP0SLAQi9oAk7EdGORntuHBIc"},
+    data: {addressId:3},
     success: function(data){
     }
-}); 
+}); */
 /*  $.ajax({
     type: "POST",
-    url: "msorder/save",
+    url: "cmorder/save",
     headers:{"openId":"obZUP0SLAQi9oAk7EdGORntuHBIc"},
-    data: {list:JSON.stringify([{productId:1,count:10,supplierId:5},{productId:8,count:10,supplierId:4}])},
+    data: {list:JSON.stringify([{productId:12,count:10,merchantId:6}]),merchantId:6},
     dataType: "json",
     success: function(data){
     }
-}); 
- $.ajax({
-    type: "GET",
-    url: "msorder/info",
-    headers:{"openId":"obZUP0SLAQi9oAk7EdGORntuHBIc"},
+});  */
+
+/* $.ajax({
+    type: "POST",
+    url: "msorder/save",
+    headers:{"openId":"obZUP0SLAQi9oAk7EdGORntuHBIx"},
+    data: {list:JSON.stringify([{productId:16,count:10,supplierId:7}])},
+    dataType: "json",
+    success: function(data){
+    }
+});  */
+$.ajax({
+    type: "POST",
+    url: "msorder/add",
+    headers:{"openId":"obZUP0SLAQi9oAk7EdGORntuHBIx"},
     data: {},
     dataType: "json",
     success: function(data){
-    	console.log(data);
-    	var _list = JSON.parse(data.result.productList);
-    	console.log(_list);
     }
 }); 
- $.ajax({
-	    type: "POST",
-	    url: "msorder/add",
-	    headers:{"openId":"obZUP0SLAQi9oAk7EdGORntuHBIc"},
-	    data: {},
-	    dataType: "json",
-	    success: function(data){
-	    	
-	    }
-	});  */
 
 /*  wAjax("supplier/product/add","JSON_POST",{name:"xm",originPrice:12,resetPrice:13,cateId:1,mainImage:"sms"},function(res){
 	 

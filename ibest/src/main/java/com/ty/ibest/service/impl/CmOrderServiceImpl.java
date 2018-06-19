@@ -1,10 +1,12 @@
 package com.ty.ibest.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
@@ -13,15 +15,19 @@ import com.ty.ibest.constant.InfoConstant;
 import com.ty.ibest.entity.Address;
 import com.ty.ibest.entity.CmOrder;
 import com.ty.ibest.entity.MerchantProduct;
+import com.ty.ibest.entity.SubCmOrder;
 import com.ty.ibest.entity.User;
 import com.ty.ibest.mapper.AddressMapper;
 import com.ty.ibest.mapper.CmOrderMapper;
 import com.ty.ibest.mapper.MerchantProductMapper;
+import com.ty.ibest.mapper.SubCmOrderMapper;
 import com.ty.ibest.mapper.UserMapper;
 import com.ty.ibest.service.CmOrderService;
+import com.ty.ibest.utils.MsgFomcat;
 import com.ty.ibest.utils.RedisCacheUtil;
 
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @Service
 public class CmOrderServiceImpl implements CmOrderService{
@@ -34,14 +40,18 @@ public class CmOrderServiceImpl implements CmOrderService{
 	@Autowired 
 	AddressMapper addressMapper;
 	@Autowired
+	SubCmOrderMapper subCmOrderMapper;
+	@Autowired
 	UserMapper userMapper;
-	public String saveCmOrder(String list,Integer merchantId,Integer userId) {
+	@Autowired
+	MsgFomcat msgFomcat;
+	public String saveCmOrder(String list,Integer merchantId,Integer userId) throws Exception {
+		SubCmOrder subCmOrder = null;
 		try{
-			
 			JSONArray jsonArray = JSONArray.fromObject(list);
 			List<Map<String,Object>> mapListJson = (List<Map<String,Object>>)jsonArray;
-			List<MerchantProduct> productList = new ArrayList<MerchantProduct>();
-			CmOrder msOrder = new CmOrder();
+			List<SubCmOrder> subOrderList = new ArrayList<SubCmOrder>();
+			CmOrder cmOrder = new CmOrder();
 			float totalMoney = 0;
 			float finalCost = 0;
 			User user = userMapper.queryUserByUserId(merchantId);
@@ -54,45 +64,62 @@ public class CmOrderServiceImpl implements CmOrderService{
 	            if(product == null||product.getMerchantId()!=merchantId){
 	            	return "未找到商品";
 	            }
+	            subCmOrder = new SubCmOrder();
+	            subCmOrder.setCount((Integer)obj.get("count"));
+	            subCmOrder.setMainImage(product.getMainImage());
+	            subCmOrder.setOriginPrice(product.getOriginPrice());
+	            subCmOrder.setResetPrice(product.getResetPrice());
+	            subCmOrder.setProductId(product.getProductId());
+	            subOrderList.add(subCmOrder);
 	            totalMoney += (Integer)obj.get("count")*product.getResetPrice();
 	            finalCost += (Integer)obj.get("count")*product.getOriginPrice();
-	            productList.add(product);
 	        }
-	        String json = JSON.toJSONString(productList);
-	        msOrder.setTotalMoney(totalMoney);
-	        msOrder.setFinalCost(finalCost);
-	        msOrder.setGainsMoney(totalMoney - finalCost);
-	        msOrder.setProductList(json);
-	        msOrder.setMerchantId(merchantId);
-	        redisCache.sset(InfoConstant.CM_ORDER+"_"+userId, JSON.toJSONString(msOrder));
+	        cmOrder.setTotalMoney(totalMoney);
+	        cmOrder.setFinalCost(finalCost);
+	        cmOrder.setGainsMoney(totalMoney - finalCost);
+	        cmOrder.setMerchantId(merchantId);
+	        cmOrder.setSubOrderList(subOrderList);
+	        redisCache.sset(InfoConstant.CM_ORDER+"_"+userId, JSONObject.fromObject(cmOrder).toString());
 			return "SUCCESS";
 		}catch(Exception e){
-			System.out.println(e);				
+			System.out.println(e);	
+			throw e;
 		}
-		return "保存信息失败";
 		
 	}
-	public String addCmOrder(CmOrder cmOrder,int addressId,User user) {
-		try{
+	@Transactional(rollbackFor=Exception.class)
 	
-			Address address = addressMapper.getAddressById(addressId);
-			if(address == null||address.getConsumerId()!=user.getUserId()){
-				return "未找相关的地址";
+	public String addCmOrder(CmOrder cmOrder,Integer addressId,User user) {
+		
+		Address address = addressMapper.getAddressById(addressId);
+		if(address == null||address.getConsumerId()!=user.getUserId()){
+			return "未找相关的地址";
+		}
+		cmOrder.setcAddress(address.getAddress());
+		cmOrder.setcDetailAddress(address.getDetail());
+		cmOrder.setcName(address.getName());
+		cmOrder.setcPhone(address.getPhone());
+		cmOrder.setConsumerId(user.getUserId());
+		List<SubCmOrder> subCmOrders = (List<SubCmOrder>)cmOrder.getSubOrderList();
+		Integer key = cmOrderMapper.addCmOrder(cmOrder);
+	
+		try {
+			for(int i=0;i<subCmOrders.size();i++) {
+				Object obj = subCmOrders.get(i);
+				SubCmOrder sub = msgFomcat.entryFomcat(obj, SubCmOrder.class);
+				
+				sub.setOrderId(cmOrder.getOrderId());
+				subCmOrders.set(i, sub);
 			}
-			cmOrder.setcAddress(address.getAddress());
-			cmOrder.setcDetailAddress(address.getDetail());
-			cmOrder.setcName(address.getName());
-			cmOrder.setcPhone(address.getPhone());
-			cmOrder.setConsumerId(user.getUserId());
-			int key = cmOrderMapper.addCmOrder(cmOrder);
-			if(key>0){
+			Integer keys = subCmOrderMapper.addSubCmOrders(subCmOrders);
+			if(key>0&&keys>0){
 				return "SUCCESS";
 			}
-			
-		}catch(Exception e){
-			System.out.println(e);	
-			
+		}catch(Exception e) {
+			System.out.println(e);
 		}
+		
+		
 		return "添加失败";
 		
 	}

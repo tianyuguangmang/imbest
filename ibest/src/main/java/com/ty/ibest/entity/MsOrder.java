@@ -1,8 +1,9 @@
 package com.ty.ibest.entity;
 
+import java.util.List;
+
 public class MsOrder {
 	private int orderId;
-	private String productList;
 	private String createTime;
 	/**
 	 * 待付款  付款 待发货(取消订单：需要跟卖家协商  待收货  确认收货（验证货物是否存在问题有问题可以退货） 待评价 已评价  已完成
@@ -39,7 +40,14 @@ public class MsOrder {
 	private float gainsMoney;
 	private boolean mDelete;
 	private boolean sDelete;
+	private List<SubMsOrder> orderList;
 	
+	public List<SubMsOrder> getOrderList() {
+		return orderList;
+	}
+	public void setOrderList(List<SubMsOrder> orderList) {
+		this.orderList = orderList;
+	}
 	public String getmPhone() {
 		return mPhone;
 	}
@@ -69,12 +77,6 @@ public class MsOrder {
 	}
 	public void setOrderId(int orderId) {
 		this.orderId = orderId;
-	}
-	public String getProductList() {
-		return productList;
-	}
-	public void setProductList(String productList) {
-		this.productList = productList;
 	}
 	public String getCreateTime() {
 		return createTime;
