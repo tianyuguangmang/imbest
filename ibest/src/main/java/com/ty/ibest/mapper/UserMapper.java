@@ -4,12 +4,20 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.ty.ibest.entity.MerchantInfo;
+import com.ty.ibest.entity.SupplierInfo;
 import com.ty.ibest.entity.User;
 
 public interface UserMapper {
-	int addUser(User user);
+	Integer addUser(User user);
+	
+	//设置用户已开通供应商
+	Integer isSupplier(@Param("isSupplier") Integer isSupplier,@Param("userId") Integer userId);
+	//设置用户已开通成为兼职商家
+	Integer isMerchant(@Param("isMerchant") Integer isMerchant,@Param("userId") Integer userId);
 	User queryUserByOpenId(@Param("openId") String openId);
 	User queryUserByUserId(@Param("userId") Integer userId);
+	
 	User queryUserByPhone(@Param("phone") String phone);
 	
 	User queryAdmin(@Param("phone") String phone,@Param("password") String password);

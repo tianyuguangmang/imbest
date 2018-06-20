@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 import com.ty.ibest.constant.InfoConstant;
+import com.ty.ibest.entity.MerchantInfo;
 import com.ty.ibest.entity.MsOrder;
+import com.ty.ibest.entity.SupplierInfo;
 import com.ty.ibest.entity.User;
+import com.ty.ibest.service.SupplierInfoService;
 import com.ty.ibest.service.UserService;
 import com.ty.ibest.utils.HttpRequestUtil;
 import com.ty.ibest.utils.LoggerUtil;
@@ -31,6 +34,8 @@ public class UserController extends BaseController{
 	UserService userService;
 	@Autowired
 	private RedisCacheUtil redisCache;
+	@Autowired
+	SupplierInfoService supplierInfoService;
 	/**
 	 * 用户的登录，通过code换取openid并查询是否已经存在这个用户，
 	 * 如果存在则返回，并做缓存
@@ -61,11 +66,15 @@ public class UserController extends BaseController{
 			if(user == null){
 				user = new User();
 				user.setOpenId(openId);
-				int id = userService.addUser(user);	
+				Integer id = userService.addUser(user);	
 				if(id==0){
 				  return failResult(555,"添加失败");
 				}
 			}
+			/*if(user.getIsSupplier() == 1) {
+				SupplierInfo supplierInfo = supplierInfoService.getSupplierInfoByUserId(user.getUserId());
+				user.setSupplierInfo(supplierInfo);
+			}*/
 			redisCache.sset(openId, JSON.toJSONString(user));
 			return successResult(user);
 		}catch(Exception e) {
@@ -88,22 +97,29 @@ public class UserController extends BaseController{
 		
 		User user = null;
 		String backMsg = null;
+		SupplierInfo supplierInfo = new SupplierInfo();
 		
 		try{
 			String openId = httpRequest.getHeader("openId");
+			if(openId == null) {
+				openId = "obZUP0SLAQi9oAk7EdGORntuHBIx";
+			}
 			user = msgFomcat.userMsg(openId, User.class);
 			if(user == null){
-				return failResult(555,"没找到您的信息");
+				return failResult(550,"系统异常，请重新进入");
 			}
-			//进行支付
-			user.setPhone(phone);
-			user.setType("SUPPLIER");
-			backMsg = userService.toRegister(user);
-			if(backMsg.equals("SUCCESS")){
+			if(user.getIsSupplier()!=null&&user.getIsSupplier()==1) {
+				return failResult(555,"您已经是供应商啦");
+			}
+			
+			supplierInfo.setPhone(phone);
+			user = userService.toSupplier(user, supplierInfo);
+			if(user != null){
 				redisCache.sset(openId, JSON.toJSONString(user));
 				return successResult(user);
 			}
 		}catch(Exception e){
+			System.out.println(e);
 		
 			
 		}
@@ -120,22 +136,28 @@ public class UserController extends BaseController{
 	 * @param userId
 	 * @return
 	 */
-	@RequestMapping(value="/merchant/register",method =RequestMethod.POST)
+	@RequestMapping(value="/merchant/register",method =RequestMethod.GET)
 	@ResponseBody
 	public Results<User> merchantRegister(String phone,String validCode,HttpServletRequest httpRequest){
 		User user = null;
 		String backMsg = null;
+		MerchantInfo merchantInfo = new MerchantInfo();
 		try{
 			String openId = httpRequest.getHeader("openId");
+			if(openId == null) {
+				openId = "obZUP0SLAQi9oAk7EdGORntuHBIx";
+			}
 			user = msgFomcat.userMsg(openId, User.class);
 			if(user == null){
-				return failResult(555,"没找到您的信息");
+				return failResult(550,"系统异常，请重新进入");
+			}
+			if(user.getIsMerchant()!=null&&user.getIsMerchant()==1){
+				return failResult(555,"您已经是兼职商家啦");
 			}
 			//进行支付
-			user.setPhone(phone);
-			user.setType("MERCHANT");
-			backMsg = userService.toRegister(user);
-			if(backMsg.equals("SUCCESS")){
+			merchantInfo.setPhone(phone);
+			user = userService.toMerchant(user, merchantInfo);
+			if(user != null){
 				redisCache.sset(openId, JSON.toJSONString(user));
 				return successResult(user);
 			}
@@ -161,9 +183,6 @@ public class UserController extends BaseController{
 			if(user == null){
 				return failResult(555,"没找到您的信息");
 			}
-			user.setAddress(merchant.getAddress());
-			user.setDetailAddress(user.getDetailAddress());
-			user.setRealName(merchant.getRealName());
 			backMsg = userService.updateMerchant(user);
 			if(backMsg.equals("SUCCESS")){
 				redisCache.sset(openId, JSON.toJSONString(user));
@@ -187,7 +206,7 @@ public class UserController extends BaseController{
 		String openId = null;
 		User user = null;
 		user = userService.queryAdmin(phone,password);
-		if(user == null||!user.getType().equals("ADMIN")){
+		if(user == null){
 			return failResult(555,"账户或密码错误");
 		}
 		session.setAttribute(InfoConstant.USER_INFO, user);
@@ -206,7 +225,7 @@ public class UserController extends BaseController{
 	public Results<PageInfo<User>> getUserListByType(int current,int size,String type,HttpSession session){
 		try{
 			User user =(User) session.getAttribute(InfoConstant.USER_INFO);
-			if(user == null||!user.getType().equals("ADMIN")){
+			if(user == null){
 				return failResult(555,"您还不是管理员");
 			}
 			PageInfo<User> pageInfo = userService.getUserListByType(current,size,type);

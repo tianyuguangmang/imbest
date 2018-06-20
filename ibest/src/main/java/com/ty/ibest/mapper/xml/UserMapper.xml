@@ -9,27 +9,13 @@
 		<result column="avatar" property="avatar"></result>
 		<result column="open_id" property="openId"></result>
 		<result column="create_time" property="createTime"></result>
-		<result column="am_start_time" property="amStartTime"></result>
-		<result column="am_end_time" property="amEndTime"></result>
-		<result column="pm_start_time" property="pmStartTime"></result>
-		<result column="pm_end_time" property="pmEndTime"></result>
-		<result column="phone" property="phone"></result>
-		<result column="real_name" property="realName"></result>
-		<result column="address" property="address"></result>
-		<result column="detail_address" property="detailAddress"></result>
-		<result column="send_price" property="sendPrice"></result>
-		<result column="delivery_fee" property="deliveryFee"></result>
-		<result column="longitude" property="longitude"></result>
-		<result column="latitude" property="latitude"></result>
-		<result column="account_amount" property="account_amount"></result>
-	
-
+		<result column="is_supplier" property="isSupplier"></result>
+		<result column="is_merchant" property="isMerchant"></result>
 	</resultMap>
 	<select id="getUserListByType" resultMap="BaseResult">
 		SELECT *
 		FROM
 		user where type = #{type}
-
 	</select>
 
 	<select id="isLogin" resultMap="BaseResult">
@@ -42,6 +28,30 @@
 		useGeneratedKeys="true" keyProperty="userId">
 		INSERT INTO user(open_id)
 		VALUES(#{openId})
+<!-- 		<selectKey keyProperty="userId" resultType="java.lang.Integer">
+	      select LAST_INSERT_ID() as userId
+	      </selectKey> -->
+	</insert>
+
+	
+	<update id="isSupplier" >
+		UPDATE user SET
+		is_supplier =#{isSupplier}
+		WHERE
+		user_id =
+		#{userId}
+	</update>
+	<update id="isMerchant" >
+		UPDATE user SET
+		is_merchant =#{isMerchant}
+		WHERE
+		user_id =
+		#{userId}
+	</update>
+	<insert id="addSupplierInfo" parameterType="SupplierInfo"
+		useGeneratedKeys="true" keyProperty="sup_id">
+		INSERT INTO supplier_info (user_id)
+		VALUES(#{userId})
 <!-- 		<selectKey keyProperty="userId" resultType="java.lang.Integer">
 	      select LAST_INSERT_ID() as userId
 	      </selectKey> -->

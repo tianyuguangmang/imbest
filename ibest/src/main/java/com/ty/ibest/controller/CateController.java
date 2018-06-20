@@ -28,9 +28,7 @@ public class CateController extends BaseController{
 		String backMsg = "";
 		try{
 			User user =(User) session.getAttribute(InfoConstant.USER_INFO);
-			if(user == null||!user.getType().equals("ADMIN")){
-				return failResult(555,"您还不是管理员");
-			}
+			
 			System.out.println(title);
 			backMsg = cateService.addCate(title);
 			if(backMsg.equals("SUCCESS")){
@@ -57,9 +55,7 @@ public class CateController extends BaseController{
 	public Results<Boolean> deleteGoodsCate(Integer id,HttpSession session){
 		try{
 			User user =(User) session.getAttribute(InfoConstant.USER_INFO);
-			if(user == null||!user.getType().equals("ADMIN")){
-				return failResult(555,"您还不是管理员");
-			}
+			
 			cateService.deleteCate(id);
 			return successResult(null);
 			

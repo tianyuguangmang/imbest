@@ -55,7 +55,7 @@ public class CmOrderServiceImpl implements CmOrderService{
 			float totalMoney = 0;
 			float finalCost = 0;
 			User user = userMapper.queryUserByUserId(merchantId);
-			if(user == null||!user.getType().equals("MERCHANT")){
+			if(user == null){
 				return "没有商家信息";
 			}
 	        for (int i = 0; i < mapListJson.size(); i++) {

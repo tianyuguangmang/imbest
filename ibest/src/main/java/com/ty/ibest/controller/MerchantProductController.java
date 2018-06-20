@@ -29,10 +29,7 @@ public class MerchantProductController extends BaseController{
 			if(user == null){
 				return failResult(555,"用户信息获取失败");
 			}
-			System.out.println(user.getType());
-			if(!user.getType().equals("MERCHANT")){
-				return failResult(555,"不是商家");
-			}
+			
 			mproduct.setMerchantId(user.getUserId());
 			backMsg = product.addProduct(mproduct);
 			if(backMsg.equals("SUCCESS"))

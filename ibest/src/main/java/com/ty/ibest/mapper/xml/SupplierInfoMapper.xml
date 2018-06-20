@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ty.ibest.mapper.SupplierInfoMapper">
+	<resultMap id="BaseResult" type="com.ty.ibest.entity.SupplierInfo">
+		<id column="sup_id" property="supId"></id>
+		<result column="user_id" property="userId"></result>
+		<result column="vip_create_date" property="vipCreateDate"></result>
+		<result column="vip_end_date" property="vipEndDate"></result>
+		<result column="am_start_time" property="amStartTime"></result>
+		<result column="am_end_time" property="amEndTime"></result>
+		<result column="pm_start_time" property="pmStartTime"></result>
+		<result column="pm_end_time" property="pmEndTime"></result>
+		<result column="phone" property="phone"></result>
+		<result column="real_name" property="realName"></result>
+		<result column="pay_fee" property="payFee"></result>
+	</resultMap>
+	<select id="getSupplierInfoBySupId" resultMap="BaseResult">
+		SELECT *
+		FROM
+		supplier_info where sup_id = #{supplierId}
+	</select>
+	<select id="getSupplierInfoByUserId" resultMap="BaseResult">
+		SELECT *
+		FROM
+		supplier_info where user_id = #{userId}
+	</select>
+	<insert id="toSupplier" parameterType="SupplierInfo"
+		useGeneratedKeys="true" keyProperty="sup_id">
+		INSERT INTO supplier_info (user_id,phone,vip_create_date,vip_end_date,
+		am_start_time,am_end_time,pm_start_time,pm_end_time,pay_fee,real_name)
+		VALUES(#{userId},#{phone},#{vipCreateDate},#{vipEndDate},
+		#{amStartTime},#{amEndTime},#{pmStartTime},#{pmEndTime},#{payFee},#{realName})
+	</insert>
+
+	
+</mapper>

@@ -101,12 +101,8 @@ public class MsOrderServiceImpl implements MsOrderService{
 
 	@Transactional(rollbackFor=Exception.class)
 	public String addMsOrder(MsOrder msOrder,User user) {
-		msOrder.setmAddress(user.getAddress());
-		msOrder.setmDetailAddress(user.getDetailAddress());
-		msOrder.setmName(user.getRealName());
 		msOrder.setmAvatar(user.getAvatar());
 		msOrder.setMerchantId(user.getUserId());
-		msOrder.setmPhone(user.getPhone());
 		Integer key = msOrderMapper.addMsOrder(msOrder);
 		List<SubMsOrder> orderList  = msOrder.getOrderList();
 		SubMsOrder subMsOrder = null;
@@ -114,12 +110,8 @@ public class MsOrderServiceImpl implements MsOrderService{
             Object object = orderList.get(i);
             subMsOrder = msgFomcat.entryFomcat(object, SubMsOrder.class);
             subMsOrder.setStatus("WAIT_PAY");
-            subMsOrder.setmAddress(user.getAddress());
-            subMsOrder.setmDetailAddress(user.getDetailAddress());
-            subMsOrder.setmName(user.getRealName());
             subMsOrder.setmAvatar(user.getAvatar());
             subMsOrder.setMerchantId(user.getUserId());
-            subMsOrder.setmPhone(user.getPhone());
             subMsOrder.setMsOrderId(msOrder.getOrderId());
             
             orderList.set(i, subMsOrder);

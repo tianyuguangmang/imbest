@@ -18,8 +18,10 @@ import com.github.pagehelper.PageInfo;
 import com.ty.ibest.constant.InfoConstant;
 import com.ty.ibest.entity.MerchantProduct;
 import com.ty.ibest.entity.MsOrder;
+import com.ty.ibest.entity.SupplierInfo;
 import com.ty.ibest.entity.SupplierProduct;
 import com.ty.ibest.entity.User;
+import com.ty.ibest.service.SupplierInfoService;
 import com.ty.ibest.service.SupplierProductService;
 import com.ty.ibest.utils.MsgFomcat;
 import com.ty.ibest.utils.RedisCacheUtil;
@@ -35,6 +37,8 @@ public class SupplierProductController extends BaseController{
 	RedisCacheUtil redisCache;
 	@Autowired
 	SupplierProductService product;
+	@Autowired
+	SupplierInfoService supplierInfoService;
 	
 	@RequestMapping(value="/supplier/product/add",method = RequestMethod.POST,consumes="application/json")
 	@ResponseBody
@@ -48,9 +52,10 @@ public class SupplierProductController extends BaseController{
 			if(user == null){
 				return failResult(555,"用户信息获取失败");
 			}
-			if(!user.getType().equals("SUPPLIER")){
-				return failResult(555,"您还不是供应商");
+			if(user.getIsSupplier()==null||user.getIsSupplier()!=1) {
+				return failResult(555,"请不是商品供应商，请开通");
 			}
+		
 			sproduct.setSupplierId(user.getUserId());
 			backMsg = product.addProduct(sproduct);
 			if(backMsg.equals("SUCCESS")){
@@ -81,9 +86,12 @@ public class SupplierProductController extends BaseController{
 	@RequestMapping(value="/supplier/product/list",method = RequestMethod.GET)
 	@ResponseBody
 	public Results<PageInfo<SupplierProduct>> getProduct(Integer supplierId,Integer cateId,Integer onSell,Integer size,Integer current){
-		
+		SupplierInfo supplierInfo = null;
 		try{
-			System.out.println(supplierId);
+			supplierInfo = supplierInfoService.getSupplierInfoBySupId(supplierId);
+			if(supplierInfo == null) {
+				return failResult(555,"未找到该商户");
+			}
 			size=size==null?10:size;
 			current=current==null?1:current;
 			PageInfo<SupplierProduct> pageInfo = product.getProduct(supplierId,cateId,onSell,current,size);

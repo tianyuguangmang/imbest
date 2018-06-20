@@ -9,6 +9,8 @@
 		<typeAlias alias="MsOrder" type="com.ty.ibest.entity.MsOrder" />
 		<typeAlias alias="CmOrder" type="com.ty.ibest.entity.CmOrder" />
 		<typeAlias alias="User" type="com.ty.ibest.entity.User" />
+		<typeAlias alias="SupplierInfo" type="com.ty.ibest.entity.SupplierInfo" />
+		<typeAlias alias="MerchantInfo" type="com.ty.ibest.entity.MerchantInfo" />
 		<typeAlias alias="Cate" type="com.ty.ibest.entity.Cate" />
 	</typeAliases>
 	<!-- 配置分页插件 -->
